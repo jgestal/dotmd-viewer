@@ -7,6 +7,7 @@ import {
   isSameOrInside,
   joinPath,
   normalisePath,
+  resolvePath,
 } from './paths';
 
 describe('normalisePath', () => {
@@ -210,5 +211,34 @@ describe('joinPath', () => {
 
   it('uses slashes for a mixed-separator base', () => {
     expect(joinPath('/a\\b', 'c')).toBe('/a\\b/c');
+  });
+});
+
+describe('resolvePath', () => {
+  it('appends a relative path to the base directory', () => {
+    expect(resolvePath('/docs/notes', 'a.md')).toBe('/docs/notes/a.md');
+  });
+
+  it('collapses dot and dot-dot segments', () => {
+    expect(resolvePath('/docs/notes', './../other/./b.md')).toBe('/docs/other/b.md');
+  });
+
+  it('never climbs above the root', () => {
+    expect(resolvePath('/docs', '../../../a.md')).toBe('/a.md');
+    expect(resolvePath('C:\\docs', '..\\..\\a.md')).toBe('C:/a.md');
+  });
+
+  it('lets an absolute path win', () => {
+    expect(resolvePath('/docs', '/etc/a.md')).toBe('/etc/a.md');
+    expect(resolvePath('/docs', 'D:\\x\\a.md')).toBe('D:/x/a.md');
+  });
+
+  it('accepts backslashes and a Windows or UNC base', () => {
+    expect(resolvePath('C:\\docs', 'sub\\a.md')).toBe('C:/docs/sub/a.md');
+    expect(resolvePath('\\\\server\\share\\docs', '../a.md')).toBe('//server/share/a.md');
+  });
+
+  it('resolves against a relative base', () => {
+    expect(resolvePath('docs', 'a.md')).toBe('docs/a.md');
   });
 });

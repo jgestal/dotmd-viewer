@@ -1,7 +1,7 @@
 // What the app shows when it runs in a plain browser (`npm run dev` without Tauri): a small
 // workspace to click around in, and dialogs answered with the browser's own prompts. It makes
 // the UI reviewable and screenshot-able without a native window.
-import type { Dialogs, UnsavedChoice } from '../../ports';
+import type { Dialogs, ExternalOpener, UnsavedChoice } from '../../ports';
 import { MemoryFileSystem } from './memoryFileSystem';
 
 export const DEMO_FOLDER = '/demo';
@@ -119,5 +119,12 @@ export class BrowserDialogs implements Dialogs {
 
   async alert(title: string, message: string): Promise<void> {
     alert(`${title}\n\n${message}`);
+  }
+}
+
+/** External links open in a new browser tab. */
+export class BrowserOpener implements ExternalOpener {
+  async openExternal(url: string): Promise<void> {
+    window.open(url, '_blank', 'noopener,noreferrer');
   }
 }

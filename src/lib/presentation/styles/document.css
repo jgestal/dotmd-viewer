@@ -1,0 +1,456 @@
+/* The rendered document: reading typography, code, tables, alerts, maths. Colours come from the
+   app tokens (app.css); the few document-only ones are defined here for light and dark. */
+
+:root {
+  --doc-code-bg: #f0eee7;
+  --doc-inline-code-bg: rgba(31, 35, 40, 0.07);
+  --doc-mark: rgba(255, 213, 79, 0.45);
+  --hl-keyword: #a626a4;
+  --hl-string: #3a7d2c;
+  --hl-number: #b45f06;
+  --hl-comment: #8a8f98;
+  --hl-title: #2461b8;
+  --hl-type: #b4372f;
+  --hl-meta: #1f6f6a;
+  --alert-note: #2461b8;
+  --alert-tip: #2a7d46;
+  --alert-important: #7c4dbd;
+  --alert-warning: #a86b00;
+  --alert-caution: #b4372f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --doc-code-bg: #1d2224;
+    --doc-inline-code-bg: rgba(230, 228, 223, 0.1);
+    --doc-mark: rgba(255, 213, 79, 0.28);
+    --hl-keyword: #d68cf0;
+    --hl-string: #8fd18a;
+    --hl-number: #f0b36a;
+    --hl-comment: #7d858c;
+    --hl-title: #7db4f5;
+    --hl-type: #f08a82;
+    --hl-meta: #6fd1c7;
+    --alert-note: #6aa5f0;
+    --alert-tip: #5cc07f;
+    --alert-important: #b18cf0;
+    --alert-warning: #e0a437;
+    --alert-caution: #f07167;
+  }
+}
+
+:root[data-theme='dark'] {
+  --doc-code-bg: #1d2224;
+  --doc-inline-code-bg: rgba(230, 228, 223, 0.1);
+  --doc-mark: rgba(255, 213, 79, 0.28);
+  --hl-keyword: #d68cf0;
+  --hl-string: #8fd18a;
+  --hl-number: #f0b36a;
+  --hl-comment: #7d858c;
+  --hl-title: #7db4f5;
+  --hl-type: #f08a82;
+  --hl-meta: #6fd1c7;
+  --alert-note: #6aa5f0;
+  --alert-tip: #5cc07f;
+  --alert-important: #b18cf0;
+  --alert-warning: #e0a437;
+  --alert-caution: #f07167;
+}
+
+.markdown-body {
+  color: var(--fg);
+  font: inherit;
+  line-height: 1.7;
+  overflow-wrap: break-word;
+  text-rendering: optimizeLegibility;
+}
+
+.markdown-body > :first-child {
+  margin-top: 0;
+}
+
+.markdown-body p,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body blockquote,
+.markdown-body pre,
+.markdown-body table,
+.markdown-body .markdown-alert,
+.markdown-body .mermaid-diagram {
+  margin: 0 0 1em;
+}
+
+/* Headings */
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  position: relative;
+  margin: 1.6em 0 0.5em;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  letter-spacing: -0.015em;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--border);
+}
+
+.markdown-body h2 {
+  font-size: 1.5em;
+  padding-bottom: 0.2em;
+  border-bottom: 1px solid var(--border);
+}
+
+.markdown-body h3 {
+  font-size: 1.25em;
+}
+
+.markdown-body h4 {
+  font-size: 1.05em;
+}
+
+.markdown-body h5,
+.markdown-body h6 {
+  font-size: 0.95em;
+  color: var(--fg-muted);
+}
+
+/* The anchor sits at the heading start, invisible; it only marks the scroll target. */
+.markdown-body .anchor {
+  position: absolute;
+  left: -1.2em;
+  width: 1em;
+  text-decoration: none;
+}
+
+.markdown-body h1:hover > .anchor::before,
+.markdown-body h2:hover > .anchor::before,
+.markdown-body h3:hover > .anchor::before {
+  content: '#';
+  color: var(--fg-muted);
+}
+
+/* Inline */
+
+.markdown-body a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  text-underline-offset: 0.15em;
+}
+
+.markdown-body a:hover {
+  text-decoration-color: currentColor;
+}
+
+.markdown-body mark {
+  padding: 0 0.15em;
+  border-radius: 3px;
+  background: var(--doc-mark);
+  color: inherit;
+}
+
+.markdown-body code,
+.markdown-body kbd {
+  font-family: var(--font-code);
+  font-size: 0.88em;
+}
+
+.markdown-body :not(pre) > code {
+  padding: 0.15em 0.4em;
+  border-radius: 5px;
+  background: var(--doc-inline-code-bg);
+}
+
+.markdown-body kbd {
+  padding: 0.1em 0.4em;
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--bg-elev);
+}
+
+.markdown-body img {
+  max-width: 100%;
+  height: auto;
+}
+
+.markdown-body hr {
+  margin: 2em 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+/* Lists and task lists */
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 1.6em;
+}
+
+.markdown-body li + li {
+  margin-top: 0.25em;
+}
+
+.markdown-body li > ul,
+.markdown-body li > ol {
+  margin: 0.25em 0 0;
+}
+
+.markdown-body li:has(> input[type='checkbox']) {
+  list-style: none;
+  margin-left: -1.4em;
+}
+
+.markdown-body li > input[type='checkbox'] {
+  margin: 0 0.5em 0 0;
+  vertical-align: -0.1em;
+  accent-color: var(--accent);
+}
+
+/* Quotes and alerts */
+
+.markdown-body blockquote {
+  padding: 0.1em 1em;
+  border-left: 4px solid var(--border);
+  color: var(--fg-muted);
+}
+
+.markdown-body blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body .markdown-alert {
+  --alert: var(--accent);
+  padding: 0.6em 1em;
+  border-left: 4px solid var(--alert);
+  border-radius: 0 8px 8px 0;
+  background: color-mix(in srgb, var(--alert) 10%, transparent);
+}
+
+.markdown-body .markdown-alert > :last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body .markdown-alert-title {
+  margin: 0 0 0.3em;
+  color: var(--alert);
+  font-weight: 650;
+}
+
+.markdown-body .markdown-alert-note {
+  --alert: var(--alert-note);
+}
+
+.markdown-body .markdown-alert-tip {
+  --alert: var(--alert-tip);
+}
+
+.markdown-body .markdown-alert-important {
+  --alert: var(--alert-important);
+}
+
+.markdown-body .markdown-alert-warning {
+  --alert: var(--alert-warning);
+}
+
+.markdown-body .markdown-alert-caution {
+  --alert: var(--alert-caution);
+}
+
+/* Tables */
+
+.markdown-body table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.markdown-body th,
+.markdown-body td {
+  padding: 0.45em 0.9em;
+  border: 1px solid var(--border);
+}
+
+.markdown-body th {
+  background: var(--bg-sidebar);
+  font-weight: 600;
+}
+
+.markdown-body tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--bg-sidebar) 55%, transparent);
+}
+
+.markdown-body [align='center'] {
+  text-align: center;
+}
+
+.markdown-body [align='right'] {
+  text-align: right;
+}
+
+.markdown-body [align='left'] {
+  text-align: left;
+}
+
+/* Code */
+
+.markdown-body pre {
+  padding: 0.9em 1.1em;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--doc-code-bg);
+  line-height: 1.55;
+}
+
+.markdown-body pre code {
+  padding: 0;
+  background: none;
+  font-size: 0.86em;
+  color: var(--fg);
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-built_in,
+.hljs-doctag {
+  color: var(--hl-keyword);
+}
+
+.hljs-string,
+.hljs-regexp,
+.hljs-addition,
+.hljs-template-variable {
+  color: var(--hl-string);
+}
+
+.hljs-number,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-attr,
+.hljs-attribute {
+  color: var(--hl-number);
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: var(--hl-comment);
+  font-style: italic;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id,
+.hljs-selector-class {
+  color: var(--hl-title);
+}
+
+.hljs-type,
+.hljs-class .hljs-title,
+.hljs-deletion,
+.hljs-variable,
+.hljs-name {
+  color: var(--hl-type);
+}
+
+.hljs-meta,
+.hljs-link,
+.hljs-params {
+  color: var(--hl-meta);
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: 700;
+}
+
+/* Maths and diagrams */
+
+.markdown-body [data-math-style='display'] {
+  display: block;
+  margin: 1em 0;
+  overflow-x: auto;
+}
+
+.markdown-body .katex-display {
+  margin: 0;
+}
+
+.markdown-body .katex-error {
+  color: var(--danger);
+  font-family: var(--font-code);
+}
+
+.markdown-body .mermaid-diagram {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+}
+
+.markdown-body .mermaid-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.markdown-body .mermaid-error {
+  display: block;
+  padding: 0.6em 1em;
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  color: var(--danger);
+}
+
+.markdown-body .mermaid-error pre {
+  margin: 0.4em 0 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  white-space: pre-wrap;
+}
+
+/* Footnotes (comrak: section.footnotes, markdown-it: section.footnotes + hr) */
+
+.markdown-body .footnote-ref {
+  font-size: 0.75em;
+  line-height: 0;
+}
+
+.markdown-body .footnote-ref a {
+  text-decoration: none;
+}
+
+.markdown-body .footnotes {
+  margin-top: 2em;
+  padding-top: 0.5em;
+  border-top: 1px solid var(--border);
+  color: var(--fg-muted);
+  font-size: 0.9em;
+}
+
+.markdown-body .footnotes ol {
+  margin: 0;
+}
+
+.markdown-body .footnotes p {
+  margin: 0;
+}
+
+.markdown-body .footnotes-sep {
+  display: none;
+}
+
+.markdown-body .footnote-backref {
+  text-decoration: none;
+}

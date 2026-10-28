@@ -4,11 +4,12 @@ import { createDocuments, type Documents } from './application/documents';
 import { createPreferences, type PreferencesUseCases } from './application/preferences';
 import { createWorkspace, type WorkspaceUseCases } from './application/workspace';
 import { createMemoryServices } from './infrastructure/memory';
-import { BrowserDialogs, DEMO_FOLDER, seedDemo } from './infrastructure/memory/demo';
+import { BrowserDialogs, BrowserOpener, DEMO_FOLDER, seedDemo } from './infrastructure/memory/demo';
 import {
   TauriDialogs,
   TauriOpenRequests,
   tauriFileSystem,
+  tauriOpener,
   tauriPreferencesStore,
   tauriRenderer,
   tauriWatcher,
@@ -19,6 +20,7 @@ import type {
   AppWindow,
   Dialogs,
   FileSystem,
+  ExternalOpener,
   FileWatcher,
   MarkdownRenderer,
   Notifier,
@@ -45,6 +47,7 @@ export interface Container {
   readonly watcher: FileWatcher;
   readonly renderer: MarkdownRenderer;
   readonly openRequests: OpenRequests;
+  readonly opener: ExternalOpener;
 }
 
 interface Ports {
@@ -55,6 +58,7 @@ interface Ports {
   readonly window: AppWindow;
   readonly store: PreferencesStore;
   readonly openRequests: OpenRequests;
+  readonly opener: ExternalOpener;
 }
 
 const tauriPorts = (t: Translate): Ports => ({
@@ -65,14 +69,29 @@ const tauriPorts = (t: Translate): Ports => ({
   window: tauriWindow,
   store: tauriPreferencesStore,
   openRequests: new TauriOpenRequests(),
+  opener: tauriOpener,
 });
+
+/** markdown-it only ships in the browser build (Tauri renders with comrak), so it loads on first use. */
+const lazyDemoRenderer: MarkdownRenderer = {
+  render: async (markdown) => {
+    const { DemoRenderer } = await import('./infrastructure/memory/demoRenderer');
+    return new DemoRenderer().render(markdown);
+  },
+};
 
 /** In a plain browser: an in-memory demo workspace, opened on first run. */
 const memoryPorts = (): Ports => {
   const services = createMemoryServices();
   seedDemo(services.fs);
   services.preferences.raw ??= { lastFolder: DEMO_FOLDER, lastFile: `${DEMO_FOLDER}/Welcome.md` };
-  return { ...services, dialogs: new BrowserDialogs(), store: services.preferences };
+  return {
+    ...services,
+    renderer: lazyDemoRenderer,
+    opener: new BrowserOpener(),
+    dialogs: new BrowserDialogs(),
+    store: services.preferences,
+  };
 };
 
 /** macOS and Windows file systems ignore case; Linux ones do not. */
@@ -85,7 +104,7 @@ export const createContainer = ({
   mode = isTauri() ? 'tauri' : 'memory',
 }: ContainerOptions): Container => {
   const ports = mode === 'tauri' ? tauriPorts(t) : memoryPorts();
-  const { fs, dialogs, window, watcher, renderer, store, openRequests } = ports;
+  const { fs, dialogs, window, watcher, renderer, store, openRequests, opener } = ports;
   return {
     documents: createDocuments({ fs, dialogs, window, watcher, notifier, t }),
     workspace: createWorkspace({
@@ -99,5 +118,6 @@ export const createContainer = ({
     watcher,
     renderer,
     openRequests,
+    opener,
   };
 };

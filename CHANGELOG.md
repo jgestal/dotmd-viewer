@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Preview: sanitised (DOMPurify) continuous rendering with KaTeX, highlight.js, lazy Mermaid, internal anchors, external links in the browser and links to other `.md` files in the app; browser-mode markdown-it renderer; document typography with light/dark and alerts (#29).
 - Outline tab: headings of the document nested by level, click or Enter reveals the heading through a navigation channel (`navigation.revealLine` / `topLine`), and the visible section is highlighted (#26).
 - Explorer tab: lazy-loaded folder tree with arrow-key navigation, Enter/Space to open, the open document highlighted and revealed, and expanded folders remembered for the session; `browse` use case that reports unreadable folders (#24).
 - Favourites tab: list with file/folder icons, open on click, remove, missing items dimmed, Alt+Up/Down reordering, and a star toggle in the viewport header (#25).

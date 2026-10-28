@@ -61,3 +61,25 @@ export function joinPath(base: string, ...segments: string[]): string {
   const parts = segments.map((s) => s.replace(TRIMMED_SEPARATORS, '')).filter((s) => s !== '');
   return [base.replace(/[\\/]+$/, ''), ...parts].join(separator);
 }
+
+/**
+ * `relative` resolved against the directory `base`, with `.` and `..` collapsed (a `..` never
+ * climbs above the root). An absolute `relative` wins. The result is normalised.
+ */
+export function resolvePath(base: string, relative: string): string {
+  const target = normalisePath(relative);
+  if (rootLength(target) > 0) return target;
+  const root = normalisePath(base);
+  const prefixLength = rootLength(root);
+  const segments = root
+    .slice(prefixLength)
+    .split('/')
+    .filter((segment) => segment !== '');
+  for (const part of target.split('/')) {
+    if (part === '..') segments.pop();
+    else if (part !== '' && part !== '.') segments.push(part);
+  }
+  const prefix = root.slice(0, prefixLength);
+  const separator = prefix === '' || prefix.endsWith('/') ? '' : '/';
+  return prefix + (segments.length > 0 ? separator : '') + segments.join('/');
+}
