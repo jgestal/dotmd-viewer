@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `render_markdown` command: GFM, footnotes, alerts, highlight, front matter, math markup for KaTeX and `data-sourcepos` via comrak
 - Project scaffold (Tauri 2 + SvelteKit)
+- CI workflow: lint, typecheck, tests and build on macOS, Windows and Linux
 - Initial documentation: README, LICENSE, CHANGELOG, CONTRIBUTING and ARCHITECTURE
 - Slide splitting by top-level `---` (code blocks and front matter aware) and `slideAtLine`
 - Document statistics (words, characters, lines, reading time) ignoring Markdown syntax, front matter and code
