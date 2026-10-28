@@ -1,5 +1,6 @@
 <script lang="ts">
   import { app } from '../app.svelte';
+  import CodeEditor from './CodeEditor.svelte';
   import Preview from './Preview.svelte';
 
   // What the main area shows for the open document. Reading follows the chosen layout;
@@ -18,7 +19,7 @@
 {:else if view === 'edit-preview'}
   <Preview /><!-- T33: editable preview -->
 {:else if view === 'edit-code'}
-  <Preview /><!-- T31: code editor -->
+  <CodeEditor />
 {:else if view === 'edit-split'}
   <Preview /><!-- T32: code editor and preview side by side -->
 {/if}

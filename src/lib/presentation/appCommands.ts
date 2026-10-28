@@ -3,6 +3,7 @@
 // is shown disabled, and its shortcut does nothing.
 import type { Command } from './commands/registry';
 import { defaultAccelerators, type CommandId } from './commands/ids';
+import { activeEditor } from './editor/activeEditor.svelte';
 import type { App, EditMode, Layout, SidebarTab } from './app.svelte';
 
 type Binding = Pick<Command, 'run' | 'enabled' | 'checked'> & { readonly label: string };
@@ -23,6 +24,16 @@ export function createAppCommands(app: App): Command[] {
     'file.save': { label: 'menu.save', run: () => app.save(), enabled: hasDocument },
     'file.saveAs': { label: 'menu.saveAs', run: () => app.saveAs(), enabled: hasDocument },
     'file.close': { label: 'menu.close', run: () => app.close(), enabled: hasDocument },
+    'edit.find': {
+      label: 'menu.find',
+      run: () => activeEditor.current?.find(),
+      enabled: () => activeEditor.current !== null,
+    },
+    'edit.replace': {
+      label: 'menu.findReplace',
+      run: () => activeEditor.current?.replace(),
+      enabled: () => activeEditor.current !== null,
+    },
     'view.toggleEdit': {
       label: 'action.edit',
       run: () => app.toggleEditing(),

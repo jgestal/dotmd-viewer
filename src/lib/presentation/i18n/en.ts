@@ -134,4 +134,24 @@ export const en = {
 
   // T38 · Native menu
   'menu.exit': 'Exit',
+  // T31 · Code editor
+  'editor.label': 'Markdown source',
+  'editor.placeholder': 'Start writing Markdown…',
+  'editor.goToLine': 'Go to line',
+  'editor.go': 'go',
+  'editor.search.find': 'Find',
+  'editor.search.replace': 'Replace',
+  'editor.search.next': 'next',
+  'editor.search.previous': 'previous',
+  'editor.search.all': 'all',
+  'editor.search.matchCase': 'match case',
+  'editor.search.regexp': 'regexp',
+  'editor.search.byWord': 'by word',
+  'editor.search.replaceOne': 'replace',
+  'editor.search.replaceAll': 'replace all',
+  'editor.search.close': 'close',
+  'editor.search.currentMatch': 'current match',
+  'editor.search.onLine': 'on line',
+  'editor.search.replacedMatches': 'replaced $ matches',
+  'editor.search.replacedMatch': 'replaced match on $',
 } as const satisfies Record<string, string>;
