@@ -8,7 +8,6 @@
   import Shell from '$lib/presentation/components/Shell.svelte';
   import StatusBar from '$lib/presentation/components/StatusBar.svelte';
   import Welcome from '$lib/presentation/components/Welcome.svelte';
-  import { i18n } from '$lib/presentation/i18n/i18n.svelte';
 
   onMount(() => {
     void app.start();
