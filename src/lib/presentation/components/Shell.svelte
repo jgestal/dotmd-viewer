@@ -86,6 +86,8 @@
   .shell {
     display: grid;
     grid-template-columns: var(--sidebar-width) 0 minmax(0, 1fr);
+    /* Without this the single row grows with the content and the page scrolls, not the viewport. */
+    grid-template-rows: minmax(0, 1fr);
     height: 100vh;
   }
 

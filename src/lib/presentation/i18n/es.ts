@@ -101,4 +101,8 @@ export const es = {
   'dialog.unsaved.save': 'Guardar',
   'dialog.unsaved.discard': 'No guardar',
   'dialog.unsaved.cancel': 'Cancelar',
+
+  // T26 · outline
+  'outline.noDocument': 'No hay ningún documento abierto.',
+  'outline.noHeadings': 'Este documento no tiene encabezados.',
 } as const satisfies Record<keyof typeof en, string>;
