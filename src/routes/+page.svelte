@@ -52,10 +52,3 @@
     <StatusBar />
   {/snippet}
 </Shell>
-
-<style>
-  .placeholder {
-    padding: 12px 16px;
-    color: var(--fg-muted);
-  }
-</style>

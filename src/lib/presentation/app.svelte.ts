@@ -179,6 +179,8 @@ class App {
   /** Entries of a folder for the explorer tree (empty when it cannot be read). */
   listFolder(path: string) {
     return this.container.workspace.browse(path);
+  }
+
   // Favourites
 
   isFavourite(path: string): boolean {
