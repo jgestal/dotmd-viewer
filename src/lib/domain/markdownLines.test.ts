@@ -59,8 +59,8 @@ describe('splitFrontMatter', () => {
   });
 
   it('closes only on a line made of the closing fence alone', () => {
-    expect(splitFrontMatter('---\na: 1\nx---\n---\nbody').frontMatter).toBe('a: 1\nx---');
-    expect(splitFrontMatter('---\na: 1\n---x\n---\nbody').frontMatter).toBe('a: 1\n---x');
+    expect(splitFrontMatter('---\na: x---\n---\nbody').frontMatter).toBe('a: x---');
+    expect(splitFrontMatter('---\na:\n  ---x\n---\nbody').frontMatter).toBe('a:\n  ---x');
   });
 
   it('treats an unclosed opening fence as body', () => {
