@@ -13,6 +13,7 @@ import { MemoryWindow } from './memoryWindow';
 export * from './fakeTranslate';
 export * from './memoryDialogs';
 export * from './memoryFileSystem';
+export * from './memoryMenu';
 export * from './memoryNotifier';
 export * from './memoryOpener';
 export * from './memoryOpenRequests';

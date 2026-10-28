@@ -10,6 +10,7 @@ export interface WindowState {
 export class MemoryWindow implements AppWindow {
   /** Every `showDocument` call, in order. */
   readonly calls: WindowState[] = [];
+  fullscreen = false;
 
   /** What the window shows now, or `null` before the first call. */
   get current(): WindowState | null {
@@ -18,5 +19,9 @@ export class MemoryWindow implements AppWindow {
 
   async showDocument(title: string, path: string | null, edited: boolean): Promise<void> {
     this.calls.push({ title, path, edited });
+  }
+
+  async toggleFullscreen(): Promise<void> {
+    this.fullscreen = !this.fullscreen;
   }
 }

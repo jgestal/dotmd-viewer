@@ -34,6 +34,12 @@ export function createAppCommands(app: App): Command[] {
       run: () => app.toggleSidebar(),
       checked: () => app.preferences.sidebarVisible,
     },
+    'file.clearRecents': {
+      label: 'menu.clearRecents',
+      run: () => app.clearRecents(),
+      enabled: () => app.preferences.recents.length > 0,
+    },
+    'view.fullScreen': { label: 'menu.fullScreen', run: () => app.toggleFullscreen() },
     'view.zoomIn': { label: 'menu.zoomIn', run: () => app.zoomIn() },
     'view.zoomOut': { label: 'menu.zoomOut', run: () => app.zoomOut() },
     'view.zoomReset': { label: 'menu.zoomReset', run: () => app.resetZoom() },

@@ -8,6 +8,8 @@
   import StatusBar from '$lib/presentation/components/StatusBar.svelte';
   import Viewport from '$lib/presentation/components/Viewport.svelte';
   import Welcome from '$lib/presentation/components/Welcome.svelte';
+  import { i18n } from '$lib/presentation/i18n/i18n.svelte';
+  import { createMenuInstaller, currentMenu } from '$lib/presentation/menu/nativeMenu';
 
   onMount(() => {
     void app.start();
@@ -18,8 +20,25 @@
     const command = app.commands.findByEvent(event, app.platform);
     if (!command) return;
     event.preventDefault();
-    void app.commands.execute(command.id);
+    app.runCommand(command.id);
   }
+
+  // The native menu bar follows the language, the recents and every command's state.
+  let installMenu: ReturnType<typeof createMenuInstaller> | undefined;
+  $effect(() => {
+    if (!app.ready) return;
+    installMenu ??= createMenuInstaller(app.container.menu, {
+      onCommand: (id) => app.runCommand(id),
+      onRecent: (path) => void app.open(path),
+    });
+    const tree = currentMenu({
+      platform: app.platform,
+      t: i18n.t,
+      recents: app.preferences.recents,
+      commands: app.commands,
+    });
+    void installMenu(tree);
+  });
 
   $effect(() => {
     const theme = app.preferences.theme;

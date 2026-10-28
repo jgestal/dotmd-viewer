@@ -1,6 +1,7 @@
 // Tauri adapters: the only code allowed to import @tauri-apps/*.
 export * from './tauriDialogs';
 export * from './tauriFileSystem';
+export * from './tauriMenu';
 export * from './tauriOpener';
 export * from './tauriOpenRequests';
 export * from './tauriPreferencesStore';
