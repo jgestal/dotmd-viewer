@@ -6,8 +6,10 @@ mod file_ops;
 mod files;
 mod folders;
 mod open_requests;
+mod preferences_file;
 mod render;
 mod watcher;
+mod window_state;
 
 use open_requests::OpenRequests;
 
@@ -38,6 +40,9 @@ pub fn run() {
             file_ops::trash_path,
             file_ops::copy_into,
             file_ops::reveal_path,
+            preferences_file::load_preferences,
+            preferences_file::save_preferences,
+            window_state::set_document_state,
         ])
         .build(tauri::generate_context!())
         .expect("error while building DotMD Viewer");
