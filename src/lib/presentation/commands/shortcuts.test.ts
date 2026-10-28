@@ -195,6 +195,12 @@ describe('resolveAccelerator', () => {
     expect(resolveAccelerator(spec, 'linux')).toBe('F11');
   });
 
+  it('lets Windows override or drop the shared accelerator', () => {
+    expect(resolveAccelerator({ other: 'Mod+Q', windows: 'Alt+F4' }, 'windows')).toBe('Alt+F4');
+    expect(resolveAccelerator({ other: 'Mod+Q', windows: null }, 'windows')).toBeUndefined();
+    expect(resolveAccelerator({ other: 'Mod+Q', windows: null }, 'linux')).toBe('Mod+Q');
+  });
+
   it('returns undefined when the platform has none', () => {
     expect(resolveAccelerator({ mac: 'Mod+K' }, 'linux')).toBeUndefined();
     expect(resolveAccelerator({ other: 'F11' }, 'mac')).toBeUndefined();

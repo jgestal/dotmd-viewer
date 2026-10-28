@@ -78,6 +78,15 @@ export interface AppWindow {
   toggleFullscreen(): Promise<void>;
   /** Shows the window, which starts hidden so it never flashes or jumps while loading. */
   reveal(): Promise<void>;
+  /**
+   * Asks before the window closes (close button, Alt+F4): `true` lets it close, which quits the
+   * app; `false` keeps it open. Returns the function that removes the handler.
+   */
+  onCloseRequested(handler: () => Promise<boolean>): () => void;
+  /** Called when the system asks to quit (Dock, Cmd+Q): the handler decides, then calls `quit`. */
+  onQuitRequested(handler: () => void): () => void;
+  /** Exits the app now, without asking: the caller already confirmed any unsaved changes. */
+  quit(): Promise<void>;
 }
 
 /** Menu items the operating system implements itself (clipboard, window management…). */
@@ -96,7 +105,6 @@ export type PredefinedMenuItem =
   | 'hide'
   | 'hideOthers'
   | 'showAll'
-  | 'quit'
   | 'about';
 
 /** The menu bar as data; labels are translated, accelerators in Tauri syntax (CmdOrCtrl+S). */

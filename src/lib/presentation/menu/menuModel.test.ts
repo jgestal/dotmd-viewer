@@ -55,7 +55,7 @@ describe('buildMenu', () => {
       '<hideOthers>',
       '<showAll>',
       '—',
-      '<quit>',
+      '[menu.quit]',
     ]);
   });
 
@@ -70,19 +70,25 @@ describe('buildMenu', () => {
 
   it('puts Settings and Exit in File on Windows', () => {
     const file = labels(submenu(buildMenu(context('windows')), 'menu.file'));
-    expect(file.slice(-4)).toEqual(['—', '[menu.settings]', '—', '<quit>']);
+    expect(file.slice(-4)).toEqual(['—', '[menu.settings]', '—', '[menu.exit]']);
     const quit = submenu(buildMenu(context('windows')), 'menu.file').at(-1);
-    expect(quit).toEqual({ kind: 'predefined', item: 'quit', label: '[menu.exit]' });
+    expect(quit).toMatchObject({ kind: 'command', id: 'app.quit' });
+    expect(strip(quit?.kind === 'command' ? quit.label : '')).toBe('[menu.exit]');
   });
 
   it('puts Preferences at the end of Edit and Quit in File on Linux', () => {
     const menu = buildMenu(context('linux'));
     expect(labels(submenu(menu, 'menu.edit')).slice(-2)).toEqual(['—', '[menu.settings]']);
-    expect(submenu(menu, 'menu.file').at(-1)).toEqual({
-      kind: 'predefined',
-      item: 'quit',
-      label: '[menu.quit]',
-    });
+    const quit = submenu(menu, 'menu.file').at(-1);
+    expect(quit).toMatchObject({ kind: 'command', id: 'app.quit' });
+    expect(strip(quit?.kind === 'command' ? quit.label : '')).toBe('[menu.quit]');
+  });
+
+  it('uses the app command, never the system item, for Quit on every platform', () => {
+    const app = submenu(buildMenu(context('mac')), 'app.name').at(-1);
+    expect(app).toMatchObject({ kind: 'command', id: 'app.quit', label: '[menu.quit]' });
+    const flat = JSON.stringify(buildMenu(context('linux')));
+    expect(flat).not.toContain('"item":"quit"');
   });
 
   it('keeps About in Help except on macOS', () => {

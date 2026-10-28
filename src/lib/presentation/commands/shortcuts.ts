@@ -2,8 +2,17 @@
 
 export type Platform = 'mac' | 'windows' | 'linux';
 
-/** One accelerator for every platform, or one per platform family. */
-export type AcceleratorSpec = string | { readonly mac?: string; readonly other?: string };
+/**
+ * One accelerator for every platform, or one per platform family. `windows` overrides `other`
+ * there; `null` means Windows has no accelerator.
+ */
+export type AcceleratorSpec =
+  | string
+  | {
+      readonly mac?: string;
+      readonly other?: string;
+      readonly windows?: string | null;
+    };
 
 export interface Accelerator {
   readonly mod: boolean;
@@ -119,5 +128,7 @@ export function toTauriAccelerator(accel: string): string {
 /** The accelerator text a spec resolves to on the platform, if any. */
 export function resolveAccelerator(spec: AcceleratorSpec, platform: Platform): string | undefined {
   if (typeof spec === 'string') return spec;
-  return platform === 'mac' ? spec.mac : spec.other;
+  if (platform === 'mac') return spec.mac;
+  if (platform === 'windows' && spec.windows !== undefined) return spec.windows ?? undefined;
+  return spec.other;
 }

@@ -80,7 +80,7 @@ export function buildMenu(context: MenuContext): MenuNode[] {
     ...(platform === 'windows' ? [separator, settings] : []),
     ...(mac
       ? []
-      : [separator, predefined('quit', platform === 'windows' ? 'menu.exit' : 'menu.quit')]),
+      : [separator, command('app.quit', platform === 'windows' ? 'menu.exit' : 'menu.quit')]),
   ]);
 
   const edit = submenu('menu.edit', [
@@ -143,7 +143,7 @@ export function buildMenu(context: MenuContext): MenuNode[] {
     predefined('hideOthers', 'menu.hideOthers'),
     predefined('showAll', 'menu.showAll'),
     separator,
-    predefined('quit', 'menu.quit'),
+    command('app.quit', 'menu.quit'),
   ]);
   const window = submenu('menu.window', [
     predefined('minimize', 'menu.minimize'),

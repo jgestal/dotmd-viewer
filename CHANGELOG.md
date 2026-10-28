@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Closing the window, Alt+F4 and Quit (menu, Cmd/Ctrl+Q or the Dock) ask to save, discard or cancel when there are unsaved changes (#46).
 - Native menus with each platform's conventions: macOS app and Window menus; menu bar in the window with Alt mnemonics on Windows and Linux; Settings, Quit/Exit and About where each desktop expects them; `*name - DotMD Viewer` titles on Windows/Linux; F11 full screen; Open Recent and Clear Recents (#38, #91). See docs/platforms.md.
 
 - Code editor: CodeMirror 6 with Markdown highlighting (code block languages loaded lazily), undo/redo, find and replace (`Mod+F`, `Mod+Alt+F`) with a translated panel, soft wrapping, bracket matching and pairing, themed from the app tokens; syncs with the document and honours the navigation channel (#31).

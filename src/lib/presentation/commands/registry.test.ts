@@ -106,7 +106,7 @@ describe('defaultAccelerators', () => {
 
   it('lists every command id exactly once', () => {
     expect(new Set(COMMAND_IDS).size).toBe(COMMAND_IDS.length);
-    expect(COMMAND_IDS).toHaveLength(30);
+    expect(COMMAND_IDS).toHaveLength(31);
   });
 
   it('only assigns accelerators to known commands and they all parse', () => {
@@ -124,6 +124,13 @@ describe('defaultAccelerators', () => {
       .map((spec) => resolveAccelerator(spec, platform))
       .filter((accelerator) => accelerator !== undefined);
     expect(new Set(used).size).toBe(used.length);
+  });
+
+  it('binds Quit to Mod+Q everywhere except Windows', () => {
+    const quit = defaultAccelerators['app.quit']!;
+    expect(resolveAccelerator(quit, 'mac')).toBe('Mod+Q');
+    expect(resolveAccelerator(quit, 'linux')).toBe('Mod+Q');
+    expect(resolveAccelerator(quit, 'windows')).toBeUndefined();
   });
 
   it('uses the platform specific full screen shortcut', () => {

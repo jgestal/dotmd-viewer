@@ -31,6 +31,7 @@ export const COMMAND_IDS = [
   'help.website',
   'help.about',
   'app.settings',
+  'app.quit',
 ] as const;
 
 export type CommandId = (typeof COMMAND_IDS)[number];
@@ -62,4 +63,6 @@ export const defaultAccelerators: Readonly<Partial<Record<CommandId, Accelerator
   'view.zoomReset': 'Mod+0',
   'view.fullScreen': { mac: 'Ctrl+Mod+F', other: 'F11' },
   'app.settings': 'Mod+,',
+  // Windows closes with Alt+F4, which the window itself handles.
+  'app.quit': { mac: 'Mod+Q', other: 'Mod+Q', windows: null },
 };

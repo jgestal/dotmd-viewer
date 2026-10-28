@@ -92,6 +92,9 @@ class App {
     watcher.onChange((path) => void this.#externalChange(path));
     openRequests.onOpen((paths) => void this.openPaths(paths));
     dropTarget.onDrag((event) => this.#onDrag(event));
+    const { window } = this.#container;
+    window.onCloseRequested(() => this.confirmQuit());
+    window.onQuitRequested(() => void this.quit());
     const pending = await openRequests.takePending();
     if (pending.length > 0) await this.openPaths(pending);
     else if (this.preferences.lastFile) await this.open(this.preferences.lastFile, { quiet: true });
@@ -172,6 +175,11 @@ class App {
 
   async edit(content: string): Promise<void> {
     this.documentState = await this.container.documents.edit(this.documentState, content);
+  }
+
+  /** Quits the app after asking about unsaved changes; cancelling keeps it running. */
+  async quit(): Promise<void> {
+    if (await this.confirmQuit()) await this.container.window.quit();
   }
 
   /** Asked by the window before it closes; false keeps it open. */
