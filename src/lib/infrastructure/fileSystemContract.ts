@@ -72,6 +72,16 @@ export function describeFileSystemContract(name: string, factory: () => FileSyst
       });
     });
 
+    describe('kind', () => {
+      it('tells files, folders and missing paths apart', async () => {
+        const { fileSystem, seedFile } = factory();
+        seedFile('/docs/a.md', 'x');
+        expect(await fileSystem.kind('/docs/a.md')).toBe('file');
+        expect(await fileSystem.kind('/docs')).toBe('folder');
+        expect(await fileSystem.kind('/docs/b.md')).toBe('missing');
+      });
+    });
+
     describe('listDir', () => {
       it('lists only Markdown and text files and folders, without hidden entries', async () => {
         const { fileSystem, seedFile, seedFolder } = factory();

@@ -26,6 +26,16 @@ pub fn exists(path: &Path) -> bool {
     path.symlink_metadata().is_ok()
 }
 
+/// What `path` is on disk: `"file"` (anything that is not a folder), `"folder"` or `"missing"`.
+/// Symlinks are followed, so a link to a folder is a folder.
+pub fn kind(path: &Path) -> &'static str {
+    match fs::metadata(path) {
+        Ok(metadata) if metadata.is_dir() => "folder",
+        Ok(_) => "file",
+        Err(_) => "missing",
+    }
+}
+
 /// True when both paths resolve to the same item, e.g. `a.md` and `A.md` on a case-insensitive disk.
 fn is_same_item(a: &Path, b: &Path) -> bool {
     matches!((fs::canonicalize(a), fs::canonicalize(b)), (Ok(a), Ok(b)) if a == b)
@@ -188,6 +198,11 @@ pub async fn path_exists(path: String) -> AppResult<bool> {
 }
 
 #[tauri::command]
+pub async fn path_kind(path: String) -> AppResult<&'static str> {
+    Ok(kind(Path::new(&path)))
+}
+
+#[tauri::command]
 pub async fn rename_path(from: String, to: String) -> AppResult<()> {
     rename(Path::new(&from), Path::new(&to))
 }
@@ -226,6 +241,16 @@ mod tests {
         assert!(exists(&file));
         assert!(exists(dir.path()));
         assert!(!exists(&dir.path().join("missing.md")));
+    }
+
+    #[test]
+    fn kind_tells_files_folders_and_missing_paths_apart() {
+        let dir = TempDir::new().unwrap();
+        let file = dir.path().join("a.md");
+        fs::write(&file, "x").unwrap();
+        assert_eq!(kind(&file), "file");
+        assert_eq!(kind(dir.path()), "folder");
+        assert_eq!(kind(&dir.path().join("missing.md")), "missing");
     }
 
     #[test]

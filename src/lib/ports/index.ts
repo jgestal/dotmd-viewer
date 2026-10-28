@@ -27,6 +27,8 @@ export interface FileSystem {
   writeText(path: string, file: TextFile): Promise<void>;
   listDir(path: string): Promise<readonly DirEntry[]>;
   exists(path: string): Promise<boolean>;
+  /** What the path is on disk; `missing` when nothing is there. */
+  kind(path: string): Promise<EntryKind | 'missing'>;
   /** Renames or moves; rejects with `alreadyExists` rather than overwrite. */
   rename(from: string, to: string): Promise<void>;
   /** Sends to the system trash / recycle bin. */
@@ -139,6 +141,17 @@ export interface PreferencesStore {
 export interface OpenRequests {
   takePending(): Promise<readonly string[]>;
   onOpen(listener: (paths: readonly string[]) => void): () => void;
+}
+
+/** What the user is doing with files dragged over the window. `paths` is empty on `leave`. */
+export interface DropEvent {
+  readonly type: 'enter' | 'over' | 'leave' | 'drop';
+  readonly paths: readonly string[];
+}
+
+/** Drag and drop of files and folders from the OS onto the window. */
+export interface DropTarget {
+  onDrag(listener: (event: DropEvent) => void): () => void;
 }
 
 /** Opens addresses in the user's default browser or mail client. */

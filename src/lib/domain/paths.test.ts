@@ -3,6 +3,7 @@ import {
   baseName,
   comparablePath,
   dirName,
+  isMarkdownPath,
   isSamePath,
   isSameOrInside,
   joinPath,
@@ -241,4 +242,15 @@ describe('resolvePath', () => {
   it('resolves against a relative base', () => {
     expect(resolvePath('docs', 'a.md')).toBe('docs/a.md');
   });
+});
+
+describe('isMarkdownPath', () => {
+  it.each(['a.md', 'a.markdown', 'a.mdown', 'a.mkd', 'a.txt', '/x/Notes.MD', 'C:\\docs\\a.Txt'])(
+    'accepts %s',
+    (path) => expect(isMarkdownPath(path)).toBe(true),
+  );
+
+  it.each(['a.png', 'a.md.bak', 'md', '/x.md/readme', 'a.mdx', ''])('rejects %s', (path) =>
+    expect(isMarkdownPath(path)).toBe(false),
+  );
 });

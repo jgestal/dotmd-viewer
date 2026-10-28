@@ -1,7 +1,7 @@
 // In-memory FileSystem for tests. It mirrors the Rust side: the same errors, the same listing rules.
 import { appError, type AppError } from '../../domain/errors';
 import { baseName, dirName, joinPath, normalisePath } from '../../domain/paths';
-import type { DirEntry, FileSystem, TextFile } from '../../ports';
+import type { DirEntry, EntryKind, FileSystem, TextFile } from '../../ports';
 
 export type FileSystemMethod = keyof FileSystem;
 
@@ -116,6 +116,13 @@ export class MemoryFileSystem implements FileSystem {
   async exists(path: string): Promise<boolean> {
     this.begin('exists', path);
     return this.isTaken(normalisePath(path));
+  }
+
+  async kind(path: string): Promise<EntryKind | 'missing'> {
+    this.begin('kind', path);
+    const key = normalisePath(path);
+    if (this.folders.has(key)) return 'folder';
+    return this.files.has(key) ? 'file' : 'missing';
   }
 
   async rename(from: string, to: string): Promise<void> {
