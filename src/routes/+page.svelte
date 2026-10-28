@@ -2,7 +2,6 @@
   import { onMount } from 'svelte';
   import { app } from '$lib/presentation/app.svelte';
   import OutlinePanel from '$lib/presentation/components/OutlinePanel.svelte';
-  import PlaceholderDocument from '$lib/presentation/components/PlaceholderDocument.svelte';
   import ExplorerPanel from '$lib/presentation/components/ExplorerPanel.svelte';
   import FavouritesPanel from '$lib/presentation/components/FavouritesPanel.svelte';
   import Preview from '$lib/presentation/components/Preview.svelte';
