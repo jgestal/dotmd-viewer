@@ -3,6 +3,7 @@
   import { app } from '$lib/presentation/app.svelte';
   import OutlinePanel from '$lib/presentation/components/OutlinePanel.svelte';
   import PlaceholderDocument from '$lib/presentation/components/PlaceholderDocument.svelte';
+  import ExplorerPanel from '$lib/presentation/components/ExplorerPanel.svelte';
   import Shell from '$lib/presentation/components/Shell.svelte';
   import Welcome from '$lib/presentation/components/Welcome.svelte';
   import { i18n } from '$lib/presentation/i18n/i18n.svelte';
@@ -30,7 +31,7 @@
 
 <Shell>
   {#snippet explorer()}
-    <p class="placeholder">{i18n.t('sidebar.explorer')}</p>
+    <ExplorerPanel />
   {/snippet}
   {#snippet favourites()}
     <p class="placeholder">{i18n.t('sidebar.favourites')}</p>

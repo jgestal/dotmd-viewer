@@ -103,4 +103,9 @@ export const en = {
   // T26 · outline
   'outline.noDocument': 'No document open.',
   'outline.noHeadings': 'No headings in this document.',
+  // T24 · Explorer
+  'explorer.tree': 'Files',
+  'explorer.chooseFolder': 'Open another folder',
+  'explorer.empty': 'No folder is open.',
+  'explorer.emptyFolder': 'This folder has no Markdown files.',
 } as const satisfies Record<string, string>;

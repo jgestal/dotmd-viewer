@@ -57,6 +57,25 @@ describe('folder', () => {
   });
 });
 
+describe('browse', () => {
+  it('lists the entries of a folder', async () => {
+    const { workspace, fs } = setup();
+    fs.seedFile('/d/a.md', 'x');
+    fs.seedFolder('/d/sub');
+    const entries = await workspace.browse('/d');
+    expect(entries.map((e) => [e.name, e.kind])).toEqual([
+      ['sub', 'folder'],
+      ['a.md', 'file'],
+    ]);
+  });
+
+  it('reports an unreadable folder and shows it as empty', async () => {
+    const { workspace, notifier } = setup();
+    expect(await workspace.browse('/gone')).toEqual([]);
+    expect(notifier.errors).toEqual(['workspace.notFound {"name":"gone"}']);
+  });
+});
+
 describe('favourites', () => {
   it('adds a favourite and removes it when toggled again', () => {
     const { workspace } = setup();
