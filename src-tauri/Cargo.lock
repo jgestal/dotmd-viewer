@@ -850,6 +850,7 @@ dependencies = [
  "tauri-plugin-dialog",
  "tauri-plugin-opener",
  "tempfile",
+ "unicode-normalization",
 ]
 
 [[package]]
