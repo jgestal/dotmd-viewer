@@ -13,5 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial documentation: README, LICENSE, CHANGELOG, CONTRIBUTING and ARCHITECTURE
 - Slide splitting by top-level `---` (code blocks and front matter aware) and `slideAtLine`
 - Document statistics (words, characters, lines, reading time) ignoring Markdown syntax, front matter and code
+- Pure workspace rules (open folder, favourites, rename and delete tracking) and path helpers
 
 [Unreleased]: https://github.com/jgestal/dotmd-viewer/commits/main
