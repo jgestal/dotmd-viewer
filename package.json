@@ -11,7 +11,7 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "icon:render": "node scripts/render-icon.mjs",
-    "icon": "npm run icon:render && tauri icon assets/icon.png",
+    "icon": "npm run icon:render && node scripts/make-icons.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint:rust": "cd src-tauri && cargo clippy --all-targets -- -D warnings",
