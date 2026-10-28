@@ -5,6 +5,7 @@ import {
   editDocument,
   isDirty,
   markSaved,
+  markUnsaved,
   newDocument,
   openDocument,
   reloadFromDisk,
@@ -231,5 +232,18 @@ describe('displayName', () => {
 
   it('returns a bare file name as is', () => {
     expect(displayName(open('', 'a.md'), 'Untitled')).toBe('a.md');
+  });
+});
+
+describe('markUnsaved', () => {
+  it('makes a clean document dirty without touching its text', () => {
+    const marked = markUnsaved(open('hello'));
+    expect(isDirty(marked)).toBe(true);
+    expect(marked.content).toBe('hello');
+    expect(marked.path).toBe('/notes/a.md');
+  });
+
+  it('also works for an empty document', () => {
+    expect(isDirty(markUnsaved(open('')))).toBe(true);
   });
 });
