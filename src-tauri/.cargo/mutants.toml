@@ -1,0 +1,5 @@
+# cargo-mutants configuration, read by `npm run test:mutation:rust`.
+
+# The only mutants left are the Tauri entry points: `main` and `run` just start the GUI event loop,
+# which needs a display and cannot be exercised by `cargo test`. Any other Rust code is mutated.
+exclude_re = ["replace (run|main) with"]

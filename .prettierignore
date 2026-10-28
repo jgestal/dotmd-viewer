@@ -4,6 +4,7 @@ src-tauri/target/
 node_modules/
 coverage/
 reports/
+.stryker-tmp/
 package-lock.json
 src-tauri/
 .claude/

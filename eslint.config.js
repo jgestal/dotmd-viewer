@@ -14,6 +14,7 @@ export default ts.config(
       'node_modules/',
       'coverage/',
       'reports/',
+      '.stryker-tmp/',
       '.claude/',
     ],
   },

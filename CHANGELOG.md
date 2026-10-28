@@ -18,5 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Document entity: content, path, dirty flag, preserved line ending, encoding and BOM, with pure edit/save/reload operations
 - Document outline domain rule: headings with level, text, GitHub-style slug and source line
 - App icons for macOS (.icns), Windows (.ico), Linux (PNG) and the favicon, generated from the rendered icon
+- Mutation testing with StrykerJS (`npm run test:mutation`) and cargo-mutants (`npm run test:mutation:rust`), with a manual workflow
 
 [Unreleased]: https://github.com/jgestal/dotmd-viewer/commits/main

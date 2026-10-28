@@ -42,12 +42,13 @@ npm run tauri build   # build the installers for your platform
 ## Tests
 
 ```sh
-npm test               # Vitest: unit, use-case and architecture tests
-npm run test:rust      # cargo test for the Rust backend
-npm run test:mutation  # StrykerJS and cargo-mutants (scripts arrive with T04)
+npm test                    # Vitest: unit, use-case and architecture tests
+npm run test:rust           # cargo test for the Rust backend
+npm run test:mutation       # StrykerJS over domain and application, report in reports/mutation/
+npm run test:mutation:rust  # cargo-mutants over the Rust backend, report in reports/
 ```
 
-The test scripts are added progressively: Vitest and `cargo test` with T03, and `test:mutation` with T04.
+Mutation testing must score at least 85 %. The Rust target needs `cargo install cargo-mutants` once.
 
 ## Documentation
 

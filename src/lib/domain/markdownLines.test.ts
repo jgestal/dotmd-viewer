@@ -48,6 +48,21 @@ describe('splitFrontMatter', () => {
     expect(splitFrontMatter('\uFEFF---\na: 1\n---\nbody').frontMatter).toBe('a: 1');
   });
 
+  it('keeps every line of a multi-line body', () => {
+    expect(splitFrontMatter('---\na: 1\n---\nfirst\nsecond').body).toBe('first\nsecond');
+  });
+
+  it('opens only on a line made of dashes alone', () => {
+    expect(splitFrontMatter('---title\na: 1\n---\nbody').frontMatter).toBeNull();
+    expect(splitFrontMatter('--- x\na: 1\n---\nbody').frontMatter).toBeNull();
+    expect(splitFrontMatter('x---\na: 1\n---\nbody').frontMatter).toBeNull();
+  });
+
+  it('closes only on a line made of the closing fence alone', () => {
+    expect(splitFrontMatter('---\na: 1\nx---\n---\nbody').frontMatter).toBe('a: 1\nx---');
+    expect(splitFrontMatter('---\na: 1\n---x\n---\nbody').frontMatter).toBe('a: 1\n---x');
+  });
+
   it('treats an unclosed opening fence as body', () => {
     const text = '---\nnot closed';
     expect(splitFrontMatter(text)).toEqual({ frontMatter: null, body: text, bodyStartLine: 0 });
@@ -118,5 +133,25 @@ describe('codeLineMask', () => {
 
   it('needs three fence characters', () => {
     expect(codeLineMask(['``', 'x'])).toEqual([false, false]);
+  });
+
+  it('does not close a backtick block on a tilde fence', () => {
+    expect(codeLineMask(['```', '~~~', 'x', '```', 'out'])).toEqual([
+      true,
+      true,
+      true,
+      true,
+      false,
+    ]);
+  });
+
+  it('does not close a longer fence on a shorter fence of the same character', () => {
+    expect(codeLineMask(['````', '```', 'x', '````', 'out'])).toEqual([
+      true,
+      true,
+      true,
+      true,
+      false,
+    ]);
   });
 });
