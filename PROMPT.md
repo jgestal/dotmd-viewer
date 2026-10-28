@@ -20,11 +20,13 @@ HTML. Editor de código con CodeMirror 6; edición visual (WYSIWYG) con Milkdown
 ## Funcionalidades (alcance cerrado)
 
 ### Barra lateral izquierda (plegable, con tres pestañas)
+
 1. **Explorador**: árbol de la carpeta abierta, solo `.md`/`.markdown`/`.txt`.
 2. **Favoritos**: archivos y carpetas marcados, persistentes entre sesiones.
 3. **Índice**: encabezados del documento actual; clic para navegar y resaltado de la sección visible.
 
 ### Viewport
+
 - **Es un visor primero**: los documentos se abren en Vista previa de solo lectura. Un botón/pestaña
   **«Editar»** en la cabecera del viewport (⌘/Ctrl+E) activa la edición y muestra los modos de abajo.
 - **Modo de edición** (con «Editar» activo): Vista previa editable (WYSIWYG) · Código · Dividida (scroll sincronizado). Atajos ⌘/Ctrl+1, 2, 3.
@@ -35,13 +37,16 @@ HTML. Editor de código con CodeMirror 6; edición visual (WYSIWYG) con Milkdown
   Mermaid, resaltado de sintaxis, front matter YAML (oculto en la vista previa).
 
 ### Barra de estado
+
 Palabras, caracteres (con y sin espacios), líneas, tiempo de lectura, posición del cursor, modo actual
 y codificación/fin de línea.
 
 ### Exportación
+
 Exportar a **PDF** (respetando la disposición elegida) e **imprimir**.
 
 ### Integración con el sistema operativo
+
 - Asociación de archivos `.md`/`.markdown` y aparición en «Abrir con…» en los tres sistemas.
 - Abrir archivos al hacer doble clic, arrastrándolos a la ventana o al icono del Dock/barra de tareas,
   y desde la línea de comandos (`dotmd-viewer archivo.md`).
@@ -51,6 +56,7 @@ Exportar a **PDF** (respetando la disposición elegida) e **imprimir**.
 - Tema claro/oscuro según el sistema.
 
 ### Arrastrar y soltar e integración de escritorio
+
 - Soltar archivos o carpetas en la ventana: un `.md` se abre y una carpeta se carga en el Explorador.
 - Soltar imágenes en el editor: se copian junto al documento (`assets/`) y se inserta el enlace Markdown.
 - Arrastrar dentro del Explorador para mover archivos, y del Explorador a Favoritos para marcarlos.
@@ -64,6 +70,7 @@ Exportar a **PDF** (respetando la disposición elegida) e **imprimir**.
   y confirmación al cerrar.
 
 ### Menús nativos
+
 - **macOS — DotMD Viewer**: Acerca de, Ajustes…, Servicios, Ocultar, Salir.
 - **Archivo**: Nuevo, Abrir…, Abrir carpeta…, Abrir reciente ▸, Guardar, Guardar como…, Exportar a PDF…,
   Imprimir…, Cerrar.
@@ -75,10 +82,12 @@ Exportar a **PDF** (respetando la disposición elegida) e **imprimir**.
 - En Windows/Linux, «Ajustes» y «Acerca de» van en Archivo y Ayuda respectivamente.
 
 ### Idiomas
+
 Interfaz en **español e inglés** (i18n desde el primer día, sin textos fijos en los componentes).
 Sigue el idioma del sistema y se puede cambiar en Ajustes.
 
 ### Créditos
+
 Diálogo «Acerca de» y sección en el README: **Juan Gestal** — juan@gestal.es — https://www.gestal.es
 
 ## Icono
