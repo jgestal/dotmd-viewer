@@ -3,6 +3,8 @@ import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
   plugins: [sveltekit()],
+  // Rune effects only run with Svelte's browser build, which the test environment must ask for.
+  resolve: { conditions: ['browser'] },
   test: {
     environment: 'jsdom',
     include: ['src/**/*.test.ts'],

@@ -36,5 +36,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `list_dir` command: one-level folder listing (documents and folders only, no hidden entries, natural sort, `hasChildren` for folders)
 - Mutation testing with StrykerJS (`npm run test:mutation`) and cargo-mutants (`npm run test:mutation:rust`), with a manual workflow
 - In-memory test doubles for every port (`createMemoryServices()`) and a reusable `FileSystem` contract suite
+- Status bar: words, characters, lines, reading time, cursor position, mode, encoding (with BOM) and line ending, with statistics debounced while typing (#27)
 
 [Unreleased]: https://github.com/jgestal/dotmd-viewer/commits/main

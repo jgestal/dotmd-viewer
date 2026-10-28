@@ -110,4 +110,13 @@ export const es = {
   'explorer.chooseFolder': 'Abrir otra carpeta',
   'explorer.empty': 'No hay ninguna carpeta abierta.',
   'explorer.emptyFolder': 'Esta carpeta no tiene archivos Markdown.',
+  // T27 · status bar
+  'status.word': '{count} palabra',
+  'status.character': '{count} carácter',
+  'status.characterNoSpaces': '{count} carácter (sin espacios)',
+  'status.line': '{count} línea',
+  'status.cursor': 'Ln {line}, Col {column}',
+  'status.reading': 'Lectura',
+  'status.editing': 'Editando: {mode}',
+  'status.encodingWithBom': '{encoding} con BOM',
 } as const satisfies Record<keyof typeof en, string>;

@@ -29,6 +29,8 @@ class App {
   documentState = $state<DocumentState>({ doc: null });
   /** Documents open read-only; editing is switched on per session with "Edit". */
   editing = $state(false);
+  /** Caret position (1-based) in the code editor; null when no editor has one. */
+  cursor = $state<{ line: number; column: number } | null>(null);
   ready = $state(false);
 
   readonly platform = currentPlatform();
