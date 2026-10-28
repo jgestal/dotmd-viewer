@@ -23,7 +23,9 @@
         "dragDropEnabled": true
       }
     ],
-    "security": { "csp": null }
+    "security": {
+      "csp": null
+    }
   },
   "bundle": {
     "active": true,
@@ -31,10 +33,74 @@
     "category": "Productivity",
     "icon": [
       "icons/32x32.png",
+      "icons/64x64.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
+      "icons/icon.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "publisher": "Juan Gestal",
+    "homepage": "https://github.com/jgestal/dotmd-viewer",
+    "copyright": "© 2026 Juan Gestal. MIT License.",
+    "shortDescription": "Markdown viewer with optional editing",
+    "fileAssociations": [
+      {
+        "ext": [
+          "md",
+          "markdown",
+          "mdown",
+          "mkd"
+        ],
+        "name": "Markdown document",
+        "description": "Markdown document",
+        "mimeType": "text/markdown",
+        "role": "Editor",
+        "rank": "Alternate",
+        "contentTypes": [
+          "net.daringfireball.markdown"
+        ],
+        "exportedType": {
+          "identifier": "net.daringfireball.markdown",
+          "conformsTo": [
+            "public.plain-text"
+          ]
+        }
+      }
+    ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "embedBootstrapper"
+      },
+      "nsis": {
+        "installMode": "currentUser",
+        "languages": [
+          "English",
+          "Spanish"
+        ],
+        "displayLanguageSelector": false
+      },
+      "wix": {
+        "language": "en-US"
+      }
+    },
+    "linux": {
+      "deb": {
+        "depends": [
+          "libwebkit2gtk-4.1-0",
+          "libgtk-3-0"
+        ],
+        "desktopTemplate": "bundle/linux/dotmd-viewer.desktop"
+      },
+      "rpm": {
+        "depends": [
+          "webkit2gtk4.1"
+        ],
+        "desktopTemplate": "bundle/linux/dotmd-viewer.desktop"
+      },
+      "appimage": {
+        "bundleMediaFramework": false
+      }
+    }
   }
 }

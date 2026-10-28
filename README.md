@@ -27,6 +27,42 @@ Tauri 2 and Rust and runs on macOS, Windows and Linux.
 - Light and dark themes that follow the system
 - Interface in English and Spanish
 
+## Installing
+
+Download the installer for your system from the [releases page](https://github.com/jgestal/dotmd-viewer/releases).
+The builds are not code-signed yet, so each system asks for confirmation the first time.
+
+### macOS
+
+Open the `.dmg` and drag DotMD Viewer to Applications. The first time, right-click the app and choose **Open**
+(or go to **System Settings > Privacy & Security** and click **Open Anyway**).
+To make it the default app for Markdown: select a `.md` file in Finder, press `Cmd+I`, pick DotMD Viewer under
+**Open with** and click **Change All...**. The app is registered as an alternate handler, so installing it never
+changes your current default.
+
+### Windows
+
+Run the `.exe` (per-user install, no administrator rights needed) or the `.msi`. If SmartScreen warns about an
+unrecognised app, click **More info** and then **Run anyway**. The installer registers the `.md`, `.markdown`,
+`.mdown` and `.mkd` extensions and creates a Start menu shortcut; WebView2 is installed if it is missing.
+To make it the default: right-click a `.md` file, **Open with > Choose another app**, select DotMD Viewer and
+tick **Always use this app** (or **Settings > Apps > Default apps**).
+
+### Linux
+
+- Debian/Ubuntu: `sudo apt install ./dotmd-viewer_*.deb`
+- Fedora/openSUSE: `sudo dnf install ./dotmd-viewer-*.rpm`
+- Any distribution: `chmod +x DotMD*.AppImage && ./DotMD*.AppImage`
+
+The `.deb` and `.rpm` add a menu entry and the Markdown MIME types, so DotMD Viewer shows up in **Open With** in
+your file manager. To make it the default for Markdown:
+
+```sh
+xdg-mime default dotmd-viewer.desktop text/markdown text/x-markdown
+```
+
+If the window stays blank on some Wayland/NVIDIA setups, start the app with `WEBKIT_DISABLE_DMABUF_RENDERER=1`.
+
 ## Building from source
 
 Prerequisites:
