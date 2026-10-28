@@ -18,7 +18,11 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "format:rust": "cd src-tauri && cargo fmt",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:rust": "cd src-tauri && cargo test"
   },
   "author": "Juan Gestal <juan@gestal.es>",
   "license": "MIT",
@@ -35,10 +39,12 @@
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
     "@tauri-apps/cli": "^2",
     "@types/node": "^26.6.5",
+    "@vitest/coverage-v8": "^4.1.12",
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.23.1",
     "globals": "^17.13.0",
+    "jsdom": "^29.1.1",
     "prettier": "^3.9.10",
     "prettier-plugin-svelte": "^4.1.1",
     "puppeteer-core": "^25.16.0",
@@ -47,6 +53,7 @@
     "svelte-eslint-parser": "^1.10.0",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.72.1",
-    "vite": "^8.0.16"
+    "vite": "^8.0.16",
+    "vitest": "^4.1.12"
   }
 }
