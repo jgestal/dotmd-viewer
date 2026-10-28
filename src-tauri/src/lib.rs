@@ -3,6 +3,7 @@
 
 pub mod error;
 mod render;
+mod files;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -12,6 +13,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             // Commands are registered here, one line per command.
             render::render_markdown,
+            files::read_file,
+            files::write_file,
         ])
         .run(tauri::generate_context!())
         .expect("error while running DotMD Viewer");
