@@ -134,4 +134,7 @@ export const es = {
   'preview.properties': 'Propiedades del documento',
   'preview.diagramError': 'No se pudo dibujar este diagrama:',
   'preview.renderError': 'No se pudo mostrar el documento.',
+
+  // T38 · Native menu
+  'menu.exit': 'Salir',
 } as const satisfies Record<keyof typeof en, string>;

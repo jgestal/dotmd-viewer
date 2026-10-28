@@ -3,11 +3,12 @@
 import { createDocuments, type Documents } from './application/documents';
 import { createPreferences, type PreferencesUseCases } from './application/preferences';
 import { createWorkspace, type WorkspaceUseCases } from './application/workspace';
-import { createMemoryServices } from './infrastructure/memory';
+import { createMemoryServices, MemoryMenu } from './infrastructure/memory';
 import { BrowserDialogs, BrowserOpener, DEMO_FOLDER, seedDemo } from './infrastructure/memory/demo';
 import {
   TauriDialogs,
   TauriOpenRequests,
+  TauriMenu,
   tauriFileSystem,
   tauriOpener,
   tauriPreferencesStore,
@@ -22,6 +23,7 @@ import type {
   FileSystem,
   ExternalOpener,
   FileWatcher,
+  NativeMenu,
   MarkdownRenderer,
   Notifier,
   OpenRequests,
@@ -48,6 +50,8 @@ export interface Container {
   readonly renderer: MarkdownRenderer;
   readonly openRequests: OpenRequests;
   readonly opener: ExternalOpener;
+  readonly window: AppWindow;
+  readonly menu: NativeMenu;
 }
 
 interface Ports {
@@ -59,6 +63,7 @@ interface Ports {
   readonly store: PreferencesStore;
   readonly openRequests: OpenRequests;
   readonly opener: ExternalOpener;
+  readonly menu: NativeMenu;
 }
 
 const tauriPorts = (t: Translate): Ports => ({
@@ -70,6 +75,7 @@ const tauriPorts = (t: Translate): Ports => ({
   store: tauriPreferencesStore,
   openRequests: new TauriOpenRequests(),
   opener: tauriOpener,
+  menu: new TauriMenu(),
 });
 
 /** markdown-it only ships in the browser build (Tauri renders with comrak), so it loads on first use. */
@@ -89,6 +95,7 @@ const memoryPorts = (): Ports => {
     ...services,
     renderer: lazyDemoRenderer,
     opener: new BrowserOpener(),
+    menu: new MemoryMenu(),
     dialogs: new BrowserDialogs(),
     store: services.preferences,
   };
@@ -104,7 +111,7 @@ export const createContainer = ({
   mode = isTauri() ? 'tauri' : 'memory',
 }: ContainerOptions): Container => {
   const ports = mode === 'tauri' ? tauriPorts(t) : memoryPorts();
-  const { fs, dialogs, window, watcher, renderer, store, openRequests, opener } = ports;
+  const { fs, dialogs, window, watcher, renderer, store, openRequests, opener, menu } = ports;
   return {
     documents: createDocuments({ fs, dialogs, window, watcher, notifier, t }),
     workspace: createWorkspace({
@@ -119,5 +126,7 @@ export const createContainer = ({
     renderer,
     openRequests,
     opener,
+    window,
+    menu,
   };
 };

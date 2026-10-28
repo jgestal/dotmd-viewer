@@ -131,4 +131,7 @@ export const en = {
   'preview.properties': 'Document properties',
   'preview.diagramError': 'This diagram could not be drawn:',
   'preview.renderError': 'The document could not be rendered.',
+
+  // T38 · Native menu
+  'menu.exit': 'Exit',
 } as const satisfies Record<string, string>;

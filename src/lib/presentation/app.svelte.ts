@@ -14,6 +14,7 @@ import {
   type Preferences,
 } from '$lib/domain/preferences';
 import { createAppCommands } from './appCommands';
+import type { CommandId } from './commands/ids';
 import { createRegistry, type CommandRegistry } from './commands/registry';
 import { i18n } from './i18n/i18n.svelte';
 import { currentPlatform } from './platform';
@@ -26,6 +27,8 @@ export type SidebarTab = Preferences['sidebarTab'];
 
 /** Preferences are written at most this often while the user drags a slider or resizes. */
 const SAVE_DELAY_MS = 400;
+/** A shortcut delivered by both the native menu and the page arrives within this window. */
+const DUPLICATE_WINDOW_MS = 200;
 
 class App {
   preferences = $state<Preferences>(defaultPreferences);
@@ -43,6 +46,7 @@ class App {
   readonly commands: CommandRegistry;
   #container: Container | null = null;
   #saveTimer: ReturnType<typeof setTimeout> | undefined;
+  #lastCommand: { id: CommandId; at: number } | null = null;
 
   constructor() {
     this.commands = createRegistry(createAppCommands(this));
@@ -252,6 +256,26 @@ class App {
 
   resetZoom(): void {
     this.setPreference('zoom', resetZoom());
+  }
+
+  clearRecents(): void {
+    this.#applyPreferences(this.container.workspace.clearRecents(this.preferences));
+  }
+
+  toggleFullscreen(): Promise<void> {
+    return this.container.window.toggleFullscreen();
+  }
+
+  /**
+   * Runs a command from a shortcut or the native menu. On some desktops a shortcut reaches both
+   * the menu and the page; the second arrival within a moment is the same keystroke, so it is
+   * dropped.
+   */
+  runCommand(id: CommandId): void {
+    const now = Date.now();
+    if (this.#lastCommand?.id === id && now - this.#lastCommand.at < DUPLICATE_WINDOW_MS) return;
+    this.#lastCommand = { id, at: now };
+    void this.commands.execute(id);
   }
 
   // Preferences

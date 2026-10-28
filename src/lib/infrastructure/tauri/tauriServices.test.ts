@@ -76,10 +76,27 @@ describe('tauriWindow', () => {
       'plugin:window|set_title': () => undefined,
       set_document_state: () => undefined,
     });
-    await tauriWindow.showDocument('a.md — DotMD', '/d/a.md', true);
+    await tauriWindow.showDocument('a.md', '/d/a.md', true);
     expect(calls).toEqual([
-      { command: 'plugin:window|set_title', args: { label: 'main', value: 'a.md — DotMD' } },
+      // jsdom is not macOS, so the Windows/Linux title format applies.
+      {
+        command: 'plugin:window|set_title',
+        args: { label: 'main', value: '*a.md - DotMD Viewer' },
+      },
       { command: 'set_document_state', args: { path: '/d/a.md', edited: true } },
+    ]);
+  });
+
+  it('toggles full screen from the current state', async () => {
+    mockWindows('main');
+    const calls = mockBackend({
+      'plugin:window|is_fullscreen': () => false,
+      'plugin:window|set_fullscreen': () => undefined,
+    });
+    await tauriWindow.toggleFullscreen();
+    expect(calls).toEqual([
+      { command: 'plugin:window|is_fullscreen', args: { label: 'main' } },
+      { command: 'plugin:window|set_fullscreen', args: { label: 'main', value: true } },
     ]);
   });
 });

@@ -70,9 +70,61 @@ export interface Dialogs {
   alert(title: string, message: string): Promise<void>;
 }
 
-/** The app window: title, macOS edited dot and proxy icon. */
+/** The app window: title, macOS edited dot and proxy icon, full screen. */
 export interface AppWindow {
   showDocument(title: string, path: string | null, edited: boolean): Promise<void>;
+  toggleFullscreen(): Promise<void>;
+}
+
+/** Menu items the operating system implements itself (clipboard, window management…). */
+export type PredefinedMenuItem =
+  | 'undo'
+  | 'redo'
+  | 'cut'
+  | 'copy'
+  | 'paste'
+  | 'selectAll'
+  | 'minimize'
+  | 'maximize'
+  | 'fullscreen'
+  | 'bringAllToFront'
+  | 'services'
+  | 'hide'
+  | 'hideOthers'
+  | 'showAll'
+  | 'quit'
+  | 'about';
+
+/** The menu bar as data; labels are translated, accelerators in Tauri syntax (CmdOrCtrl+S). */
+export type MenuNode =
+  | { readonly kind: 'submenu'; readonly label: string; readonly items: readonly MenuNode[] }
+  | {
+      readonly kind: 'command';
+      readonly id: string;
+      readonly label: string;
+      readonly accelerator?: string;
+      readonly enabled: boolean;
+      readonly checked?: boolean;
+    }
+  | { readonly kind: 'recent'; readonly path: string; readonly label: string }
+  | { readonly kind: 'predefined'; readonly item: PredefinedMenuItem; readonly label: string }
+  | { readonly kind: 'separator' };
+
+export interface AboutInfo {
+  readonly name: string;
+  readonly credits: string;
+  readonly website: string;
+  readonly copyright: string;
+}
+
+export interface MenuHandlers {
+  onCommand(id: string): void;
+  onRecent(path: string): void;
+}
+
+/** The native menu bar: the app menu on macOS, the window's menu bar on Windows and Linux. */
+export interface NativeMenu {
+  install(menu: readonly MenuNode[], about: AboutInfo, handlers: MenuHandlers): Promise<void>;
 }
 
 /** Durable storage for the preferences file; parsing and validation live in the domain. */
