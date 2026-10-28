@@ -2,6 +2,7 @@
 //! frontend as Tauri commands. Each feature lives in its own module; this file only wires them.
 
 pub mod error;
+mod file_ops;
 mod files;
 mod folders;
 mod open_requests;
@@ -32,6 +33,11 @@ pub fn run() {
             folders::list_dir,
             open_requests::take_pending_open,
             watcher::watch_file,
+            file_ops::path_exists,
+            file_ops::rename_path,
+            file_ops::trash_path,
+            file_ops::copy_into,
+            file_ops::reveal_path,
         ])
         .build(tauri::generate_context!())
         .expect("error while building DotMD Viewer");
