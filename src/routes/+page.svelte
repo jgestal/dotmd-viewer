@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { app } from '$lib/presentation/app.svelte';
+  import OutlinePanel from '$lib/presentation/components/OutlinePanel.svelte';
+  import PlaceholderDocument from '$lib/presentation/components/PlaceholderDocument.svelte';
   import Shell from '$lib/presentation/components/Shell.svelte';
   import Welcome from '$lib/presentation/components/Welcome.svelte';
   import { i18n } from '$lib/presentation/i18n/i18n.svelte';
@@ -34,11 +36,11 @@
     <p class="placeholder">{i18n.t('sidebar.favourites')}</p>
   {/snippet}
   {#snippet outline()}
-    <p class="placeholder">{i18n.t('sidebar.outline')}</p>
+    <OutlinePanel />
   {/snippet}
   {#snippet viewport()}
     {#if app.document}
-      <pre class="placeholder-doc">{app.document.content}</pre>
+      <PlaceholderDocument />
     {:else if app.ready}
       <Welcome />
     {/if}
@@ -52,13 +54,5 @@
   .placeholder {
     padding: 12px 16px;
     color: var(--fg-muted);
-  }
-
-  .placeholder-doc {
-    margin: 0;
-    padding: 24px 32px;
-    font: 13px/1.6 var(--font-code);
-    white-space: pre-wrap;
-    user-select: text;
   }
 </style>

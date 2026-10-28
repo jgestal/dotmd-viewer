@@ -99,4 +99,8 @@ export const en = {
   'dialog.unsaved.save': 'Save',
   'dialog.unsaved.discard': "Don't Save",
   'dialog.unsaved.cancel': 'Cancel',
+
+  // T26 · outline
+  'outline.noDocument': 'No document open.',
+  'outline.noHeadings': 'No headings in this document.',
 } as const satisfies Record<string, string>;

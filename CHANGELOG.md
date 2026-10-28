@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Outline tab: headings of the document nested by level, click or Enter reveals the heading through a navigation channel (`navigation.revealLine` / `topLine`), and the visible section is highlighted (#26).
 - App shell: resizable sidebar with Explorer/Favourites/Outline tabs, viewport header with Edit toggle and mode/layout switches, status bar, welcome screen with recents, toasts, light/dark theme following the system (#23, #28).
 
 - i18n infrastructure: English and Spanish dictionaries, pure translator with system-language detection, and a reactive `i18n` store that switches language live
