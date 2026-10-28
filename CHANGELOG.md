@@ -13,7 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - File commands `path_exists`, `rename_path`, `trash_path`, `copy_into` and `reveal_path`: rename/move without overwriting, system trash, copy under a free name, reveal in the file manager
 - Document use cases (open, save, save as, new, close, quit confirmation, external reload) tested with the in-memory doubles
 - Application use cases for preferences (load, save, update) and workspace (folder, favourites, recents, rename, move, trash)
-
 - `render_markdown` command: GFM, footnotes, alerts, highlight, front matter, math markup for KaTeX and `data-sourcepos` via comrak
 - Project scaffold (Tauri 2 + SvelteKit)
 - CI workflow: lint, typecheck, tests and build on macOS, Windows and Linux
