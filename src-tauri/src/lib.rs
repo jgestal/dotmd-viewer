@@ -2,8 +2,8 @@
 //! frontend as Tauri commands. Each feature lives in its own module; this file only wires them.
 
 pub mod error;
-mod render;
 mod files;
+mod render;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
