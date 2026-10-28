@@ -176,4 +176,13 @@ export const en = {
   'pages.size.a4': 'A4',
   'pages.size.letter': 'Letter',
   'pages.pageNumber': 'Page {page} of {total}',
+  // T35 · Slides
+  'slides.present': 'Present',
+  'slides.exit': 'Exit presentation',
+  'slides.previous': 'Previous slide',
+  'slides.next': 'Next slide',
+  'slides.counter': '{current} / {total}',
+  'slides.stage': 'Slides',
+  'slides.empty': 'This document has no content to present.',
+  'slides.fullscreenFailed': 'Full screen is not available here.',
 } as const satisfies Record<string, string>;

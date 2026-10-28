@@ -179,4 +179,13 @@ export const es = {
   'pages.size.a4': 'A4',
   'pages.size.letter': 'Carta',
   'pages.pageNumber': 'Página {page} de {total}',
+  // T35 · Slides
+  'slides.present': 'Presentar',
+  'slides.exit': 'Salir de la presentación',
+  'slides.previous': 'Diapositiva anterior',
+  'slides.next': 'Diapositiva siguiente',
+  'slides.counter': '{current} / {total}',
+  'slides.stage': 'Diapositivas',
+  'slides.empty': 'Este documento no tiene contenido para presentar.',
+  'slides.fullscreenFailed': 'La pantalla completa no está disponible aquí.',
 } as const satisfies Record<keyof typeof en, string>;
