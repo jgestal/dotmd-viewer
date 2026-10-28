@@ -2,6 +2,7 @@
 //! frontend as Tauri commands. Each feature lives in its own module; this file only wires them.
 
 pub mod error;
+mod render;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -10,6 +11,7 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .invoke_handler(tauri::generate_handler![
             // Commands are registered here, one line per command.
+            render::render_markdown,
         ])
         .run(tauri::generate_context!())
         .expect("error while running DotMD Viewer");

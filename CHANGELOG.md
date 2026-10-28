@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `render_markdown` command: GFM, footnotes, alerts, highlight, front matter, math markup for KaTeX and `data-sourcepos` via comrak
 - Project scaffold (Tauri 2 + SvelteKit)
 - Initial documentation: README, LICENSE, CHANGELOG, CONTRIBUTING and ARCHITECTURE
 - Slide splitting by top-level `---` (code blocks and front matter aware) and `slideAtLine`
