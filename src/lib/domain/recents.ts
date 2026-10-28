@@ -1,14 +1,11 @@
 // Recently opened files: most recent first, without duplicates, capped.
 
+import { isSamePath } from './paths';
+
 export const MAX_RECENTS = 10;
 
-/** Paths are the same file when they differ only in separator style or a trailing slash. */
-const identity = (path: string): string => path.replaceAll('\\', '/').replace(/\/+$/, '');
-
-const samePath = (a: string, b: string): boolean => identity(a) === identity(b);
-
 export const removeRecent = (list: readonly string[], path: string): readonly string[] =>
-  list.filter((entry) => !samePath(entry, path));
+  list.filter((entry) => !isSamePath(entry, path));
 
 /** Puts `path` first, dropping its earlier occurrence and anything beyond `max`. */
 export const addRecent = (
@@ -25,6 +22,6 @@ export const renameRecent = (
   oldPath: string,
   newPath: string,
 ): readonly string[] => {
-  const renamed = list.map((entry) => (samePath(entry, oldPath) ? newPath : entry));
-  return renamed.filter((entry, index) => renamed.findIndex((e) => samePath(e, entry)) === index);
+  const renamed = list.map((entry) => (isSamePath(entry, oldPath) ? newPath : entry));
+  return renamed.filter((entry, index) => renamed.findIndex((e) => isSamePath(e, entry)) === index);
 };
