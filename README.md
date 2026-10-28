@@ -1,5 +1,7 @@
 # DotMD Viewer
 
+[![CI](https://github.com/jgestal/dotmd-viewer/actions/workflows/ci.yml/badge.svg)](https://github.com/jgestal/dotmd-viewer/actions/workflows/ci.yml)
+
 A simple, cross-platform Markdown viewer — with optional editing — for macOS, Windows and Linux.
 The little sibling of [DotMD](https://github.com/jgestal/dotmd).
 
