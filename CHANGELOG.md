@@ -17,5 +17,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Recent files list and validated user preferences (domain)
 - Document entity: content, path, dirty flag, preserved line ending, encoding and BOM, with pure edit/save/reload operations
 - Document outline domain rule: headings with level, text, GitHub-style slug and source line
+- App icons for macOS (.icns), Windows (.ico), Linux (PNG) and the favicon, generated from the rendered icon
 
 [Unreleased]: https://github.com/jgestal/dotmd-viewer/commits/main
