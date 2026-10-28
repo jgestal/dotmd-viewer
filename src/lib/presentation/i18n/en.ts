@@ -89,4 +89,14 @@ export const en = {
   'menu.hideOthers': 'Hide Others',
   'menu.showAll': 'Show All',
   'menu.quit': 'Quit DotMD Viewer',
+
+  'welcome.hint': 'Open a Markdown file or a folder, or drop one here.',
+  'document.unsaved': 'Unsaved changes',
+  'sidebar.resize': 'Resize sidebar',
+  'action.dismiss': 'Dismiss',
+  'dialog.unsaved.title': 'Unsaved changes',
+  'dialog.unsaved.message': 'Do you want to save the changes you made to "{name}"?',
+  'dialog.unsaved.save': 'Save',
+  'dialog.unsaved.discard': "Don't Save",
+  'dialog.unsaved.cancel': 'Cancel',
 } as const satisfies Record<string, string>;

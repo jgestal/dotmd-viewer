@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- App shell: resizable sidebar with Explorer/Favourites/Outline tabs, viewport header with Edit toggle and mode/layout switches, status bar, welcome screen with recents, toasts, light/dark theme following the system (#23, #28).
+
 - i18n infrastructure: English and Spanish dictionaries, pure translator with system-language detection, and a reactive `i18n` store that switches language live
 
 - Command registry: command ids, per-OS accelerators (`Mod+Shift+S` syntax with matching, display and Tauri formatting) and enable/check state
