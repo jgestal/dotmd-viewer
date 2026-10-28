@@ -10,7 +10,7 @@
   import { navigation } from '../navigation.svelte';
   import { effectiveScheme, SYSTEM_DARK_QUERY } from '../preview/colorScheme';
   import { bindLinks } from '../preview/enhance';
-  import { renderToElement } from '../preview/renderPipeline';
+  import { renderDocument } from '../preview/renderDocument';
   import {
     actionForKey,
     clampIndex,
@@ -66,9 +66,9 @@
   ): Promise<readonly string[]> {
     const options = { scheme: colors, diagramErrorLabel: i18n.t('preview.diagramError') };
     const pieces = await Promise.all(
-      markdowns.map((markdown) => renderToElement(app.container.renderer, markdown, options)),
+      markdowns.map((markdown) => renderDocument(app.container.renderer, markdown, options)),
     );
-    return pieces.map(({ element }) => element.innerHTML);
+    return pieces.map(({ root }) => root.innerHTML);
   }
 
   let latest = 0;

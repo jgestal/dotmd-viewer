@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Native menus with each platform's conventions: macOS app and Window menus; menu bar in the window with Alt mnemonics on Windows and Linux; Settings, Quit/Exit and About where each desktop expects them; `*name - DotMD Viewer` titles on Windows/Linux; F11 full screen; Open Recent and Clear Recents (#38, #91). See docs/platforms.md.
+
 - Code editor: CodeMirror 6 with Markdown highlighting (code block languages loaded lazily), undo/redo, find and replace (`Mod+F`, `Mod+Alt+F`) with a translated panel, soft wrapping, bracket matching and pairing, themed from the app tokens; syncs with the document and honours the navigation channel (#31).
 - Drag and drop: a Markdown file dropped on the window opens, a folder loads into the Explorer, a translucent overlay shows whether the drop will be accepted, and unsupported types or skipped extras are reported; `FileSystem.kind` (`path_kind` command) decides file or folder (#41).
 - Context menu in the Explorer and Favourites: open, rename in place (F2), move to trash, show in Finder / Explorer / File Manager, copy path and add/remove favourite, with the context-menu key and Shift+F10; native menu through a `ContextMenu` port and an in-app fallback in browser mode; the open document follows a rename (#39).
