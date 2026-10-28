@@ -4,6 +4,7 @@ import { createDocuments, type Documents } from './application/documents';
 import { createPreferences, type PreferencesUseCases } from './application/preferences';
 import { createWorkspace, type WorkspaceUseCases } from './application/workspace';
 import { createMemoryServices } from './infrastructure/memory';
+import { BrowserDialogs, DEMO_FOLDER, seedDemo } from './infrastructure/memory/demo';
 import {
   TauriDialogs,
   TauriOpenRequests,
@@ -66,9 +67,12 @@ const tauriPorts = (t: Translate): Ports => ({
   openRequests: new TauriOpenRequests(),
 });
 
+/** In a plain browser: an in-memory demo workspace, opened on first run. */
 const memoryPorts = (): Ports => {
   const services = createMemoryServices();
-  return { ...services, store: services.preferences };
+  seedDemo(services.fs);
+  services.preferences.raw ??= { lastFolder: DEMO_FOLDER, lastFile: `${DEMO_FOLDER}/Welcome.md` };
+  return { ...services, dialogs: new BrowserDialogs(), store: services.preferences };
 };
 
 /** macOS and Windows file systems ignore case; Linux ones do not. */
