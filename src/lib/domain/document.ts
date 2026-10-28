@@ -78,6 +78,12 @@ export const markSaved = (doc: Document, path?: string): Document => ({
   savedContent: doc.content,
 });
 
+/** The file behind the document is gone: the text counts as unsaved so Save writes it out again. */
+export const markUnsaved = (doc: Document): Document => ({
+  ...doc,
+  savedContent: doc.content === '' ? '\n' : '',
+});
+
 /**
  * Applies a fresh read of the file. A clean document simply takes the new text; unsaved edits
  * are never overwritten, and are reported as a conflict only if the file really changed.
