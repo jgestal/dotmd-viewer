@@ -134,6 +134,7 @@ export const es = {
   'preview.properties': 'Propiedades del documento',
   'preview.diagramError': 'No se pudo dibujar este diagrama:',
   'preview.renderError': 'No se pudo mostrar el documento.',
+<<<<<<< HEAD
 
   // T38 · Native menu
   'menu.exit': 'Salir',
@@ -179,4 +180,15 @@ export const es = {
   'pages.size.a4': 'A4',
   'pages.size.letter': 'Carta',
   'pages.pageNumber': 'Página {page} de {total}',
+=======
+  // T35 · Slides
+  'slides.present': 'Presentar',
+  'slides.exit': 'Salir de la presentación',
+  'slides.previous': 'Diapositiva anterior',
+  'slides.next': 'Diapositiva siguiente',
+  'slides.counter': '{current} / {total}',
+  'slides.stage': 'Diapositivas',
+  'slides.empty': 'Este documento no tiene contenido para presentar.',
+  'slides.fullscreenFailed': 'La pantalla completa no está disponible aquí.',
+>>>>>>> d6f0d85 (feat: slides layout with full-screen presenting (#35))
 } as const satisfies Record<keyof typeof en, string>;
