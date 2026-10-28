@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `watch_file` command: watches the open file and emits a debounced `file-changed` event when it is modified, replaced or removed
 - `render_markdown` command: GFM, footnotes, alerts, highlight, front matter, math markup for KaTeX and `data-sourcepos` via comrak
 - Project scaffold (Tauri 2 + SvelteKit)
 - CI workflow: lint, typecheck, tests and build on macOS, Windows and Linux

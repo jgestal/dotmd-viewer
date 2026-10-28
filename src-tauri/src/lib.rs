@@ -6,6 +6,7 @@ mod files;
 mod folders;
 mod open_requests;
 mod render;
+mod watcher;
 
 use open_requests::OpenRequests;
 
@@ -22,6 +23,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
         .manage(OpenRequests::with_pending(launch_paths))
+        .manage(watcher::WatcherState::default())
         .invoke_handler(tauri::generate_handler![
             // Commands are registered here, one line per command.
             render::render_markdown,
@@ -29,6 +31,7 @@ pub fn run() {
             files::write_file,
             folders::list_dir,
             open_requests::take_pending_open,
+            watcher::watch_file,
         ])
         .build(tauri::generate_context!())
         .expect("error while building DotMD Viewer");
