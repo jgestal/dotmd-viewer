@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Outline tab: headings of the document nested by level, click or Enter reveals the heading through a navigation channel (`navigation.revealLine` / `topLine`), and the visible section is highlighted (#26).
 - Explorer tab: lazy-loaded folder tree with arrow-key navigation, Enter/Space to open, the open document highlighted and revealed, and expanded folders remembered for the session; `browse` use case that reports unreadable folders (#24).
+- Favourites tab: list with file/folder icons, open on click, remove, missing items dimmed, Alt+Up/Down reordering, and a star toggle in the viewport header (#25).
 - App shell: resizable sidebar with Explorer/Favourites/Outline tabs, viewport header with Edit toggle and mode/layout switches, status bar, welcome screen with recents, toasts, light/dark theme following the system (#23, #28).
 
 - i18n infrastructure: English and Spanish dictionaries, pure translator with system-language detection, and a reactive `i18n` store that switches language live

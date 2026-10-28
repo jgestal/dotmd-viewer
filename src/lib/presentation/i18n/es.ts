@@ -119,4 +119,14 @@ export const es = {
   'status.reading': 'Lectura',
   'status.editing': 'Editando: {mode}',
   'status.encodingWithBom': '{encoding} con BOM',
+  // T25 · Favourites tab
+  'favourites.add': 'Añadir a favoritos',
+  'favourites.remove': 'Quitar de favoritos',
+  'favourites.list': 'Favoritos',
+  'favourites.empty.title': 'Aún no hay favoritos',
+  'favourites.empty.hint':
+    'Abre un documento y pulsa la estrella de la cabecera para guardarlo aquí.',
+  'favourites.missing': 'Este elemento ya no existe',
+  'favourites.removeItem': 'Quitar "{name}" de favoritos',
+  'favourites.reorderHint': 'Alt+Arriba y Alt+Abajo reordenan',
 } as const satisfies Record<keyof typeof en, string>;

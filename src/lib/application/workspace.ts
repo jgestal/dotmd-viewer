@@ -146,6 +146,9 @@ export function createWorkspace({ fs, dialogs, notifier, t, caseInsensitive }: W
       rules.toggleFavourite(toWorkspace(prefs), { path, kind }, caseInsensitive),
     );
 
+  const isFavourite = (prefs: Preferences, path: string): boolean =>
+    rules.isFavourite(toWorkspace(prefs), path, caseInsensitive);
+
   const removeFavourite = (prefs: Preferences, path: string): Preferences =>
     fromWorkspace(prefs, rules.removeFavourite(toWorkspace(prefs), path, caseInsensitive));
 
@@ -235,6 +238,7 @@ export function createWorkspace({ fs, dialogs, notifier, t, caseInsensitive }: W
     openFolder,
     chooseFolder,
     closeFolder,
+    isFavourite,
     toggleFavourite,
     removeFavourite,
     moveFavourite,

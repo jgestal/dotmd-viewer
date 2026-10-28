@@ -28,6 +28,19 @@
   </h1>
 
   {#if app.document}
+    {@const path = app.document.path}
+    {#if path}
+      {@const starred = app.isFavourite(path)}
+      <button
+        class="tb star"
+        aria-pressed={starred}
+        title={i18n.t(starred ? 'favourites.remove' : 'favourites.add')}
+        aria-label={i18n.t(starred ? 'favourites.remove' : 'favourites.add')}
+        onclick={() => app.toggleFavourite(path, 'file')}
+      >
+        <Icon name="star" filled={starred} />
+      </button>
+    {/if}
     {#if app.editing}
       <div class="segmented" role="radiogroup" aria-label={i18n.t('menu.view')}>
         {#each modes as mode (mode)}
@@ -83,6 +96,11 @@
     color: var(--accent);
     font-size: 10px;
     vertical-align: middle;
+  }
+
+  .star[aria-pressed='true'] {
+    background: none;
+    color: var(--accent);
   }
 
   .edit[aria-pressed='true'] {

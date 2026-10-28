@@ -4,6 +4,7 @@
 import type { DocumentState } from '$lib/application/documents';
 import { createContainer, type Container } from '$lib/container';
 import { isDirty } from '$lib/domain/document';
+import type { FavouriteWithStatus } from '$lib/domain/workspace';
 import {
   defaultPreferences,
   resetZoom,
@@ -19,6 +20,7 @@ import { notifier } from './toasts.svelte';
 
 export type EditMode = Preferences['editMode'];
 export type Layout = Preferences['layout'];
+export type FavouriteKind = Preferences['favourites'][number]['kind'];
 export type SidebarTab = Preferences['sidebarTab'];
 
 /** Preferences are written at most this often while the user drags a slider or resizes. */
@@ -32,6 +34,9 @@ class App {
   /** Caret position (1-based) in the code editor; null when no editor has one. */
   cursor = $state<{ line: number; column: number } | null>(null);
   ready = $state(false);
+  /** Favourite paths found missing on disk by the last `refreshFavourites`. */
+  #missingFavourites = $state<readonly string[]>([]);
+  #favouritesRun = 0;
 
   readonly platform = currentPlatform();
   readonly commands: CommandRegistry;
@@ -44,6 +49,14 @@ class App {
 
   get document() {
     return this.documentState.doc;
+  }
+
+  /** The favourites in order, each flagged when its file or folder is gone. */
+  get favourites(): FavouriteWithStatus[] {
+    return this.preferences.favourites.map((fav) => ({
+      ...fav,
+      missing: this.#missingFavourites.includes(fav.path),
+    }));
   }
 
   get dirty(): boolean {
@@ -166,6 +179,30 @@ class App {
   /** Entries of a folder for the explorer tree (empty when it cannot be read). */
   listFolder(path: string) {
     return this.container.workspace.browse(path);
+  // Favourites
+
+  isFavourite(path: string): boolean {
+    return this.container.workspace.isFavourite(this.preferences, path);
+  }
+
+  toggleFavourite(path: string, kind: FavouriteKind): void {
+    this.#applyPreferences(this.container.workspace.toggleFavourite(this.preferences, path, kind));
+  }
+
+  removeFavourite(path: string): void {
+    this.#applyPreferences(this.container.workspace.removeFavourite(this.preferences, path));
+  }
+
+  moveFavourite(from: number, to: number): void {
+    this.#applyPreferences(this.container.workspace.moveFavourite(this.preferences, from, to));
+  }
+
+  /** Checks the disk for missing favourites; an answer that arrives after a newer call is dropped. */
+  async refreshFavourites(): Promise<void> {
+    const run = ++this.#favouritesRun;
+    const checked = await this.container.workspace.favouritesWithStatus(this.preferences);
+    if (run !== this.#favouritesRun) return;
+    this.#missingFavourites = checked.filter((fav) => fav.missing).map((fav) => fav.path);
   }
 
   // View

@@ -4,6 +4,7 @@
   import OutlinePanel from '$lib/presentation/components/OutlinePanel.svelte';
   import PlaceholderDocument from '$lib/presentation/components/PlaceholderDocument.svelte';
   import ExplorerPanel from '$lib/presentation/components/ExplorerPanel.svelte';
+  import FavouritesPanel from '$lib/presentation/components/FavouritesPanel.svelte';
   import Shell from '$lib/presentation/components/Shell.svelte';
   import StatusBar from '$lib/presentation/components/StatusBar.svelte';
   import Welcome from '$lib/presentation/components/Welcome.svelte';
@@ -35,7 +36,7 @@
     <ExplorerPanel />
   {/snippet}
   {#snippet favourites()}
-    <p class="placeholder">{i18n.t('sidebar.favourites')}</p>
+    <FavouritesPanel />
   {/snippet}
   {#snippet outline()}
     <OutlinePanel />

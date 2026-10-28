@@ -90,6 +90,13 @@ describe('favourites', () => {
     expect(workspace.toggleFavourite(added, '/a/X.md', 'file').favourites).toEqual([]);
   });
 
+  it('tells whether a path is a favourite, honouring case insensitivity', () => {
+    const prefs = prefsWith({ favourites: [{ path: '/a/x.md', kind: 'file' }] });
+    expect(setup().workspace.isFavourite(prefs, '/a/x.md')).toBe(true);
+    expect(setup().workspace.isFavourite(prefs, '/a/X.md')).toBe(false);
+    expect(setup(true).workspace.isFavourite(prefs, '/a/X.md')).toBe(true);
+  });
+
   it('removes a favourite by path', () => {
     const { workspace } = setup();
     const prefs = prefsWith({ favourites: [{ path: '/a', kind: 'folder' }] });
