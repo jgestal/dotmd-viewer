@@ -137,4 +137,24 @@ export const es = {
 
   // T38 · Native menu
   'menu.exit': 'Salir',
+  // T31 · Code editor
+  'editor.label': 'Código Markdown',
+  'editor.placeholder': 'Empieza a escribir en Markdown…',
+  'editor.goToLine': 'Ir a la línea',
+  'editor.go': 'ir',
+  'editor.search.find': 'Buscar',
+  'editor.search.replace': 'Reemplazar',
+  'editor.search.next': 'siguiente',
+  'editor.search.previous': 'anterior',
+  'editor.search.all': 'todas',
+  'editor.search.matchCase': 'distinguir mayúsculas',
+  'editor.search.regexp': 'expresión regular',
+  'editor.search.byWord': 'palabra completa',
+  'editor.search.replaceOne': 'reemplazar',
+  'editor.search.replaceAll': 'reemplazar todo',
+  'editor.search.close': 'cerrar',
+  'editor.search.currentMatch': 'coincidencia actual',
+  'editor.search.onLine': 'en la línea',
+  'editor.search.replacedMatches': '$ coincidencias reemplazadas',
+  'editor.search.replacedMatch': 'coincidencia reemplazada en $',
 } as const satisfies Record<keyof typeof en, string>;
