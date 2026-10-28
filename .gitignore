@@ -1,12 +1,11 @@
-!.env.example
 .DS_Store
 .env
 .env.*
+!.env.example
 .stryker-tmp
 /.svelte-kit
 /build
 /package
-build
 coverage
 mutants.out*
 node_modules
