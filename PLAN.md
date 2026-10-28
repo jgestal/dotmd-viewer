@@ -130,9 +130,16 @@ Formato: `ID · título · modelo · depende de`. Criterios de aceptación en ca
 - T57 ★ · Pasada de mutación: matar mutantes supervivientes o justificarlos · Opus + Sonnet · todo
 - T58 · Lista de pruebas manuales por SO y versión 0.1.0 · Opus · T57
 
+### E12 · Windows y Linux
+
+- T59 · Windows: instaladores NSIS/MSI, asociaciones y «Abrir con» · Sonnet · T18, T40, T53
+- T60 · Linux: .desktop, tipos MIME, AppImage/deb/rpm · Sonnet · T18, T40, T53
+- T61 ★ · Convenciones de cada sistema en menús y ventana · Opus · T37, T38
+- T62 · Pruebas E2E de humo en Windows y Linux (tauri-driver) · Sonnet · T29, T31, T48
+
 ## Orden de ejecución
 
 1. E0 → E1 y E2 en paralelo → E3.
 2. E4, E5 y E6 (en paralelo donde las dependencias lo permitan); E10 puede ir en cualquier momento tras T01.
-3. E7, E8, E9.
+3. E7, E8, E9 y E12 (cada ticket de interfaz se valida en la CI de macOS, Windows y Linux).
 4. E11: mutación al final, luego te aviso para que pruebes la app.
