@@ -126,4 +126,9 @@ export const en = {
   'favourites.missing': 'This item no longer exists',
   'favourites.removeItem': 'Remove "{name}" from favourites',
   'favourites.reorderHint': 'Alt+Up and Alt+Down reorder',
+
+  // T29 · Preview
+  'preview.properties': 'Document properties',
+  'preview.diagramError': 'This diagram could not be drawn:',
+  'preview.renderError': 'The document could not be rendered.',
 } as const satisfies Record<string, string>;

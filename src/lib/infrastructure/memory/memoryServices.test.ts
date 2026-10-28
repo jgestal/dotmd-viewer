@@ -3,6 +3,7 @@ import { createMemoryServices } from '.';
 import { fakeTranslate } from './fakeTranslate';
 import { MemoryDialogs } from './memoryDialogs';
 import { MemoryNotifier } from './memoryNotifier';
+import { MemoryOpener } from './memoryOpener';
 import { MemoryOpenRequests } from './memoryOpenRequests';
 import { MemoryPreferencesStore } from './memoryPreferencesStore';
 import { MemoryRenderer } from './memoryRenderer';
@@ -166,6 +167,15 @@ describe('MemoryRenderer', () => {
   it('splits the front matter off the rendered body', async () => {
     const rendered = await new MemoryRenderer().render('---\ntitle: Hi\n---\nBody');
     expect(rendered).toEqual({ html: '<p>Body</p>', frontMatter: 'title: Hi' });
+  });
+});
+
+describe('MemoryOpener', () => {
+  it('records the addresses it was asked to open', async () => {
+    const opener = new MemoryOpener();
+    await opener.openExternal('https://example.com');
+    await opener.openExternal('mailto:a@b.c');
+    expect(opener.opened).toEqual(['https://example.com', 'mailto:a@b.c']);
   });
 });
 

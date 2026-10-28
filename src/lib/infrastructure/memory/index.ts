@@ -2,6 +2,7 @@
 import { fakeTranslate } from './fakeTranslate';
 import { MemoryDialogs } from './memoryDialogs';
 import { MemoryFileSystem } from './memoryFileSystem';
+import { MemoryOpener } from './memoryOpener';
 import { MemoryNotifier } from './memoryNotifier';
 import { MemoryOpenRequests } from './memoryOpenRequests';
 import { MemoryPreferencesStore } from './memoryPreferencesStore';
@@ -13,6 +14,7 @@ export * from './fakeTranslate';
 export * from './memoryDialogs';
 export * from './memoryFileSystem';
 export * from './memoryNotifier';
+export * from './memoryOpener';
 export * from './memoryOpenRequests';
 export * from './memoryPreferencesStore';
 export * from './memoryRenderer';
@@ -27,6 +29,7 @@ export interface MemoryServices {
   readonly window: MemoryWindow;
   readonly preferences: MemoryPreferencesStore;
   readonly openRequests: MemoryOpenRequests;
+  readonly opener: MemoryOpener;
   readonly notifier: MemoryNotifier;
   readonly translate: typeof fakeTranslate;
 }
@@ -42,6 +45,7 @@ export const createMemoryServices = (): MemoryServices => {
     window: new MemoryWindow(),
     preferences: new MemoryPreferencesStore(),
     openRequests: new MemoryOpenRequests(),
+    opener: new MemoryOpener(),
     notifier: new MemoryNotifier(),
     translate: fakeTranslate,
   };

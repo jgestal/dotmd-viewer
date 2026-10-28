@@ -87,6 +87,11 @@ export interface OpenRequests {
   onOpen(listener: (paths: readonly string[]) => void): () => void;
 }
 
+/** Opens addresses in the user's default browser or mail client. */
+export interface ExternalOpener {
+  openExternal(url: string): Promise<void>;
+}
+
 /** Short, non-blocking messages to the user. */
 export interface Notifier {
   info(message: string): void;

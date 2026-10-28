@@ -5,6 +5,7 @@ import type { DocumentState } from '$lib/application/documents';
 import { createContainer, type Container } from '$lib/container';
 import { isDirty } from '$lib/domain/document';
 import type { FavouriteWithStatus } from '$lib/domain/workspace';
+import { toAppError } from '$lib/domain/errors';
 import {
   defaultPreferences,
   resetZoom,
@@ -94,6 +95,15 @@ class App {
     this.editing = false;
     this.preferences = this.container.workspace.rememberOpened(this.preferences, result.openedPath);
     this.#scheduleSave();
+  }
+
+  /** Hands a web or mail link to the system; failures become a toast. */
+  async openExternal(url: string): Promise<void> {
+    try {
+      await this.container.opener.openExternal(url);
+    } catch (thrown) {
+      notifier.error(toAppError(thrown).message);
+    }
   }
 
   /** The OS asked us to open these: the last file wins, a folder becomes the explorer root. */

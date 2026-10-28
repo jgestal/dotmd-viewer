@@ -129,4 +129,9 @@ export const es = {
   'favourites.missing': 'Este elemento ya no existe',
   'favourites.removeItem': 'Quitar "{name}" de favoritos',
   'favourites.reorderHint': 'Alt+Arriba y Alt+Abajo reordenan',
+
+  // T29 · Preview
+  'preview.properties': 'Propiedades del documento',
+  'preview.diagramError': 'No se pudo dibujar este diagrama:',
+  'preview.renderError': 'No se pudo mostrar el documento.',
 } as const satisfies Record<keyof typeof en, string>;
