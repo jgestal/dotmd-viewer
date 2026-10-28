@@ -7,7 +7,7 @@ import type { Preferences } from '../domain/preferences';
 import { addRecent, clearRecents, removeRecent, renameRecent } from '../domain/recents';
 import * as rules from '../domain/workspace';
 import type { FavouriteWithStatus, Workspace } from '../domain/workspace';
-import type { Dialogs, EntryKind, FileSystem, Notifier, Translate } from '../ports';
+import type { Dialogs, DirEntry, EntryKind, FileSystem, Notifier, Translate } from '../ports';
 
 export interface WorkspaceDeps {
   readonly fs: FileSystem;
@@ -174,6 +174,16 @@ export function createWorkspace({ fs, dialogs, notifier, t, caseInsensitive }: W
     recents: clearRecents(),
   });
 
+  /** Lists a folder for the explorer; a folder that cannot be read is reported and shows as empty. */
+  const browse = async (path: string): Promise<readonly DirEntry[]> => {
+    try {
+      return await fs.listDir(path);
+    } catch (thrown) {
+      notifier.error(describeFailure(toAppError(thrown), path));
+      return [];
+    }
+  };
+
   /**
    * Renames the item inside its folder. `newName` is a bare name (see `withKeptExtension` for
    * files); `kind` says whether the item is a file or a folder.
@@ -229,6 +239,7 @@ export function createWorkspace({ fs, dialogs, notifier, t, caseInsensitive }: W
     removeFavourite,
     moveFavourite,
     favouritesWithStatus,
+    browse,
     rememberOpened,
     forgetRecent,
     clearRecents: clearAllRecents,

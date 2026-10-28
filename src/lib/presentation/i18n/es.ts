@@ -105,4 +105,9 @@ export const es = {
   // T26 · outline
   'outline.noDocument': 'No hay ningún documento abierto.',
   'outline.noHeadings': 'Este documento no tiene encabezados.',
+  // T24 · Explorer
+  'explorer.tree': 'Archivos',
+  'explorer.chooseFolder': 'Abrir otra carpeta',
+  'explorer.empty': 'No hay ninguna carpeta abierta.',
+  'explorer.emptyFolder': 'Esta carpeta no tiene archivos Markdown.',
 } as const satisfies Record<keyof typeof en, string>;
