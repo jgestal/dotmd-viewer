@@ -54,6 +54,10 @@ pub fn run() {
             preferences_file::save_preferences,
             window_state::set_document_state,
         ])
+        .setup(|app| {
+            show_window_if_frontend_stalls(app.handle().clone());
+            Ok(())
+        })
         .build(tauri::generate_context!())
         .expect("error while building DotMD Viewer");
 
@@ -67,6 +71,20 @@ pub fn run() {
                 .map(|path| path.to_string_lossy().into_owned())
                 .collect();
             open_requests::deliver(_app, paths);
+        }
+    });
+}
+
+/// The window starts hidden and the frontend shows it once the first view is painted. If the
+/// frontend fails before that, show it anyway so the app never looks like it did not start.
+fn show_window_if_frontend_stalls(app: tauri::AppHandle) {
+    use tauri::Manager;
+    std::thread::spawn(move || {
+        std::thread::sleep(std::time::Duration::from_secs(3));
+        if let Some(window) = app.get_webview_window("main")
+            && !window.is_visible().unwrap_or(true)
+        {
+            let _ = window.show();
         }
     });
 }
