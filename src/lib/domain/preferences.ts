@@ -1,10 +1,6 @@
 // User preferences: defaults, tolerant parsing of stored values and validated updates.
 import { MAX_RECENTS } from './recents';
-
-export interface Favourite {
-  readonly path: string;
-  readonly kind: 'file' | 'folder';
-}
+import type { Favourite } from './workspace';
 
 export interface Preferences {
   readonly language: 'system' | 'en' | 'es';
