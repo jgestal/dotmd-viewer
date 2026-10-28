@@ -6,3 +6,4 @@ coverage/
 reports/
 package-lock.json
 src-tauri/
+.claude/
