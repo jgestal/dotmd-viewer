@@ -1,0 +1,210 @@
+/* App chrome. Colours are tokens on :root; dark values follow the system unless the user picks
+   a theme (data-theme on <html>). The document itself is styled in document.css. */
+
+:root {
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Ubuntu, Cantarell, 'Noto Sans', sans-serif;
+  --font-code:
+    ui-monospace, 'SF Mono', 'Cascadia Code', 'JetBrains Mono', Menlo, Consolas, monospace;
+
+  --bg: #fbfaf7;
+  --bg-sidebar: #f2f0ea;
+  --bg-elev: #ffffff;
+  --bg-hover: rgba(31, 35, 40, 0.06);
+  --bg-active: rgba(31, 35, 40, 0.1);
+  --fg: #1f2328;
+  --fg-muted: #676c73;
+  --border: #e2ded4;
+  --accent: #1f6f6a;
+  --accent-fg: #ffffff;
+  --accent-soft: rgba(31, 111, 106, 0.12);
+  --danger: #b4372f;
+  --sel: rgba(31, 111, 106, 0.22);
+  --shadow: 0 8px 28px rgba(15, 20, 25, 0.16), 0 1px 3px rgba(15, 20, 25, 0.08);
+
+  --header-height: 44px;
+  --status-height: 26px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #15191a;
+    --bg-sidebar: #1b2022;
+    --bg-elev: #22282a;
+    --bg-hover: rgba(230, 228, 223, 0.07);
+    --bg-active: rgba(230, 228, 223, 0.12);
+    --fg: #e6e4df;
+    --fg-muted: #9a9f9d;
+    --border: #2d3436;
+    --accent: #4fb3a9;
+    --accent-fg: #0b1716;
+    --accent-soft: rgba(79, 179, 169, 0.16);
+    --danger: #f07167;
+    --sel: rgba(79, 179, 169, 0.3);
+    --shadow: 0 8px 28px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.3);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #15191a;
+  --bg-sidebar: #1b2022;
+  --bg-elev: #22282a;
+  --bg-hover: rgba(230, 228, 223, 0.07);
+  --bg-active: rgba(230, 228, 223, 0.12);
+  --fg: #e6e4df;
+  --fg-muted: #9a9f9d;
+  --border: #2d3436;
+  --accent: #4fb3a9;
+  --accent-fg: #0b1716;
+  --accent-soft: rgba(79, 179, 169, 0.16);
+  --danger: #f07167;
+  --sel: rgba(79, 179, 169, 0.3);
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.3);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font: 13px/1.4 var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  cursor: default;
+  overscroll-behavior: none;
+}
+
+body.resizing {
+  cursor: col-resize;
+}
+
+body.resizing * {
+  pointer-events: none;
+}
+
+::selection {
+  background: var(--sel);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--fg) 18%, transparent);
+  border-radius: 10px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Toolbar icon button. */
+.tb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 28px;
+  min-width: 28px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--fg-muted);
+  flex-shrink: 0;
+}
+
+.tb:hover {
+  background: var(--bg-hover);
+  color: var(--fg);
+}
+
+.tb[aria-pressed='true'],
+.tb[aria-selected='true'] {
+  background: var(--bg-active);
+  color: var(--fg);
+}
+
+.btn {
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 6px 14px;
+  background: var(--bg-elev);
+  color: var(--fg);
+}
+
+.btn:hover {
+  background: var(--bg-hover);
+}
+
+.btn.primary {
+  background: var(--accent);
+  border-color: transparent;
+  color: var(--accent-fg);
+}
+
+.btn.primary:hover {
+  filter: brightness(1.08);
+}
+
+.segmented {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 8px;
+  background: var(--bg-hover);
+}
+
+.segmented button {
+  border: 0;
+  border-radius: 6px;
+  padding: 3px 10px;
+  background: none;
+  color: var(--fg-muted);
+}
+
+.segmented button:hover {
+  color: var(--fg);
+}
+
+.segmented button[aria-checked='true'] {
+  background: var(--bg-elev);
+  color: var(--fg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

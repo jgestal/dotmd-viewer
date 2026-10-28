@@ -91,4 +91,14 @@ export const es = {
   'menu.hideOthers': 'Ocultar otros',
   'menu.showAll': 'Mostrar todo',
   'menu.quit': 'Salir de DotMD Viewer',
+
+  'welcome.hint': 'Abre un archivo Markdown o una carpeta, o suéltalos aquí.',
+  'document.unsaved': 'Cambios sin guardar',
+  'sidebar.resize': 'Cambiar el ancho de la barra lateral',
+  'action.dismiss': 'Cerrar',
+  'dialog.unsaved.title': 'Cambios sin guardar',
+  'dialog.unsaved.message': '¿Quieres guardar los cambios hechos en «{name}»?',
+  'dialog.unsaved.save': 'Guardar',
+  'dialog.unsaved.discard': 'No guardar',
+  'dialog.unsaved.cancel': 'Cancelar',
 } as const satisfies Record<keyof typeof en, string>;
