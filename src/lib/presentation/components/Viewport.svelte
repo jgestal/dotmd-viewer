@@ -4,6 +4,7 @@
   import PagedPreview from './PagedPreview.svelte';
   import Preview from './Preview.svelte';
   import SlidesView from './SlidesView.svelte';
+  import SplitView from './SplitView.svelte';
 
   // What the main area shows for the open document. Reading follows the chosen layout;
   // editing follows the chosen mode. Each view is its own component, so this file only routes.
@@ -23,5 +24,5 @@
 {:else if view === 'edit-code'}
   <CodeEditor />
 {:else if view === 'edit-split'}
-  <Preview /><!-- T32: code editor and preview side by side -->
+  <SplitView />
 {/if}

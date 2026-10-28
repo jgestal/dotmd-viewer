@@ -27,3 +27,18 @@ export function scrollLineToTop(view: EditorView, line: number): void {
   const target = doc.line(Math.min(Math.max(line, 0), doc.lines - 1) + 1);
   view.dispatch({ effects: EditorView.scrollIntoView(target.from, { y: 'start' }) });
 }
+
+/** Zero-based line, with the fraction of it already scrolled past, at `scrollTop`. */
+export function lineAtScrollTop(view: EditorView, scrollTop: number): number {
+  const block = view.lineBlockAtHeight(scrollTop);
+  const line = view.state.doc.lineAt(block.from).number - 1;
+  return line + Math.min(Math.max((scrollTop - block.top) / block.height, 0), 1);
+}
+
+/** Scrolls so the (fractional, zero-based) `line` is at the top of the visible area. */
+export function scrollToLine(view: EditorView, line: number): void {
+  const { doc } = view.state;
+  const index = Math.min(Math.max(Math.floor(line), 0), doc.lines - 1);
+  const block = view.lineBlockAt(doc.line(index + 1).from);
+  view.scrollDOM.scrollTop = block.top + (line - index) * block.height;
+}

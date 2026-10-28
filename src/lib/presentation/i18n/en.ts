@@ -185,4 +185,6 @@ export const en = {
   'slides.stage': 'Slides',
   'slides.empty': 'This document has no content to present.',
   'slides.fullscreenFailed': 'Full screen is not available here.',
+  // T32 · Split view
+  'split.resize': 'Resize the code and preview panes',
 } as const satisfies Record<string, string>;
