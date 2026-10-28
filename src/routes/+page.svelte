@@ -4,9 +4,9 @@
   import OutlinePanel from '$lib/presentation/components/OutlinePanel.svelte';
   import ExplorerPanel from '$lib/presentation/components/ExplorerPanel.svelte';
   import FavouritesPanel from '$lib/presentation/components/FavouritesPanel.svelte';
-  import Preview from '$lib/presentation/components/Preview.svelte';
   import Shell from '$lib/presentation/components/Shell.svelte';
   import StatusBar from '$lib/presentation/components/StatusBar.svelte';
+  import Viewport from '$lib/presentation/components/Viewport.svelte';
   import Welcome from '$lib/presentation/components/Welcome.svelte';
 
   onMount(() => {
@@ -42,7 +42,7 @@
   {/snippet}
   {#snippet viewport()}
     {#if app.document}
-      <Preview />
+      <Viewport />
     {:else if app.ready}
       <Welcome />
     {/if}
