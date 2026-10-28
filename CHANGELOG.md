@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tauri adapters for every port, `set_document_state` (macOS proxy icon and edited dot), `load_preferences`/`save_preferences`, and `createContainer` as the single wiring point (Tauri or in-memory)
 - Document use cases (open, save, save as, new, close, quit confirmation, external reload) tested with the in-memory doubles
 - Application use cases for preferences (load, save, update) and workspace (folder, favourites, recents, rename, move, trash)
+- Window size, position and maximised state are remembered (`tauri-plugin-window-state`); the window starts hidden and is shown once the app has started, so it never flashes or jumps (#45)
 - `render_markdown` command: GFM, footnotes, alerts, highlight, front matter, math markup for KaTeX and `data-sourcepos` via comrak
 - Project scaffold (Tauri 2 + SvelteKit)
 - CI workflow: lint, typecheck, tests and build on macOS, Windows and Linux

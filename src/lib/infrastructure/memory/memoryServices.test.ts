@@ -98,6 +98,15 @@ describe('MemoryWindow', () => {
     expect(window.current).toEqual({ title: 'a.md', path: '/a.md', edited: true });
     expect(window.calls).toHaveLength(2);
   });
+
+  it('counts reveals without showing anything', async () => {
+    const window = new MemoryWindow();
+    expect(window.reveals).toBe(0);
+    await window.reveal();
+    await window.reveal();
+    expect(window.reveals).toBe(2);
+    expect(window.current).toBeNull();
+  });
 });
 
 describe('MemoryPreferencesStore', () => {

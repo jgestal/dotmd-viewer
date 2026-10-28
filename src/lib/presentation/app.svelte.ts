@@ -85,6 +85,8 @@ class App {
     if (pending.length > 0) await this.openPaths(pending);
     else if (this.preferences.lastFile) await this.open(this.preferences.lastFile, { quiet: true });
     this.ready = true;
+    // The window starts hidden; showing it here means the first painted frame is the real one.
+    await this.container.window.reveal();
   }
 
   // Documents

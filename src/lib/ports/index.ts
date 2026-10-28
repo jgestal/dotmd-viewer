@@ -70,10 +70,12 @@ export interface Dialogs {
   alert(title: string, message: string): Promise<void>;
 }
 
-/** The app window: title, macOS edited dot and proxy icon, full screen. */
+/** The app window: title, macOS edited dot and proxy icon, full screen, and when it shows. */
 export interface AppWindow {
   showDocument(title: string, path: string | null, edited: boolean): Promise<void>;
   toggleFullscreen(): Promise<void>;
+  /** Shows the window, which starts hidden so it never flashes or jumps while loading. */
+  reveal(): Promise<void>;
 }
 
 /** Menu items the operating system implements itself (clipboard, window management…). */

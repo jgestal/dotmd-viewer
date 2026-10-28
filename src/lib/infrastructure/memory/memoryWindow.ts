@@ -12,6 +12,9 @@ export class MemoryWindow implements AppWindow {
   readonly calls: WindowState[] = [];
   fullscreen = false;
 
+  /** Every `reveal` call so far; there is no real window to show. */
+  reveals = 0;
+
   /** What the window shows now, or `null` before the first call. */
   get current(): WindowState | null {
     return this.calls.at(-1) ?? null;
@@ -23,5 +26,9 @@ export class MemoryWindow implements AppWindow {
 
   async toggleFullscreen(): Promise<void> {
     this.fullscreen = !this.fullscreen;
+  }
+
+  async reveal(): Promise<void> {
+    this.reveals += 1;
   }
 }

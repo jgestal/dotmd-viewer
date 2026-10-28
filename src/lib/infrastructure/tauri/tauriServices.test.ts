@@ -99,6 +99,19 @@ describe('tauriWindow', () => {
       { command: 'plugin:window|set_fullscreen', args: { label: 'main', value: true } },
     ]);
   });
+
+  it('shows the window through the window plugin', async () => {
+    mockWindows('main');
+    const calls = mockBackend({ 'plugin:window|show': () => undefined });
+    await tauriWindow.reveal();
+    expect(calls).toEqual([{ command: 'plugin:window|show', args: { label: 'main' } }]);
+  });
+
+  it('reports a failure to show the window as an AppError', async () => {
+    mockWindows('main');
+    mockBackend({ 'plugin:window|show': () => Promise.reject('no window') });
+    await expect(tauriWindow.reveal()).rejects.toEqual({ kind: 'io', message: 'no window' });
+  });
 });
 
 describe('TauriOpenRequests', () => {

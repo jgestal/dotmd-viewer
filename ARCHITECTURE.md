@@ -50,6 +50,11 @@ The rule is enforced by a test, `src/lib/__tests__/architecture.test.ts` (_plann
 - **Command registry**: one command definition feeds keyboard shortcuts and the native menu.
 - **Centralized errors**: adapters turn backend failures into `AppError` (`domain/errors.ts`), and use
   cases report them through `Notifier`.
+- **Hidden until ready**: the main window starts with `"visible": false` and `backgroundColor` set to
+  the light background. `app.start()` calls `AppWindow.reveal()` once the first render is done, so the
+  user never sees a white flash or a jump. Dark mode relies on this: the window paints the light
+  `backgroundColor` until the webview applies the dark theme, so it must stay hidden until then. The
+  window-state plugin restores size, position and maximised state, but not visibility.
 
 ## Rust backend (`src-tauri/src`)
 
