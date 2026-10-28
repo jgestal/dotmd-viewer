@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Command registry: command ids, per-OS accelerators (`Mod+Shift+S` syntax with matching, display and Tauri formatting) and enable/check state
 - `watch_file` command: watches the open file and emits a debounced `file-changed` event when it is modified, replaced or removed
 - File commands `path_exists`, `rename_path`, `trash_path`, `copy_into` and `reveal_path`: rename/move without overwriting, system trash, copy under a free name, reveal in the file manager
+- Tauri adapters for every port, `set_document_state` (macOS proxy icon and edited dot), `load_preferences`/`save_preferences`, and `createContainer` as the single wiring point (Tauri or in-memory)
 - Document use cases (open, save, save as, new, close, quit confirmation, external reload) tested with the in-memory doubles
 - Application use cases for preferences (load, save, update) and workspace (folder, favourites, recents, rename, move, trash)
 - `render_markdown` command: GFM, footnotes, alerts, highlight, front matter, math markup for KaTeX and `data-sourcepos` via comrak

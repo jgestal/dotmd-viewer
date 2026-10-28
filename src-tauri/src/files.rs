@@ -154,7 +154,7 @@ fn keep_permissions(_path: &Path, _temp: &NamedTempFile) -> AppResult<()> {
     Ok(())
 }
 
-fn write_atomically(path: &Path, bytes: &[u8]) -> AppResult<()> {
+pub fn write_atomically(path: &Path, bytes: &[u8]) -> AppResult<()> {
     let directory = match path.parent() {
         Some(parent) if !parent.as_os_str().is_empty() => parent,
         _ => Path::new("."),
