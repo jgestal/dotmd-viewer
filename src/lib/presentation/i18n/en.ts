@@ -117,4 +117,13 @@ export const en = {
   'status.reading': 'Reading',
   'status.editing': 'Editing: {mode}',
   'status.encodingWithBom': '{encoding} with BOM',
+  // T25 · Favourites tab
+  'favourites.add': 'Add to favourites',
+  'favourites.remove': 'Remove from favourites',
+  'favourites.list': 'Favourites',
+  'favourites.empty.title': 'No favourites yet',
+  'favourites.empty.hint': 'Open a document and click the star in the header to keep it here.',
+  'favourites.missing': 'This item no longer exists',
+  'favourites.removeItem': 'Remove "{name}" from favourites',
+  'favourites.reorderHint': 'Alt+Up and Alt+Down reorder',
 } as const satisfies Record<string, string>;

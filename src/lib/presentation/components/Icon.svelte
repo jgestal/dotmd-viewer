@@ -16,14 +16,18 @@
 </script>
 
 <script lang="ts">
-  let { name, size = 16 }: { name: IconName; size?: number } = $props();
+  let {
+    name,
+    size = 16,
+    filled = false,
+  }: { name: IconName; size?: number; filled?: boolean } = $props();
 </script>
 
 <svg
   width={size}
   height={size}
   viewBox="0 0 24 24"
-  fill="none"
+  fill={filled ? 'currentColor' : 'none'}
   stroke="currentColor"
   stroke-width="1.8"
   stroke-linecap="round"
