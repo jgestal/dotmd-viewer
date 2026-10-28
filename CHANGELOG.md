@@ -11,5 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Project scaffold (Tauri 2 + SvelteKit)
 - Initial documentation: README, LICENSE, CHANGELOG, CONTRIBUTING and ARCHITECTURE
+- Slide splitting by top-level `---` (code blocks and front matter aware) and `slideAtLine`
 
 [Unreleased]: https://github.com/jgestal/dotmd-viewer/commits/main
