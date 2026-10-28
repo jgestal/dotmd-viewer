@@ -174,4 +174,9 @@ export const es = {
   'entryMenu.pathCopied': 'Ruta copiada',
   'entryMenu.copyFailed': 'No se pudo copiar la ruta.',
   'entryMenu.renameField': 'Nuevo nombre de "{name}"',
+  // T34 · Pages layout
+  'pages.pageSize': 'Tamaño de página',
+  'pages.size.a4': 'A4',
+  'pages.size.letter': 'Carta',
+  'pages.pageNumber': 'Página {page} de {total}',
 } as const satisfies Record<keyof typeof en, string>;
