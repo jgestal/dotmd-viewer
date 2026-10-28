@@ -10,11 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Native menus with each platform's conventions: macOS app and Window menus; menu bar in the window with Alt mnemonics on Windows and Linux; Settings, Quit/Exit and About where each desktop expects them; `*name - DotMD Viewer` titles on Windows/Linux; F11 full screen; Open Recent and Clear Recents (#38, #91). See docs/platforms.md.
-
 - Code editor: CodeMirror 6 with Markdown highlighting (code block languages loaded lazily), undo/redo, find and replace (`Mod+F`, `Mod+Alt+F`) with a translated panel, soft wrapping, bracket matching and pairing, themed from the app tokens; syncs with the document and honours the navigation channel (#31).
 - Drag and drop: a Markdown file dropped on the window opens, a folder loads into the Explorer, a translucent overlay shows whether the drop will be accepted, and unsupported types or skipped extras are reported; `FileSystem.kind` (`path_kind` command) decides file or folder (#41).
 - Context menu in the Explorer and Favourites: open, rename in place (F2), move to trash, show in Finder / Explorer / File Manager, copy path and add/remove favourite, with the context-menu key and Shift+F10; native menu through a `ContextMenu` port and an in-app fallback in browser mode; the open document follows a rename (#39).
 - Pages layout: A4 / Letter sheets with 20 mm margins on a grey desk, page numbers, headings kept with the next block, `\pagebreak` manual breaks, automatic fit-to-width zoom times the user zoom, and a floating A4/Letter switch; the render pipeline is shared with the continuous view (#34).
+- Slides layout: 16:9 stage scaled to fit, arrows/space/Home/End navigation, "n / total" counter, full-screen Present mode with auto-hiding cursor, current slide remembered per document (#35).
 - Preview: sanitised (DOMPurify) continuous rendering with KaTeX, highlight.js, lazy Mermaid, internal anchors, external links in the browser and links to other `.md` files in the app; browser-mode markdown-it renderer; document typography with light/dark and alerts (#29).
 - Outline tab: headings of the document nested by level, click or Enter reveals the heading through a navigation channel (`navigation.revealLine` / `topLine`), and the visible section is highlighted (#26).
 - Explorer tab: lazy-loaded folder tree with arrow-key navigation, Enter/Space to open, the open document highlighted and revealed, and expanded folders remembered for the session; `browse` use case that reports unreadable folders (#24).
