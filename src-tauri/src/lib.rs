@@ -23,6 +23,16 @@ pub fn run() {
         .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
             open_requests::on_second_instance(app, argv, cwd)
         }))
+        // Size, position and maximised state are restored before the window is shown; the
+        // frontend reveals it once started (see `AppWindow.reveal`), so VISIBLE is not restored.
+        .plugin(
+            tauri_plugin_window_state::Builder::new()
+                .with_state_flags(
+                    tauri_plugin_window_state::StateFlags::all()
+                        & !tauri_plugin_window_state::StateFlags::VISIBLE,
+                )
+                .build(),
+        )
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
         .manage(OpenRequests::with_pending(launch_paths))
