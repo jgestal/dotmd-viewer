@@ -15,5 +15,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Document statistics (words, characters, lines, reading time) ignoring Markdown syntax, front matter and code
 - Pure workspace rules (open folder, favourites, rename and delete tracking) and path helpers
 - Recent files list and validated user preferences (domain)
+- Document entity: content, path, dirty flag, preserved line ending, encoding and BOM, with pure edit/save/reload operations
 
 [Unreleased]: https://github.com/jgestal/dotmd-viewer/commits/main
