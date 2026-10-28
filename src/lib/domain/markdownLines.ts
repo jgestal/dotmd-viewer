@@ -12,18 +12,33 @@ export interface FrontMatterSplit {
 
 const FRONT_MATTER_FENCE = /^---\s*$/;
 const FRONT_MATTER_CLOSE = /^(?:---|\.\.\.)\s*$/;
+const YAML_KEY = /^[^\s#:-][^:]*:(?:\s|$)/;
+const YAML_TOP_LEVEL = /^(?:[^\s#:-][^:]*:(?:\s|$)|#|- |-$)/;
 const CODE_FENCE = /^ {0,3}(`{3,}|~{3,})/;
 
 export const splitLines = (text: string): string[] => text.split(/\r\n|\r|\n/);
 
+/**
+ * Whether the lines between the fences read as a YAML mapping: every top-level line is a key,
+ * a comment or a list item, and there is at least one key. This keeps a document that opens with
+ * a `---` slide separator (`---`, `# Slide`, `---`) from being mistaken for front matter.
+ */
+const looksLikeYaml = (lines: readonly string[]): boolean => {
+  const topLevel = lines.filter((line) => line.trim() !== '' && !/^\s/.test(line));
+  return (
+    topLevel.every((line) => YAML_TOP_LEVEL.test(line)) &&
+    (lines.length === 0 || topLevel.some((line) => YAML_KEY.test(line)))
+  );
+};
+
 /** Separates a leading YAML front matter block (`---` … `---` or `...`) from the body. */
 export const splitFrontMatter = (text: string): FrontMatterSplit => {
   const lines = splitLines(text.startsWith('\uFEFF') ? text.slice(1) : text);
-  if (!FRONT_MATTER_FENCE.test(lines[0] ?? ''))
-    return { frontMatter: null, body: text, bodyStartLine: 0 };
+  const noFrontMatter = { frontMatter: null, body: text, bodyStartLine: 0 };
+  if (!FRONT_MATTER_FENCE.test(lines[0] ?? '')) return noFrontMatter;
 
   const close = lines.findIndex((line, index) => index > 0 && FRONT_MATTER_CLOSE.test(line));
-  if (close === -1) return { frontMatter: null, body: text, bodyStartLine: 0 };
+  if (close === -1 || !looksLikeYaml(lines.slice(1, close))) return noFrontMatter;
 
   return {
     frontMatter: lines.slice(1, close).join('\n'),
