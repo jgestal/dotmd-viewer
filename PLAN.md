@@ -5,20 +5,20 @@ Requisitos completos en [PROMPT.md](PROMPT.md).
 
 ## Decisiones
 
-| Tema | Decisión |
-|---|---|
-| Stack | Tauri 2 · Rust · Svelte 5 · TypeScript strict · Vite · Vitest (igual que DotMD) |
-| Markdown → HTML | comrak (Rust) + KaTeX + Mermaid (carga diferida) + highlight.js + DOMPurify |
-| Editores | CodeMirror 6 (código) · Milkdown (vista previa editable, carga diferida) |
-| Arrastrar hacia fuera | `tauri-plugin-drag` (como DotMD) |
-| Plugins Tauri | dialog, opener, single-instance, window-state, log, drag |
-| Arquitectura | domain → application → ports → infrastructure (tauri / memory) → presentation, `container.ts` |
-| Calidad | ESLint + Prettier · clippy `-D warnings` · cobertura ≥ 90 % domain/application |
-| Mutación | StrykerJS + cargo-mutants, score ≥ 85 %, en local al terminar y por `workflow_dispatch` |
-| Idiomas | es / en, según el sistema, cambiable en Ajustes |
-| Repositorio | `jgestal/dotmd-viewer`, público, MIT, Conventional Commits, una rama y un PR por ticket |
-| Release | Instaladores sin firmar; firma preparada como paso opcional |
-| Identificador | `es.gestal.dotmdviewer` · binario `dotmd-viewer` |
+| Tema                  | Decisión                                                                                      |
+| --------------------- | --------------------------------------------------------------------------------------------- |
+| Stack                 | Tauri 2 · Rust · Svelte 5 · TypeScript strict · Vite · Vitest (igual que DotMD)               |
+| Markdown → HTML       | comrak (Rust) + KaTeX + Mermaid (carga diferida) + highlight.js + DOMPurify                   |
+| Editores              | CodeMirror 6 (código) · Milkdown (vista previa editable, carga diferida)                      |
+| Arrastrar hacia fuera | `tauri-plugin-drag` (como DotMD)                                                              |
+| Plugins Tauri         | dialog, opener, single-instance, window-state, log, drag                                      |
+| Arquitectura          | domain → application → ports → infrastructure (tauri / memory) → presentation, `container.ts` |
+| Calidad               | ESLint + Prettier · clippy `-D warnings` · cobertura ≥ 90 % domain/application                |
+| Mutación              | StrykerJS + cargo-mutants, score ≥ 85 %, en local al terminar y por `workflow_dispatch`       |
+| Idiomas               | es / en, según el sistema, cambiable en Ajustes                                               |
+| Repositorio           | `jgestal/dotmd-viewer`, público, MIT, Conventional Commits, una rama y un PR por ticket       |
+| Release               | Instaladores sin firmar; firma preparada como paso opcional                                   |
+| Identificador         | `es.gestal.dotmdviewer` · binario `dotmd-viewer`                                              |
 
 ## Delegación
 
@@ -37,6 +37,7 @@ test de arquitectura en verde · diff revisado por Opus · CHANGELOG actualizado
 Formato: `ID · título · modelo · depende de`. Criterios de aceptación en cada Issue.
 
 ### E0 · Cimientos
+
 - T01 · Scaffold Tauri 2 + SvelteKit estático + TS strict (configuración base de DotMD) · Sonnet · —
 - T02 · ESLint, Prettier, `.editorconfig`, rustfmt, clippy · Haiku · T01
 - T03 · Vitest + cobertura, `cargo test`, test de arquitectura por capas · Sonnet · T01
@@ -45,6 +46,7 @@ Formato: `ID · título · modelo · depende de`. Criterios de aceptación en ca
 - T06 · README inicial, LICENSE MIT, CHANGELOG, CONTRIBUTING, ARCHITECTURE · Haiku · T01
 
 ### E1 · Dominio (puro, sin dependencias)
+
 - T07 · Entidad Documento: contenido, ruta, modificado, fin de línea, codificación · Sonnet · T03
 - T08 · Estadísticas: palabras, caracteres (con/sin espacios), líneas, tiempo de lectura · Sonnet · T03
 - T09 · Índice: extraer encabezados con slug y línea de origen · Sonnet · T03
@@ -53,6 +55,7 @@ Formato: `ID · título · modelo · depende de`. Criterios de aceptación en ca
 - T12 · Recientes y preferencias (validación, valores por defecto) · Sonnet · T03
 
 ### E2 · Backend Rust
+
 - T13 · Leer/escribir con codificación y guardado atómico · Sonnet · T01
 - T14 · Listar carpeta filtrada (`.md`, `.markdown`, `.txt`) y por niveles · Sonnet · T01
 - T15 · Render comrak (GFM, notas, front matter, líneas de origen) · Sonnet · T01
@@ -61,12 +64,14 @@ Formato: `ID · título · modelo · depende de`. Criterios de aceptación en ca
 - T18 ★ · CLI, instancia única y apertura desde el SO (macOS `RunEvent::Opened`) · Opus · T13
 
 ### E3 · Casos de uso y puertos
+
 - T19 · Puertos (`FileSystem`, `Dialogs`, `Renderer`, `Watcher`, `Exporter`…) y dobles en memoria · Sonnet · T07
 - T20 · Abrir / guardar / guardar como / cerrar con cambios / recarga externa · Sonnet · T19, T13
 - T21 · Carpetas, favoritos y recientes persistentes · Sonnet · T11, T12, T19
 - T22 · Adaptadores Tauri y `container.ts` · Sonnet · T19, T13–T17
 
 ### E4 · Interfaz: estructura
+
 - T23 · Layout: barra lateral plegable y redimensionable, viewport, barra de estado · Sonnet · T22
 - T24 · Pestaña Explorador (árbol, carga perezosa, selección) · Sonnet · T23, T21
 - T25 · Pestaña Favoritos · Sonnet · T23, T21
@@ -75,6 +80,7 @@ Formato: `ID · título · modelo · depende de`. Criterios de aceptación en ca
 - T28 · Tema claro/oscuro del sistema, estilos de lectura · Sonnet · T23
 
 ### E5 · Viewport
+
 - T29 · Vista previa: KaTeX, Mermaid diferido, highlight.js, DOMPurify, enlaces y anclas · Sonnet · T15, T23
 - T30 · Visor por defecto en solo lectura + botón «Editar» (⌘E) · Sonnet · T29
 - T31 · Editor de código CodeMirror 6 + buscar y reemplazar · Sonnet · T30
@@ -85,11 +91,13 @@ Formato: `ID · título · modelo · depende de`. Criterios de aceptación en ca
 - T36 · Zoom (aumentar, reducir, restablecer) · Haiku · T29
 
 ### E6 · Menús y atajos
+
 - T37 · Registro de comandos (id, atajo por SO, acción, estado activo) · Sonnet · T22
 - T38 ★ · Menú nativo macOS / Windows / Linux con recientes · Opus · T37
 - T39 · Menú contextual del Explorador · Sonnet · T37, T24
 
 ### E7 · Escritorio y arrastrar y soltar
+
 - T40 · Asociación `.md`/`.markdown`, «Abrir con…» en los tres SO · Sonnet · T18
 - T41 · Soltar archivos/carpetas en la ventana con indicador de zona · Sonnet · T20, T23
 - T42 · Soltar imágenes en el editor → `assets/` + enlace · Sonnet · T31
@@ -100,19 +108,23 @@ Formato: `ID · título · modelo · depende de`. Criterios de aceptación en ca
 - T47 · Recientes del SO (Dock en macOS, Jump List en Windows) · Sonnet · T38
 
 ### E8 · Exportación
+
 - T48 · Exportar a PDF respetando la disposición · Sonnet · T34
 - T49 · Imprimir · Haiku · T48
 
 ### E9 · Idiomas
+
 - T50 · Infraestructura i18n (detección, cambio en caliente, menús nativos traducidos) · Sonnet · T23
 - T51 · Traducciones es/en completas y test de claves faltantes · Haiku · T50
 
 ### E10 · Icono y créditos
+
 - T52 · Variante del icono de DotMD + `scripts/render-icon.mjs` · Sonnet · T01
 - T53 · Generar `.icns`, `.ico`, PNG y favicon con `tauri icon` · Haiku · T52
 - T54 · Diálogo «Acerca de» con créditos (Juan Gestal, juan@gestal.es, gestal.es) · Haiku · T38
 
 ### E11 · Entrega
+
 - T55 · Workflow de release sin firmar (`.dmg`, `.msi`/`.exe`, `.AppImage`/`.deb`) · Haiku · T05, T53
 - T56 · README final: capturas, atajos, instalación, cómo abrir sin firmar · Haiku · todo E4–E10
 - T57 ★ · Pasada de mutación: matar mutantes supervivientes o justificarlos · Opus + Sonnet · todo

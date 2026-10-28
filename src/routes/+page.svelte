@@ -1,5 +1,5 @@
 <script lang="ts">
-  let title = $state("DotMD Viewer");
+  let title = $state('DotMD Viewer');
 </script>
 
 <main>

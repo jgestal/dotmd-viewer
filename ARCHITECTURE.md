@@ -4,7 +4,7 @@ DotMD Viewer is a Tauri 2 app: a Rust backend (files, rendering, OS integration,
 frontend. The frontend follows **Clean Architecture**: business rules sit in the middle, frameworks at the
 edges, and dependencies point inwards only.
 
-Parts that are not built yet are marked *planned*, with the ticket that delivers them (see [PLAN.md](PLAN.md)).
+Parts that are not built yet are marked _planned_, with the ticket that delivers them (see [PLAN.md](PLAN.md)).
 
 ```
             ┌────────────────────────── presentation ─────────────────────────┐
@@ -22,20 +22,20 @@ Parts that are not built yet are marked *planned*, with the ticket that delivers
 
 ## Layers
 
-| Layer | Folder | May import | Contents |
-|---|---|---|---|
-| **Domain** | `src/lib/domain/` | nothing outside itself | Pure rules: documents (line endings, modes, dirty state), workspace (folders, favorites), statistics, outline, slides, preferences validation, `AppError`. |
-| **Ports** | `src/lib/ports/` | nothing (types only) | Interfaces the application needs: `FileSystem`, `Dialogs`, `FileWatcher`, `MarkdownRenderer`, `Exporter`, `Notifier`, `Translate`. |
-| **Application** | `src/lib/application/` | domain, ports | Use cases: open, save, save as, close with changes, external reload; folders and favorites; rename, move and trash; recent files and preferences. They receive their dependencies as arguments. |
-| **Infrastructure** | `src/lib/infrastructure/` | ports, domain | `tauri/`: adapters over Rust commands and Tauri plugins. `memory/`: in-memory doubles with scripted answers for tests. |
-| **Presentation** | `src/lib/presentation/`, `src/routes/` | everything | Svelte components and stores, the command registry (shortcuts and menu), and UI-only behavior. |
-| **Composition root** | `src/lib/container.ts` | everything | The only place that picks adapters and builds the use cases (dependency injection). |
+| Layer                | Folder                                 | May import             | Contents                                                                                                                                                                                        |
+| -------------------- | -------------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Domain**           | `src/lib/domain/`                      | nothing outside itself | Pure rules: documents (line endings, modes, dirty state), workspace (folders, favorites), statistics, outline, slides, preferences validation, `AppError`.                                      |
+| **Ports**            | `src/lib/ports/`                       | nothing (types only)   | Interfaces the application needs: `FileSystem`, `Dialogs`, `FileWatcher`, `MarkdownRenderer`, `Exporter`, `Notifier`, `Translate`.                                                              |
+| **Application**      | `src/lib/application/`                 | domain, ports          | Use cases: open, save, save as, close with changes, external reload; folders and favorites; rename, move and trash; recent files and preferences. They receive their dependencies as arguments. |
+| **Infrastructure**   | `src/lib/infrastructure/`              | ports, domain          | `tauri/`: adapters over Rust commands and Tauri plugins. `memory/`: in-memory doubles with scripted answers for tests.                                                                          |
+| **Presentation**     | `src/lib/presentation/`, `src/routes/` | everything             | Svelte components and stores, the command registry (shortcuts and menu), and UI-only behavior.                                                                                                  |
+| **Composition root** | `src/lib/container.ts`                 | everything             | The only place that picks adapters and builds the use cases (dependency injection).                                                                                                             |
 
 Status: the layers are in place as folders; their contents are built by the tickets in epics E1 to E6.
 
 ## Dependency rule
 
-The rule is enforced by a test, `src/lib/__tests__/architecture.test.ts` (*planned, T03*). It checks that:
+The rule is enforced by a test, `src/lib/__tests__/architecture.test.ts` (_planned, T03_). It checks that:
 
 - the domain imports nothing;
 - the application imports only the domain and the ports;
@@ -56,14 +56,14 @@ The rule is enforced by a test, `src/lib/__tests__/architecture.test.ts` (*plann
 Commands stay thin. The logic lives in plain functions that tests call directly, often with temporary
 folders.
 
-| Module | Responsibility | Status |
-|---|---|---|
-| `lib.rs`, `main.rs` | App setup, plugins, command registration. | Scaffold (T01) |
-| `fs.rs` | Read and write text with encoding detection (UTF-8/16, Latin-1), atomic save, directory listing filtered to `.md`, `.markdown` and `.txt`. | *Planned (T13, T14)* |
-| `markdown.rs` | comrak rendering with GFM, notes, front matter and source line mapping. | *Planned (T15)* |
-| `watch.rs` | File watching with `notify`, emitting change events for live reload. | *Planned (T16)* |
-| `os.rs` | Rename, move, trash, and reveal in Finder or Explorer. | *Planned (T17)* |
-| `cli.rs` | Command-line arguments, single instance, and opening files from the OS. | *Planned (T18)* |
+| Module              | Responsibility                                                                                                                             | Status               |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | -------------------- |
+| `lib.rs`, `main.rs` | App setup, plugins, command registration.                                                                                                  | Scaffold (T01)       |
+| `fs.rs`             | Read and write text with encoding detection (UTF-8/16, Latin-1), atomic save, directory listing filtered to `.md`, `.markdown` and `.txt`. | _Planned (T13, T14)_ |
+| `markdown.rs`       | comrak rendering with GFM, notes, front matter and source line mapping.                                                                    | _Planned (T15)_      |
+| `watch.rs`          | File watching with `notify`, emitting change events for live reload.                                                                       | _Planned (T16)_      |
+| `os.rs`             | Rename, move, trash, and reveal in Finder or Explorer.                                                                                     | _Planned (T17)_      |
+| `cli.rs`            | Command-line arguments, single instance, and opening files from the OS.                                                                    | _Planned (T18)_      |
 
 ## Frontend libraries
 
@@ -73,13 +73,13 @@ CodeMirror 6; the editable preview is Milkdown (loaded lazily). These arrive wit
 
 ## Testing strategy
 
-| Level | Where | Tool | Command | Status |
-|---|---|---|---|---|
-| **Unit** | `src/lib/**/__tests__/` | Vitest | `npm test` | *Planned (T03)* |
-| **Use cases** | `src/lib/application/` tests, using in-memory adapters | Vitest | `npm test` | *Planned (T19, T20)* |
-| **Architecture** | `src/lib/__tests__/architecture.test.ts` | Vitest | `npm test` | *Planned (T03)* |
-| **Rust** | `#[cfg(test)]` modules in `src-tauri/src` | `cargo test` | `npm run test:rust` | *Planned (T13 to T18)* |
-| **Mutation** | StrykerJS for TypeScript, cargo-mutants for Rust | StrykerJS, cargo-mutants | `npm run test:mutation` | *Planned (T04)* |
+| Level            | Where                                                  | Tool                     | Command                 | Status                 |
+| ---------------- | ------------------------------------------------------ | ------------------------ | ----------------------- | ---------------------- |
+| **Unit**         | `src/lib/**/__tests__/`                                | Vitest                   | `npm test`              | _Planned (T03)_        |
+| **Use cases**    | `src/lib/application/` tests, using in-memory adapters | Vitest                   | `npm test`              | _Planned (T19, T20)_   |
+| **Architecture** | `src/lib/__tests__/architecture.test.ts`               | Vitest                   | `npm test`              | _Planned (T03)_        |
+| **Rust**         | `#[cfg(test)]` modules in `src-tauri/src`              | `cargo test`             | `npm run test:rust`     | _Planned (T13 to T18)_ |
+| **Mutation**     | StrykerJS for TypeScript, cargo-mutants for Rust       | StrykerJS, cargo-mutants | `npm run test:mutation` | _Planned (T04)_        |
 
 Targets: coverage of at least 90 % in `domain` and `application`, and a mutation score of at least 85 % in
 the same layers. Surviving mutants are either killed by a new test or justified in writing. Mutation
