@@ -11,11 +11,12 @@ import {
   newDocument,
   openDocument,
   reloadFromDisk,
+  retargetDocument,
   serialise,
   type Document,
 } from '../domain/document';
 import { toAppError } from '../domain/errors';
-import { baseName, isSamePath } from '../domain/paths';
+import { baseName, isSameOrInside, isSamePath } from '../domain/paths';
 import type {
   AppWindow,
   Dialogs,
@@ -25,6 +26,7 @@ import type {
   Notifier,
   Translate,
 } from '../ports';
+import type { PathChange } from './workspace';
 
 export interface DocumentState {
   readonly doc: Document | null;
@@ -43,6 +45,8 @@ export interface DocumentsDeps {
   readonly watcher: FileWatcher;
   readonly notifier: Notifier;
   readonly t: Translate;
+  /** True on file systems that ignore case (macOS, Windows); defaults to false. */
+  readonly caseInsensitive?: boolean;
 }
 
 export interface Documents {
@@ -56,6 +60,8 @@ export interface Documents {
   confirmQuit(state: DocumentState): Promise<boolean>;
   edit(state: DocumentState, content: string): Promise<DocumentState>;
   externalChange(state: DocumentState, path: string): Promise<DocumentState | null>;
+  /** Re-points the open document after its file or a folder above it was renamed or moved; `null` when it is unaffected. */
+  followMove(state: DocumentState, change: PathChange): Promise<DocumentState | null>;
 }
 
 const MARKDOWN_EXTENSIONS = ['md', 'markdown', 'txt'] as const;
@@ -71,6 +77,7 @@ export const createDocuments = ({
   watcher,
   notifier,
   t,
+  caseInsensitive = false,
 }: DocumentsDeps): Documents => {
   /** What we last wrote, so the watcher's echo of our own save is not taken for an external edit. */
   let lastWrite: { readonly path: string; readonly content: string } | null = null;
@@ -208,6 +215,18 @@ export const createDocuments = ({
     }
   };
 
+  const followMove = async (
+    state: DocumentState,
+    { from, to }: PathChange,
+  ): Promise<DocumentState | null> => {
+    const { doc } = state;
+    if (doc?.path == null || !isSameOrInside(from, doc.path, caseInsensitive)) return null;
+    const moved = retargetDocument(doc, from, to, caseInsensitive);
+    await watcher.watch(moved.path);
+    await show(moved);
+    return { doc: moved };
+  };
+
   return {
     open,
     openWithDialog,
@@ -218,5 +237,6 @@ export const createDocuments = ({
     confirmQuit: resolveUnsaved,
     edit,
     externalChange,
+    followMove,
   };
 };

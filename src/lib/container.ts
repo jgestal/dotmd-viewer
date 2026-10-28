@@ -11,6 +11,7 @@ import {
   TauriDropTarget,
   TauriOpenRequests,
   TauriMenu,
+  tauriContextMenu,
   tauriFileSystem,
   tauriOpener,
   tauriPreferencesStore,
@@ -21,6 +22,7 @@ import {
 import { isTauri } from './isTauri';
 import type {
   AppWindow,
+  ContextMenu,
   Dialogs,
   DropTarget,
   FileSystem,
@@ -40,6 +42,8 @@ export interface ContainerOptions {
   /** Toasts live in the presentation layer, which hands its notifier in. */
   readonly notifier: Notifier;
   readonly t: Translate;
+  /** Browser mode has no native menu: the presentation draws one and hands it in here. */
+  readonly fallbackContextMenu: ContextMenu;
   /** Defaults to `'tauri'` inside the Tauri webview and `'memory'` anywhere else. */
   readonly mode?: ContainerMode;
 }
@@ -57,6 +61,7 @@ export interface Container {
   readonly window: AppWindow;
   readonly menu: NativeMenu;
   readonly dropTarget: DropTarget;
+  readonly contextMenu: ContextMenu;
 }
 
 interface Ports {
@@ -70,6 +75,7 @@ interface Ports {
   readonly opener: ExternalOpener;
   readonly menu: NativeMenu;
   readonly dropTarget: DropTarget;
+  readonly contextMenu: ContextMenu;
 }
 
 const tauriPorts = (t: Translate): Ports => ({
@@ -83,6 +89,7 @@ const tauriPorts = (t: Translate): Ports => ({
   opener: tauriOpener,
   menu: new TauriMenu(),
   dropTarget: new TauriDropTarget(),
+  contextMenu: tauriContextMenu,
 });
 
 /** markdown-it only ships in the browser build (Tauri renders with comrak), so it loads on first use. */
@@ -94,7 +101,7 @@ const lazyDemoRenderer: MarkdownRenderer = {
 };
 
 /** In a plain browser: an in-memory demo workspace, opened on first run. */
-const memoryPorts = (): Ports => {
+const memoryPorts = (contextMenu: ContextMenu): Ports => {
   const services = createMemoryServices();
   seedDemo(services.fs);
   services.preferences.raw ??= { lastFolder: DEMO_FOLDER, lastFile: `${DEMO_FOLDER}/Welcome.md` };
@@ -104,6 +111,7 @@ const memoryPorts = (): Ports => {
     opener: new BrowserOpener(),
     menu: new MemoryMenu(),
     dialogs: new BrowserDialogs(),
+    contextMenu,
     store: services.preferences,
     dropTarget: new BrowserDropTarget(services.fs),
   };
@@ -116,20 +124,15 @@ const hostIgnoresCase = (): boolean =>
 export const createContainer = ({
   notifier,
   t,
+  fallbackContextMenu,
   mode = isTauri() ? 'tauri' : 'memory',
 }: ContainerOptions): Container => {
-  const ports = mode === 'tauri' ? tauriPorts(t) : memoryPorts();
-  const { fs, dialogs, window, watcher, renderer, store, openRequests, opener, menu, dropTarget } =
-    ports;
+  const ports = mode === 'tauri' ? tauriPorts(t) : memoryPorts(fallbackContextMenu);
+  const caseInsensitive = mode === 'tauri' && hostIgnoresCase();
+  const { fs, dialogs, window, watcher, renderer, store, openRequests, opener } = ports;
   return {
-    documents: createDocuments({ fs, dialogs, window, watcher, notifier, t }),
-    workspace: createWorkspace({
-      fs,
-      dialogs,
-      notifier,
-      t,
-      caseInsensitive: mode === 'tauri' && hostIgnoresCase(),
-    }),
+    documents: createDocuments({ fs, dialogs, window, watcher, notifier, t, caseInsensitive }),
+    workspace: createWorkspace({ fs, dialogs, notifier, t, caseInsensitive }),
     drop: createDrop({ fs, notifier, t }),
     preferences: createPreferences({ store, notifier, t }),
     watcher,
@@ -137,7 +140,8 @@ export const createContainer = ({
     openRequests,
     opener,
     window,
-    menu,
-    dropTarget,
+    menu: ports.menu,
+    dropTarget: ports.dropTarget,
+    contextMenu: ports.contextMenu,
   };
 };

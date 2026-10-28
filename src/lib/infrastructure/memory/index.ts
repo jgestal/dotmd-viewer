@@ -1,5 +1,6 @@
 // In-memory adapters: test doubles for every port, with scripted answers and call records.
 import { fakeTranslate } from './fakeTranslate';
+import { MemoryContextMenu } from './memoryContextMenu';
 import { MemoryDialogs } from './memoryDialogs';
 import { MemoryFileSystem } from './memoryFileSystem';
 import { MemoryOpener } from './memoryOpener';
@@ -12,6 +13,7 @@ import { MemoryWindow } from './memoryWindow';
 
 export * from './browserDropTarget';
 export * from './fakeTranslate';
+export * from './memoryContextMenu';
 export * from './memoryDialogs';
 export * from './memoryFileSystem';
 export * from './memoryMenu';
@@ -32,6 +34,7 @@ export interface MemoryServices {
   readonly preferences: MemoryPreferencesStore;
   readonly openRequests: MemoryOpenRequests;
   readonly opener: MemoryOpener;
+  readonly contextMenu: MemoryContextMenu;
   readonly notifier: MemoryNotifier;
   readonly translate: typeof fakeTranslate;
 }
@@ -48,6 +51,7 @@ export const createMemoryServices = (): MemoryServices => {
     preferences: new MemoryPreferencesStore(),
     openRequests: new MemoryOpenRequests(),
     opener: new MemoryOpener(),
+    contextMenu: new MemoryContextMenu(),
     notifier: new MemoryNotifier(),
     translate: fakeTranslate,
   };

@@ -1,5 +1,6 @@
 // The explorer's live tree. It outlives the panel (switching sidebar tabs unmounts the panel), so
 // the folders the user expanded are remembered for the session.
+import { dirName } from '$lib/domain/paths';
 import { app } from '../app.svelte';
 import {
   ancestorsWithin,
@@ -41,6 +42,12 @@ class Explorer {
     const entries = await app.listFolder(path);
     this.#loading.delete(path);
     if (root === this.#root) this.tree = withChildren(this.tree, path, entries);
+  }
+
+  /** Lists again the folders that contain `paths`, when they are loaded; e.g. after a rename or trash. */
+  async refreshAround(...paths: readonly string[]): Promise<void> {
+    const loaded = new Set(paths.map(dirName).filter((folder) => this.tree.children.has(folder)));
+    await Promise.all([...loaded].map((folder) => this.refresh(folder)));
   }
 
   toggle(path: string): void {

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { createMemoryServices } from '.';
 import { fakeTranslate } from './fakeTranslate';
+import { MemoryContextMenu } from './memoryContextMenu';
 import { MemoryDialogs } from './memoryDialogs';
 import { MemoryNotifier } from './memoryNotifier';
 import { MemoryOpener } from './memoryOpener';
@@ -205,5 +206,16 @@ describe('createMemoryServices', () => {
     first.notifier.info('x');
     expect(second.notifier.infos).toEqual([]);
     expect(first.translate).toBe(fakeTranslate);
+  });
+});
+
+describe('MemoryContextMenu', () => {
+  it('answers with the scripted choices, then null, and records the items', async () => {
+    const menu = new MemoryContextMenu();
+    const items = [{ id: 'open', label: 'Open' }];
+    menu.answer('open');
+    expect(await menu.show(items)).toBe('open');
+    expect(await menu.show(items)).toBeNull();
+    expect(menu.shown).toEqual([items, items]);
   });
 });

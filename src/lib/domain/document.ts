@@ -1,6 +1,8 @@
 // The single document open in the viewer: its text, where it lives on disk and how to write it
 // back exactly as it was read (line ending, encoding, BOM). Content is always held with `\n`.
 
+import { retargetPath } from './paths';
+
 export type LineEnding = 'lf' | 'crlf';
 
 /** Names match the ones the Rust side reports when it decodes a file. */
@@ -100,3 +102,12 @@ export const reloadFromDisk = (doc: Document, raw: string): ReloadResult => {
 /** The file name of the document, or `untitled` when it has no path. */
 export const displayName = (doc: Document, untitled: string): string =>
   doc.path === null ? untitled : (doc.path.split(PATH_SEPARATOR).pop() ?? doc.path);
+
+/** Follows a rename or move of `from` to `to`: a document at or inside it now lives at the new path. */
+export const retargetDocument = (
+  doc: Document,
+  from: string,
+  to: string,
+  caseInsensitive = false,
+): Document =>
+  doc.path === null ? doc : { ...doc, path: retargetPath(doc.path, from, to, caseInsensitive) };

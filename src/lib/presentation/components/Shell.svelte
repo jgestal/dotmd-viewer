@@ -4,6 +4,7 @@
   import { app } from '../app.svelte';
   import { i18n } from '../i18n/i18n.svelte';
   import DropOverlay from './DropOverlay.svelte';
+  import ContextMenuFallback from './ContextMenuFallback.svelte';
   import Sidebar from './Sidebar.svelte';
   import Toasts from './Toasts.svelte';
   import ViewportHeader from './ViewportHeader.svelte';
@@ -83,6 +84,7 @@
 
 <DropOverlay />
 <Toasts />
+<ContextMenuFallback />
 
 <style>
   .shell {

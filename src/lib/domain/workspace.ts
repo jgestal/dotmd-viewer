@@ -1,4 +1,4 @@
-import { isSameOrInside, isSamePath, joinPath, normalisePath } from './paths';
+import { isSameOrInside, isSamePath, retargetPath } from './paths';
 
 export interface Favourite {
   readonly path: string;
@@ -98,17 +98,6 @@ export function withMissing(
   exists: (path: string) => boolean,
 ): FavouriteWithStatus[] {
   return favourites.map((fav) => ({ ...fav, missing: !exists(fav.path) }));
-}
-
-function retargetPath(
-  path: string,
-  oldPath: string,
-  newPath: string,
-  caseInsensitive: boolean,
-): string {
-  if (!isSameOrInside(oldPath, path, caseInsensitive)) return path;
-  const rest = normalisePath(path).slice(normalisePath(oldPath).length);
-  return joinPath(newPath, ...rest.split('/'));
 }
 
 const clamp = (value: number, min: number, max: number): number =>
