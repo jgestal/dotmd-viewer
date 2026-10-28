@@ -157,4 +157,9 @@ export const es = {
   'editor.search.onLine': 'en la línea',
   'editor.search.replacedMatches': '$ coincidencias reemplazadas',
   'editor.search.replacedMatch': 'coincidencia reemplazada en $',
+  // T41 · Drop files and folders
+  'drop.open': 'Suelta para abrir',
+  'drop.openFolder': 'Suelta para abrir la carpeta',
+  'drop.rejected': 'Solo archivos Markdown y carpetas',
+  'drop.skipped': 'Abierto {name}; omitidos: {count}',
 } as const satisfies Record<keyof typeof en, string>;

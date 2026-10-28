@@ -33,6 +33,7 @@ export const fileCommands = (fs: MemoryFileSystem): CommandHandlers => ({
     fs.writeText(path as string, { content, encoding, hasBom } as never),
   list_dir: ({ path }) => fs.listDir(path as string),
   path_exists: ({ path }) => fs.exists(path as string),
+  path_kind: ({ path }) => fs.kind(path as string),
   rename_path: ({ from, to }) => fs.rename(from as string, to as string),
   trash_path: ({ path }) => fs.trash(path as string),
   copy_into: ({ source, directory }) => fs.copyInto(source as string, directory as string),

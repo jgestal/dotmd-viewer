@@ -154,4 +154,9 @@ export const en = {
   'editor.search.onLine': 'on line',
   'editor.search.replacedMatches': 'replaced $ matches',
   'editor.search.replacedMatch': 'replaced match on $',
+  // T41 · Drop files and folders
+  'drop.open': 'Drop to open',
+  'drop.openFolder': 'Drop to open folder',
+  'drop.rejected': 'Only Markdown files and folders',
+  'drop.skipped': 'Opened {name}; skipped: {count}',
 } as const satisfies Record<string, string>;

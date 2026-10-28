@@ -46,6 +46,7 @@ pub fn run() {
             open_requests::take_pending_open,
             watcher::watch_file,
             file_ops::path_exists,
+            file_ops::path_kind,
             file_ops::rename_path,
             file_ops::trash_path,
             file_ops::copy_into,

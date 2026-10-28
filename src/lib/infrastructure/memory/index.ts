@@ -10,6 +10,7 @@ import { MemoryRenderer } from './memoryRenderer';
 import { MemoryWatcher } from './memoryWatcher';
 import { MemoryWindow } from './memoryWindow';
 
+export * from './browserDropTarget';
 export * from './fakeTranslate';
 export * from './memoryDialogs';
 export * from './memoryFileSystem';

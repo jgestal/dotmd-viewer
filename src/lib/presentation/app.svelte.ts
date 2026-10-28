@@ -3,6 +3,7 @@
 // read `app.*` and call its methods instead of talking to the use cases directly.
 import type { DocumentState } from '$lib/application/documents';
 import { createContainer, type Container } from '$lib/container';
+import type { DropEvent } from '$lib/ports';
 import { isDirty } from '$lib/domain/document';
 import type { FavouriteWithStatus } from '$lib/domain/workspace';
 import { toAppError } from '$lib/domain/errors';
@@ -38,6 +39,8 @@ class App {
   /** Caret position (1-based) in the code editor; null when no editor has one. */
   cursor = $state<{ line: number; column: number } | null>(null);
   ready = $state(false);
+  /** Paths being dragged over the window, or null when no drag is under way. */
+  draggedPaths = $state<readonly string[] | null>(null);
   /** Favourite paths found missing on disk by the last `refreshFavourites`. */
   #missingFavourites = $state<readonly string[]>([]);
   #favouritesRun = 0;
@@ -75,12 +78,13 @@ class App {
 
   async start(): Promise<void> {
     this.#container = createContainer({ notifier, t: (key, vars) => i18n.t(key, vars) });
-    const { preferences, watcher, openRequests } = this.#container;
+    const { preferences, watcher, openRequests, dropTarget } = this.#container;
     this.preferences = await preferences.load();
     i18n.setPreference(this.preferences.language);
 
     watcher.onChange((path) => void this.#externalChange(path));
     openRequests.onOpen((paths) => void this.openPaths(paths));
+    dropTarget.onDrag((event) => this.#onDrag(event));
     const pending = await openRequests.takePending();
     if (pending.length > 0) await this.openPaths(pending);
     else if (this.preferences.lastFile) await this.open(this.preferences.lastFile, { quiet: true });
@@ -112,12 +116,16 @@ class App {
     }
   }
 
-  /** The OS asked us to open these: the last file wins, a folder becomes the explorer root. */
+  /** The OS asked us to open these (or they were dropped): the last folder and the last file win. */
   async openPaths(paths: readonly string[]): Promise<void> {
-    for (const path of paths) {
-      if (/\.(md|markdown|mdown|mkd|txt)$/i.test(path)) await this.open(path);
-      else await this.openFolder(path);
-    }
+    const { folder, file } = await this.container.drop.plan(paths);
+    if (folder !== null) await this.openFolder(folder);
+    if (file !== null) await this.open(file);
+  }
+
+  #onDrag({ type, paths }: DropEvent): void {
+    this.draggedPaths = type === 'leave' || type === 'drop' ? null : paths;
+    if (type === 'drop') void this.openPaths(paths);
   }
 
   async openWithDialog(): Promise<void> {

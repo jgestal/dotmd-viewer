@@ -19,7 +19,8 @@
         "minWidth": 640,
         "minHeight": 400,
         "visible": false,
-        "backgroundColor": "#fbfaf7"
+        "backgroundColor": "#fbfaf7",
+        "dragDropEnabled": true
       }
     ],
     "security": { "csp": null }

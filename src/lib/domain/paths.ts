@@ -83,3 +83,10 @@ export function resolvePath(base: string, relative: string): string {
   const separator = prefix === '' || prefix.endsWith('/') ? '' : '/';
   return prefix + (segments.length > 0 ? separator : '') + segments.join('/');
 }
+
+const MARKDOWN_EXTENSION = /\.(md|markdown|mdown|mkd|txt)$/i;
+
+/** True for the files the app can open: Markdown and plain text, whatever the case of the extension. */
+export function isMarkdownPath(path: string): boolean {
+  return MARKDOWN_EXTENSION.test(baseName(path));
+}

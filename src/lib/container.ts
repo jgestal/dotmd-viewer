@@ -1,12 +1,14 @@
 // Composition root: the one place that picks concrete adapters and wires the use cases to them.
 // Presentation receives the returned container instead of importing infrastructure.
+import { createDrop, type DropUseCases } from './application/drop';
 import { createDocuments, type Documents } from './application/documents';
 import { createPreferences, type PreferencesUseCases } from './application/preferences';
 import { createWorkspace, type WorkspaceUseCases } from './application/workspace';
-import { createMemoryServices, MemoryMenu } from './infrastructure/memory';
+import { BrowserDropTarget, createMemoryServices, MemoryMenu } from './infrastructure/memory';
 import { BrowserDialogs, BrowserOpener, DEMO_FOLDER, seedDemo } from './infrastructure/memory/demo';
 import {
   TauriDialogs,
+  TauriDropTarget,
   TauriOpenRequests,
   TauriMenu,
   tauriFileSystem,
@@ -20,6 +22,7 @@ import { isTauri } from './isTauri';
 import type {
   AppWindow,
   Dialogs,
+  DropTarget,
   FileSystem,
   ExternalOpener,
   FileWatcher,
@@ -44,6 +47,7 @@ export interface ContainerOptions {
 export interface Container {
   readonly documents: Documents;
   readonly workspace: WorkspaceUseCases;
+  readonly drop: DropUseCases;
   readonly preferences: PreferencesUseCases;
   /** Ports the presentation subscribes to directly. */
   readonly watcher: FileWatcher;
@@ -52,6 +56,7 @@ export interface Container {
   readonly opener: ExternalOpener;
   readonly window: AppWindow;
   readonly menu: NativeMenu;
+  readonly dropTarget: DropTarget;
 }
 
 interface Ports {
@@ -64,6 +69,7 @@ interface Ports {
   readonly openRequests: OpenRequests;
   readonly opener: ExternalOpener;
   readonly menu: NativeMenu;
+  readonly dropTarget: DropTarget;
 }
 
 const tauriPorts = (t: Translate): Ports => ({
@@ -76,6 +82,7 @@ const tauriPorts = (t: Translate): Ports => ({
   openRequests: new TauriOpenRequests(),
   opener: tauriOpener,
   menu: new TauriMenu(),
+  dropTarget: new TauriDropTarget(),
 });
 
 /** markdown-it only ships in the browser build (Tauri renders with comrak), so it loads on first use. */
@@ -98,6 +105,7 @@ const memoryPorts = (): Ports => {
     menu: new MemoryMenu(),
     dialogs: new BrowserDialogs(),
     store: services.preferences,
+    dropTarget: new BrowserDropTarget(services.fs),
   };
 };
 
@@ -111,7 +119,8 @@ export const createContainer = ({
   mode = isTauri() ? 'tauri' : 'memory',
 }: ContainerOptions): Container => {
   const ports = mode === 'tauri' ? tauriPorts(t) : memoryPorts();
-  const { fs, dialogs, window, watcher, renderer, store, openRequests, opener, menu } = ports;
+  const { fs, dialogs, window, watcher, renderer, store, openRequests, opener, menu, dropTarget } =
+    ports;
   return {
     documents: createDocuments({ fs, dialogs, window, watcher, notifier, t }),
     workspace: createWorkspace({
@@ -121,6 +130,7 @@ export const createContainer = ({
       t,
       caseInsensitive: mode === 'tauri' && hostIgnoresCase(),
     }),
+    drop: createDrop({ fs, notifier, t }),
     preferences: createPreferences({ store, notifier, t }),
     watcher,
     renderer,
@@ -128,5 +138,6 @@ export const createContainer = ({
     opener,
     window,
     menu,
+    dropTarget,
   };
 };
