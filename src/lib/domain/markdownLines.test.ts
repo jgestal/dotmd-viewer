@@ -53,6 +53,26 @@ describe('splitFrontMatter', () => {
     expect(splitFrontMatter(text)).toEqual({ frontMatter: null, body: text, bodyStartLine: 0 });
   });
 
+  it('accepts nested values, lists and comments', () => {
+    const yaml = '# meta\ntitle: A\nauthors:\n  - Ann\n- loose\nempty:';
+    expect(splitFrontMatter(`---\n${yaml}\n---\nbody`).frontMatter).toBe(yaml);
+  });
+
+  it('does not take a leading slide for front matter', () => {
+    const text = '---\n# Slide 1\n---\n# Slide 2';
+    expect(splitFrontMatter(text)).toEqual({ frontMatter: null, body: text, bodyStartLine: 0 });
+  });
+
+  it('needs at least one key', () => {
+    expect(splitFrontMatter('---\n# only a comment\n---\nbody').frontMatter).toBeNull();
+    expect(splitFrontMatter('---\n\n---\nbody').frontMatter).toBeNull();
+  });
+
+  it('rejects prose lines between the fences', () => {
+    expect(splitFrontMatter('---\ntitle: A\nJust text\n---').frontMatter).toBeNull();
+    expect(splitFrontMatter('---\n: no key\n---').frontMatter).toBeNull();
+  });
+
   it('only recognises a fence on the first line', () => {
     expect(splitFrontMatter('\n---\na: 1\n---').frontMatter).toBeNull();
   });
