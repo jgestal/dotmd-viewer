@@ -417,3 +417,18 @@ describe('trash', () => {
     expect(notifier.errors).toEqual(['workspace.permissionDenied {"name":"dir"}']);
   });
 });
+
+describe('reveal', () => {
+  it('shows the item in the file manager', async () => {
+    const { workspace, fs } = setup();
+    fs.seedFile('/a/x.md', '');
+    await workspace.reveal('/a/x.md');
+    expect(fs.revealed).toEqual(['/a/x.md']);
+  });
+
+  it('tells the user when the item is gone', async () => {
+    const { workspace, notifier } = setup();
+    await workspace.reveal('/a/gone.md');
+    expect(notifier.errors).toEqual(['workspace.notFound {"name":"gone.md"}']);
+  });
+});

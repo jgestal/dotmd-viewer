@@ -159,6 +159,24 @@ export interface ExternalOpener {
   openExternal(url: string): Promise<void>;
 }
 
+export interface MenuItem {
+  readonly id: string;
+  /** Already translated. */
+  readonly label: string;
+  /** Defaults to true. */
+  readonly enabled?: boolean;
+  /** Draws a separator above the item. */
+  readonly separatorBefore?: boolean;
+}
+
+/** A pop-up menu at a window position (CSS pixels); resolves the chosen id, or `null` when dismissed. */
+export interface ContextMenu {
+  show(
+    items: readonly MenuItem[],
+    at?: { readonly x: number; readonly y: number },
+  ): Promise<string | null>;
+}
+
 /** Short, non-blocking messages to the user. */
 export interface Notifier {
   info(message: string): void;

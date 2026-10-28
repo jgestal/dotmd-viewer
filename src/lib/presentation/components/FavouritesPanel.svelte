@@ -2,7 +2,9 @@
   import { tick } from 'svelte';
   import { isSamePath } from '$lib/domain/paths';
   import { app } from '../app.svelte';
+  import { showEntryMenu } from '../contextMenu/entryActions';
   import { favouriteLabel, reorderTarget } from '../favouriteLabel';
+  import { rowShortcut } from '../explorer/rowKeys';
   import { i18n } from '../i18n/i18n.svelte';
   import Icon from './Icon.svelte';
 
@@ -14,13 +16,25 @@
     void app.refreshFavourites();
   });
 
-  function activate(fav: { path: string; kind: string; missing: boolean }): void {
+  type Favourite = (typeof app.favourites)[number];
+
+  function activate(fav: Favourite): void {
     if (fav.missing) return;
     if (fav.kind === 'folder') void app.openFolder(fav.path);
     else void app.open(fav.path);
   }
 
-  async function onKeydown(event: KeyboardEvent, index: number): Promise<void> {
+  function openMenu(fav: Favourite, at: { x: number; y: number }): void {
+    void showEntryMenu({ path: fav.path, kind: fav.kind, missing: fav.missing }, at);
+  }
+
+  async function onKeydown(event: KeyboardEvent, fav: Favourite, index: number): Promise<void> {
+    if (rowShortcut(event, app.platform) === 'menu') {
+      event.preventDefault();
+      const box = (event.currentTarget as HTMLElement).getBoundingClientRect();
+      openMenu(fav, { x: box.left + 24, y: box.bottom });
+      return;
+    }
     if (!event.altKey) return;
     const target = reorderTarget(event.key, index);
     if (target === null) return;
@@ -55,7 +69,11 @@
             ? `${i18n.t('favourites.missing')}\n${fav.path}`
             : `${fav.path}\n${i18n.t('favourites.reorderHint')}`}
           onclick={() => activate(fav)}
-          onkeydown={(event) => onKeydown(event, index)}
+          oncontextmenu={(event) => {
+            event.preventDefault();
+            openMenu(fav, { x: event.clientX, y: event.clientY });
+          }}
+          onkeydown={(event) => onKeydown(event, fav, index)}
         >
           <Icon name={fav.kind === 'folder' ? 'folder' : 'file'} />
           <span class="name">{label.name}</span>

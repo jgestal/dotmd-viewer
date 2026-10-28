@@ -2,6 +2,7 @@
 // cases work on (document, preferences) and turns their results into reactive runes; components
 // read `app.*` and call its methods instead of talking to the use cases directly.
 import type { DocumentState } from '$lib/application/documents';
+import type { MoveResult, PathChange } from '$lib/application/workspace';
 import { createContainer, type Container } from '$lib/container';
 import type { DropEvent } from '$lib/ports';
 import { isDirty } from '$lib/domain/document';
@@ -19,12 +20,14 @@ import type { CommandId } from './commands/ids';
 import { createRegistry, type CommandRegistry } from './commands/registry';
 import { i18n } from './i18n/i18n.svelte';
 import { currentPlatform } from './platform';
+import { fallbackContextMenu } from './contextMenu/fallbackMenu.svelte';
 import { notifier } from './toasts.svelte';
 
 export type EditMode = Preferences['editMode'];
 export type Layout = Preferences['layout'];
 export type FavouriteKind = Preferences['favourites'][number]['kind'];
 export type SidebarTab = Preferences['sidebarTab'];
+export type EntryKind = FavouriteKind;
 
 /** Preferences are written at most this often while the user drags a slider or resizes. */
 const SAVE_DELAY_MS = 400;
@@ -77,7 +80,11 @@ class App {
   }
 
   async start(): Promise<void> {
-    this.#container = createContainer({ notifier, t: (key, vars) => i18n.t(key, vars) });
+    this.#container = createContainer({
+      notifier,
+      t: (key, vars) => i18n.t(key, vars),
+      fallbackContextMenu,
+    });
     const { preferences, watcher, openRequests, dropTarget } = this.#container;
     this.preferences = await preferences.load();
     i18n.setPreference(this.preferences.language);
@@ -203,6 +210,33 @@ class App {
   /** Entries of a folder for the explorer tree (empty when it cannot be read). */
   listFolder(path: string) {
     return this.container.workspace.browse(path);
+  }
+
+  /** Renames a file or folder; answers where it went, or `null` when nothing happened. */
+  async renameEntry(path: string, newName: string, kind: EntryKind): Promise<PathChange | null> {
+    return this.#followMove(
+      await this.container.workspace.rename(this.preferences, path, newName, kind),
+    );
+  }
+
+  /** Asks to trash a file or folder; answers whether it was trashed. */
+  async trashEntry(path: string): Promise<boolean> {
+    const { prefs, trashed } = await this.container.workspace.trash(this.preferences, path);
+    this.#applyPreferences(prefs);
+    return trashed;
+  }
+
+  revealEntry(path: string): Promise<void> {
+    return this.container.workspace.reveal(path);
+  }
+
+  /** Applies a rename's new preferences and re-points the open document at the new path. */
+  async #followMove({ prefs, change }: MoveResult): Promise<PathChange | null> {
+    this.#applyPreferences(prefs);
+    if (change === null) return null;
+    const state = await this.container.documents.followMove(this.documentState, change);
+    if (state) this.documentState = state;
+    return change;
   }
 
   // Favourites

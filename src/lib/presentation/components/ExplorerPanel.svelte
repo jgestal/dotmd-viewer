@@ -2,6 +2,7 @@
   import { tick, untrack } from 'svelte';
   import { baseName } from '$lib/domain/paths';
   import { app } from '../app.svelte';
+  import { renameEntry, showEntryMenu, trashEntry } from '../contextMenu/entryActions';
   import { explorer } from '../explorer/explorer.svelte';
   import {
     firstChildPath,
@@ -13,8 +14,10 @@
     visibleRows,
     type TreeRow,
   } from '../explorer/tree';
+  import { rowShortcut, type RowShortcut } from '../explorer/rowKeys';
   import { i18n } from '../i18n/i18n.svelte';
   import Icon from './Icon.svelte';
+  import RenameInput from './RenameInput.svelte';
 
   const GUIDE_WIDTH = 14;
 
@@ -24,6 +27,8 @@
   const listedEmpty = $derived(root !== null && explorer.tree.children.get(root)?.length === 0);
 
   let focused = $state<string | null>(null);
+  /** Path of the row whose name is being edited. */
+  let renaming = $state<string | null>(null);
   const elements: Record<string, HTMLElement | null> = {};
 
   // Roving tabindex: one row is in the tab order, the focused one or else the open document.
@@ -65,7 +70,54 @@
     else void moveTo(parentPath(rows, row.entry.path));
   }
 
+  function startRename(row: TreeRow): void {
+    focused = row.entry.path;
+    renaming = row.entry.path;
+  }
+
+  /** Ends the rename: `newName` is applied unless it is null (cancelled) or unchanged. */
+  async function finishRename(row: TreeRow, newName: string | null): Promise<void> {
+    const { path, name, kind } = row.entry;
+    if (renaming !== path) return;
+    renaming = null;
+    const renamed =
+      newName === null || newName === name ? null : await renameEntry(path, newName, kind);
+    await moveTo(renamed ?? path);
+  }
+
+  function openMenu(row: TreeRow, at: { x: number; y: number }): void {
+    focused = row.entry.path;
+    const { path, kind } = row.entry;
+    void showEntryMenu({ path, kind }, at, () => startRename(row));
+  }
+
+  function openMenuBelow(row: TreeRow): void {
+    const box = elements[row.entry.path]?.getBoundingClientRect();
+    openMenu(row, { x: (box?.left ?? 0) + 24, y: box?.bottom ?? 0 });
+  }
+
+  async function trash(row: TreeRow): Promise<void> {
+    const { path } = row.entry;
+    const neighbour = previousPath(rows, path) ?? nextPath(rows, path);
+    if (await trashEntry(path)) await moveTo(neighbour);
+  }
+
+  function onShortcut(shortcut: RowShortcut, row: TreeRow): void {
+    const actions: Record<RowShortcut, () => unknown> = {
+      menu: () => openMenuBelow(row),
+      rename: () => startRename(row),
+      trash: () => trash(row),
+    };
+    void actions[shortcut]();
+  }
+
   function onKeydown(event: KeyboardEvent, row: TreeRow): void {
+    const shortcut = rowShortcut(event, app.platform);
+    if (shortcut) {
+      event.preventDefault();
+      onShortcut(shortcut, row);
+      return;
+    }
     const path = row.entry.path;
     const actions: Record<string, () => void> = {
       ArrowDown: () => void moveTo(nextPath(rows, path)),
@@ -120,6 +172,10 @@
         title={path}
         bind:this={elements[path]}
         onclick={() => activate(row)}
+        oncontextmenu={(event) => {
+          event.preventDefault();
+          openMenu(row, { x: event.clientX, y: event.clientY });
+        }}
         onkeydown={(event) => onKeydown(event, row)}
         onfocus={() => (focused = path)}
       >
@@ -131,7 +187,16 @@
           {#if row.expandable}<Icon name="chevron" size={14} />{/if}
         </span>
         <Icon name={row.entry.kind === 'folder' ? 'folder' : 'file'} size={15} />
-        <span class="name">{row.entry.name}</span>
+        {#if renaming === path}
+          <RenameInput
+            name={row.entry.name}
+            kind={row.entry.kind}
+            oncommit={(newName) => finishRename(row, newName)}
+            oncancel={() => finishRename(row, null)}
+          />
+        {:else}
+          <span class="name">{row.entry.name}</span>
+        {/if}
       </li>
     {/each}
   </ul>

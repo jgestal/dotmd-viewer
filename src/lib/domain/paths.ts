@@ -90,3 +90,15 @@ const MARKDOWN_EXTENSION = /\.(md|markdown|mdown|mkd|txt)$/i;
 export function isMarkdownPath(path: string): boolean {
   return MARKDOWN_EXTENSION.test(baseName(path));
 }
+
+/** Maps `path` through a rename or move of `oldPath` to `newPath`; a path outside `oldPath` is returned unchanged. */
+export function retargetPath(
+  path: string,
+  oldPath: string,
+  newPath: string,
+  caseInsensitive = false,
+): string {
+  if (!isSameOrInside(oldPath, path, caseInsensitive)) return path;
+  const rest = normalisePath(path).slice(normalisePath(oldPath).length);
+  return joinPath(newPath, ...rest.split('/'));
+}

@@ -1,13 +1,17 @@
 import { mockWindows } from '@tauri-apps/api/mocks';
 import { describe, expect, it } from 'vitest';
 import { createContainer } from './container';
-import { fakeTranslate, MemoryNotifier } from './infrastructure/memory';
+import { fakeTranslate, MemoryContextMenu, MemoryNotifier } from './infrastructure/memory';
 import { mockBackend, resetMocksAfterEach } from './infrastructure/tauri/mockBackend';
 import { isTauri } from './isTauri';
 
 resetMocksAfterEach();
 
-const options = () => ({ notifier: new MemoryNotifier(), t: fakeTranslate });
+const options = () => ({
+  notifier: new MemoryNotifier(),
+  t: fakeTranslate,
+  fallbackContextMenu: new MemoryContextMenu(),
+});
 
 describe('isTauri', () => {
   it('is false in a plain browser', () => {

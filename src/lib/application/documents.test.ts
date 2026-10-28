@@ -422,3 +422,52 @@ describe('externalChange', () => {
     });
   });
 });
+
+describe('followMove', () => {
+  it('re-points the document, the watcher and the window at the renamed file', async () => {
+    const { documents, window, watcher, openFile } = setup();
+    const state = await openFile('/notes/a.md');
+    const next = await documents.followMove(state, { from: '/notes/a.md', to: '/notes/c.md' });
+    expect(next?.doc?.path).toBe('/notes/c.md');
+    expect(next?.doc?.content).toBe('# A\n');
+    expect(watcher.watched).toBe('/notes/c.md');
+    expect(window.current).toEqual({ title: 'c.md', path: '/notes/c.md', edited: false });
+  });
+
+  it('follows a rename of a folder above the document and keeps unsaved edits', async () => {
+    const { documents, window, openFile } = setup();
+    const state = await openFile('/notes/a.md');
+    const edited = await documents.edit(state, 'changed');
+    const next = await documents.followMove(edited, { from: '/notes', to: '/ideas' });
+    expect(next?.doc?.path).toBe('/ideas/a.md');
+    expect(next?.doc && isDirty(next.doc)).toBe(true);
+    expect(window.current).toEqual({ title: 'a.md', path: '/ideas/a.md', edited: true });
+  });
+
+  it('ignores moves elsewhere, siblings that share a prefix and a missing document', async () => {
+    const { documents, openFile } = setup();
+    const state = await openFile('/notes/a.md');
+    expect(await documents.followMove(state, { from: '/other', to: '/x' })).toBeNull();
+    expect(await documents.followMove(state, { from: '/notes/a', to: '/notes/z' })).toBeNull();
+    expect(await documents.followMove(EMPTY, { from: '/notes', to: '/x' })).toBeNull();
+    const fresh = (await documents.newDocument(EMPTY)) as DocumentState;
+    expect(await documents.followMove(fresh, { from: '/notes', to: '/x' })).toBeNull();
+  });
+
+  it('matches paths case-insensitively when the file system does', async () => {
+    const services = createMemoryServices();
+    const documents = createDocuments({
+      fs: services.fs,
+      dialogs: services.dialogs,
+      window: services.window,
+      watcher: services.watcher,
+      notifier: services.notifier,
+      t: services.translate,
+      caseInsensitive: true,
+    });
+    services.fs.seedFile('/notes/a.md', '# A\n');
+    const opened = await documents.open(EMPTY, '/notes/a.md');
+    const next = await documents.followMove(opened?.state ?? EMPTY, { from: '/NOTES', to: '/x' });
+    expect(next?.doc?.path).toBe('/x/a.md');
+  });
+});

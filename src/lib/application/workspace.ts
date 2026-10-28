@@ -2,7 +2,14 @@
 // Every operation takes the current preferences and returns the new ones; nothing is mutated.
 // On failure the user is told through the notifier and the preferences come back unchanged.
 import { toAppError, type AppError } from '../domain/errors';
-import { baseName, dirName, isSameOrInside, isSamePath, joinPath } from '../domain/paths';
+import {
+  baseName,
+  dirName,
+  isSameOrInside,
+  isSamePath,
+  joinPath,
+  retargetPath,
+} from '../domain/paths';
 import type { Preferences } from '../domain/preferences';
 import { addRecent, clearRecents, removeRecent, renameRecent } from '../domain/recents';
 import * as rules from '../domain/workspace';
@@ -66,9 +73,8 @@ export function createWorkspace({ fs, dialogs, notifier, t, caseInsensitive }: W
   const sameOrInside = (parent: string, child: string) =>
     isSameOrInside(parent, child, caseInsensitive);
 
-  /** Maps a path through a rename/move with the domain's rule (a workspace folder is just a path). */
   const retarget = (path: string, from: string, to: string): string =>
-    rules.renamePath({ folder: path, favourites: [] }, from, to, caseInsensitive).folder as string;
+    retargetPath(path, from, to, caseInsensitive);
 
   const retargetRecents = (recents: readonly string[], from: string, to: string) =>
     recents
@@ -220,6 +226,11 @@ export function createWorkspace({ fs, dialogs, notifier, t, caseInsensitive }: W
     return relocate(prefs, path, joinPath(targetFolder, baseName(path)));
   };
 
+  /** Shows the item in the system file manager; a failure is reported to the user. */
+  const reveal = async (path: string): Promise<void> => {
+    await attempt(path, () => fs.reveal(path));
+  };
+
   /** Asks for confirmation, sends the item to the trash and forgets it everywhere. */
   const trash = async (prefs: Preferences, path: string): Promise<TrashResult> => {
     const confirmed = await dialogs.confirm(
@@ -250,6 +261,7 @@ export function createWorkspace({ fs, dialogs, notifier, t, caseInsensitive }: W
     rename,
     move,
     trash,
+    reveal,
   };
 }
 

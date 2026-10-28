@@ -159,4 +159,16 @@ export const en = {
   'drop.openFolder': 'Drop to open folder',
   'drop.rejected': 'Only Markdown files and folders',
   'drop.skipped': 'Opened {name}; skipped: {count}',
+  // T39 · context menu
+  'entryMenu.open': 'Open',
+  'entryMenu.openFolder': 'Open as folder',
+  'entryMenu.rename': 'Rename',
+  'entryMenu.trash': 'Move to Trash',
+  'entryMenu.revealMac': 'Show in Finder',
+  'entryMenu.revealWindows': 'Show in Explorer',
+  'entryMenu.revealLinux': 'Show in File Manager',
+  'entryMenu.copyPath': 'Copy path',
+  'entryMenu.pathCopied': 'Path copied',
+  'entryMenu.copyFailed': 'The path could not be copied.',
+  'entryMenu.renameField': 'New name for "{name}"',
 } as const satisfies Record<string, string>;

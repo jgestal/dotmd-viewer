@@ -162,4 +162,16 @@ export const es = {
   'drop.openFolder': 'Suelta para abrir la carpeta',
   'drop.rejected': 'Solo archivos Markdown y carpetas',
   'drop.skipped': 'Abierto {name}; omitidos: {count}',
+  // T39 · context menu
+  'entryMenu.open': 'Abrir',
+  'entryMenu.openFolder': 'Abrir como carpeta',
+  'entryMenu.rename': 'Renombrar',
+  'entryMenu.trash': 'Mover a la papelera',
+  'entryMenu.revealMac': 'Mostrar en el Finder',
+  'entryMenu.revealWindows': 'Mostrar en el Explorador',
+  'entryMenu.revealLinux': 'Mostrar en el gestor de archivos',
+  'entryMenu.copyPath': 'Copiar ruta',
+  'entryMenu.pathCopied': 'Ruta copiada',
+  'entryMenu.copyFailed': 'No se pudo copiar la ruta.',
+  'entryMenu.renameField': 'Nuevo nombre de "{name}"',
 } as const satisfies Record<keyof typeof en, string>;
