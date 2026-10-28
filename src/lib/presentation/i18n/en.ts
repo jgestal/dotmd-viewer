@@ -171,4 +171,9 @@ export const en = {
   'entryMenu.pathCopied': 'Path copied',
   'entryMenu.copyFailed': 'The path could not be copied.',
   'entryMenu.renameField': 'New name for "{name}"',
+  // T34 · Pages layout
+  'pages.pageSize': 'Page size',
+  'pages.size.a4': 'A4',
+  'pages.size.letter': 'Letter',
+  'pages.pageNumber': 'Page {page} of {total}',
 } as const satisfies Record<string, string>;

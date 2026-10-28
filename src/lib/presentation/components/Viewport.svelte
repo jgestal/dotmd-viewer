@@ -1,6 +1,7 @@
 <script lang="ts">
   import { app } from '../app.svelte';
   import CodeEditor from './CodeEditor.svelte';
+  import PagedPreview from './PagedPreview.svelte';
   import Preview from './Preview.svelte';
 
   // What the main area shows for the open document. Reading follows the chosen layout;
@@ -13,7 +14,7 @@
 {#if view === 'read-continuous'}
   <Preview />
 {:else if view === 'read-pages'}
-  <Preview /><!-- T34: paged preview -->
+  <PagedPreview />
 {:else if view === 'read-slides'}
   <Preview /><!-- T35: slides -->
 {:else if view === 'edit-preview'}

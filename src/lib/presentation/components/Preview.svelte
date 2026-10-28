@@ -7,10 +7,10 @@
   import { i18n } from '../i18n/i18n.svelte';
   import { notifier } from '../toasts.svelte';
   import { effectiveScheme, type ColorScheme, SYSTEM_DARK_QUERY } from '../preview/colorScheme';
-  import { bindLinks, enhance } from '../preview/enhance';
-  import { parseFrontMatter, type FrontMatterEntry } from '../preview/frontMatter';
-  import { sanitize } from '../preview/sanitize';
-  import { blockForLine, parseStartLine, topLineAt } from '../preview/sourcePositions';
+  import { bindLinks } from '../preview/enhance';
+  import type { FrontMatterEntry } from '../preview/frontMatter';
+  import { renderDocument } from '../preview/renderDocument';
+  import { revealLine, topLine } from '../preview/viewNavigation';
   import { throttle } from '../navigation';
   import { navigation } from '../navigation.svelte';
 
@@ -37,29 +37,13 @@
   // Requests issued before this view existed are stale.
   let handledId = navigation.reveal?.id ?? 0;
 
-  const sourceBlocks = () =>
-    [...(article?.querySelectorAll('[data-sourcepos]') ?? [])].flatMap((element) => {
-      const start = parseStartLine(element.getAttribute('data-sourcepos'));
-      return start === null ? [] : [{ element, start }];
-    });
-
-  /** Scrolls so the block of the zero-based source line is at the top. */
-  function revealLine(line: number): void {
-    const block = blockForLine(sourceBlocks(), line);
-    if (!block || !scroller) return;
-    pendingReveal = null;
-    const offset = block.element.getBoundingClientRect().top - scroller.getBoundingClientRect().top;
-    scroller.scrollTop += offset;
+  /** Scrolls to the zero-based source line; stays pending until there is something to scroll to. */
+  function reveal(line: number): void {
+    if (scroller && article && revealLine(scroller, article, line)) pendingReveal = null;
   }
 
   const reportTopLine = throttle(() => {
-    if (!scroller) return;
-    const edge = scroller.getBoundingClientRect().top;
-    const blocks = sourceBlocks().map(({ element, start }) => ({
-      start,
-      top: element.getBoundingClientRect().top - edge,
-    }));
-    navigation.reportTopLine(topLineAt(blocks, 4));
+    if (scroller && article) navigation.reportTopLine(topLine(scroller, article));
   }, REPORT_INTERVAL_MS);
 
   async function render(
@@ -69,19 +53,19 @@
   ): Promise<void> {
     const ticket = ++latest;
     try {
-      const { html, frontMatter } = await app.container.renderer.render(markdown);
-      const next = document.createElement('div');
-      next.innerHTML = sanitize(html);
-      await enhance(next, { scheme: colors, diagramErrorLabel: i18n.t('preview.diagramError') });
+      const next = await renderDocument(app.container.renderer, markdown, {
+        scheme: colors,
+        diagramErrorLabel: i18n.t('preview.diagramError'),
+      });
       if (ticket !== latest || !scroller || !article) return;
       const top = forPath === renderedPath ? scroller.scrollTop : 0;
       // The article is empty in the template: the post-processed document is swapped in whole.
       // eslint-disable-next-line svelte/no-dom-manipulating
-      article.replaceChildren(...next.childNodes);
-      properties = frontMatter === null ? [] : parseFrontMatter(frontMatter);
+      article.replaceChildren(...next.root.childNodes);
+      properties = next.properties;
       scroller.scrollTop = top;
       renderedPath = forPath;
-      if (pendingReveal !== null) revealLine(pendingReveal);
+      if (pendingReveal !== null) reveal(pendingReveal);
     } catch {
       notifier.error(i18n.t('preview.renderError'));
     }
@@ -109,7 +93,7 @@
     handledId = request.id;
     untrack(() => {
       pendingReveal = request.line;
-      if (article?.firstElementChild) revealLine(request.line);
+      reveal(request.line);
     });
   });
 
