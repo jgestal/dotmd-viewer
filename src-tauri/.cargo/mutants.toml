@@ -1,5 +1,26 @@
-# cargo-mutants configuration, read by `npm run test:mutation:rust`.
+# cargo-mutants configuration, read by `npm run test:mutation:rust`. Every exclusion below is
+# justified in docs/mutation.md ("Rust (cargo-mutants)").
 
-# The only mutants left are the Tauri entry points: `main` and `run` just start the GUI event loop,
-# which needs a display and cannot be exercised by `cargo test`. Any other Rust code is mutated.
-exclude_re = ["replace (run|main) with"]
+# Code that only runs inside the GUI event loop, on a real window, or on another OS: `cargo test`
+# cannot reach it on the macOS host the mutation run uses.
+exclude_globs = [
+    "src/main.rs",                 # Calls `run`.
+    "src/lib.rs",                  # Wires the plugins and commands and starts the event loop.
+    "src/window_state.rs",         # NSWindow calls on the main thread.
+    "src/printing/wkwebview.rs",   # NSPrintOperation of a live WKWebView.
+    "src/printing/webview2.rs",    # Windows only.
+    "src/printing/webkitgtk.rs",   # Linux only.
+]
+
+exclude_re = [
+    # Need a running app (`AppHandle`, events, the main window or AppKit's main thread).
+    '^src/finder_services\.rs:.*: replace (register|handle|file_urls) ',
+    '^src/open_requests\.rs:.*: replace (deliver|on_second_instance|bring_forward|take_pending_open) ',
+    '^src/os_recents\.rs:.*: replace platform::(add|clear) with \(\)',
+    '^src/quit\.rs:.*: replace (hold_exit|quit_app) ',
+    # Equivalent: `elapsed` is never exactly equal to the timeout, so `>=` behaves like `>`.
+    '^src/printing/mod\.rs:.*: replace > with >= in wait_for_pdf$',
+    # Only a real move to another volume returns CrossesDevices; `move_across_devices` itself is
+    # tested directly, and the `true`/`!=` mutants of this guard are caught.
+    '^src/file_ops\.rs:.*: replace match guard error\.kind\(\) == io::ErrorKind::CrossesDevices with false in rename$',
+]

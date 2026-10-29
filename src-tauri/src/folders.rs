@@ -92,6 +92,7 @@ fn has_document_extension(name: &str) -> bool {
 }
 
 #[cfg(windows)]
+#[cfg_attr(test, mutants::skip)] // Not compiled on the macOS host that runs cargo-mutants.
 fn is_hidden_by_system(dir_entry: &DirEntry) -> bool {
     use std::os::windows::fs::MetadataExt;
     const FILE_ATTRIBUTE_HIDDEN: u32 = 0x2;

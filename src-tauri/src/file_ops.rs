@@ -333,9 +333,43 @@ mod tests {
         let dir = TempDir::new().unwrap();
         let from = dir.path().join("a.md");
         fs::write(&from, "a").unwrap();
-        let result = rename(&from, &dir.path().join("missing/a.md"));
-        assert_eq!(kind_of(result), ErrorKind::NotFound);
+        let missing = dir.path().join("missing");
+        let error = rename(&from, &missing.join("a.md")).unwrap_err();
+        assert_eq!(error.kind, ErrorKind::NotFound);
+        assert_eq!(error.message, "No such folder");
+        assert_eq!(error.path.as_deref(), missing.to_str());
         assert!(from.exists());
+    }
+
+    #[test]
+    #[cfg(unix)]
+    fn rename_reports_a_failed_move_with_the_systems_reason() {
+        let dir = TempDir::new().unwrap();
+        let folder = dir.path().join("folder");
+        fs::create_dir_all(folder.join("sub")).unwrap();
+        // A folder cannot go inside itself: the system refuses it, it is not a cross-device move.
+        let error = rename(&folder, &folder.join("sub/folder")).unwrap_err();
+        assert_eq!(error.kind, ErrorKind::InvalidInput);
+        assert_eq!(error.path.as_deref(), folder.to_str());
+    }
+
+    #[test]
+    fn move_across_devices_copies_the_file_and_removes_the_original() {
+        let dir = TempDir::new().unwrap();
+        let from = dir.path().join("a.md");
+        let to = dir.path().join("b.md");
+        fs::write(&from, "a").unwrap();
+        move_across_devices(&from, &to).unwrap();
+        assert!(!from.exists());
+        assert_eq!(fs::read_to_string(&to).unwrap(), "a");
+    }
+
+    #[test]
+    fn move_across_devices_refuses_folders() {
+        let dir = TempDir::new().unwrap();
+        let error = move_across_devices(dir.path(), &dir.path().join("copy")).unwrap_err();
+        assert_eq!(error.kind, ErrorKind::Unsupported);
+        assert!(dir.path().exists());
     }
 
     #[test]
