@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name={{name}}
+GenericName=Markdown Viewer
+GenericName[es]=Visor de Markdown
+Comment=Read Markdown documents, with optional editing
+Comment[es]=Lee documentos Markdown, con edición opcional
+Keywords=markdown;md;viewer;reader;editor;preview;
+Keywords[es]=markdown;md;visor;lector;editor;vista previa;
+Categories=Office;TextEditor;Viewer;Utility;
+MimeType=text/markdown;text/x-markdown;
+Exec={{exec}} %F
+Icon={{icon}}
+Terminal=false
+StartupWMClass=dotmd-viewer

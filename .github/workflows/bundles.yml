@@ -1,0 +1,80 @@
+name: Bundles
+
+# Builds the real installers/packages. Slow, so it only runs when the bundle
+# configuration changes (or on demand).
+on:
+  pull_request:
+    paths:
+      - src-tauri/tauri.conf.json
+      - src-tauri/bundle/**
+      - .github/workflows/bundles.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bundles:
+    name: Bundles (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            bundles: msi,nsis
+          - os: ubuntu-22.04
+            bundles: deb,rpm,appimage
+          - os: macos-latest
+            bundles: app,dmg
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tauri system dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf build-essential libssl-dev libxdo-dev desktop-file-utils rpm
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build bundles
+        run: npx tauri build --bundles ${{ matrix.bundles }}
+      - name: Validate the generated .desktop (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          desktop=$(find src-tauri/target/release/bundle/deb -name '*.desktop' | head -n 1)
+          test -n "$desktop"
+          cat "$desktop"
+          desktop-file-validate "$desktop"
+          grep -q '^MimeType=.*text/markdown;' "$desktop"
+      - name: Check the file association in the generated WiX source (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          wxs=$(find src-tauri/target/release/wix -name '*.wxs' | head -n 1)
+          test -n "$wxs"
+          grep -n -i 'extension' "$wxs"
+          grep -q 'Extension Id="md"' "$wxs"
+          grep -q 'ProgId' "$wxs"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bundles-${{ matrix.os }}
+          path: |
+            src-tauri/target/release/bundle/**/*.msi
+            src-tauri/target/release/bundle/**/*.exe
+            src-tauri/target/release/bundle/**/*.deb
+            src-tauri/target/release/bundle/**/*.rpm
+            src-tauri/target/release/bundle/**/*.AppImage
+            src-tauri/target/release/bundle/**/*.dmg
+          if-no-files-found: error
