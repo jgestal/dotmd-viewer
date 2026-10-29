@@ -461,6 +461,12 @@ describe('followMove', () => {
     expect(await documents.followMove(fresh, { from: '/notes', to: '/x' })).toBeNull();
   });
 
+  it('matches paths case-sensitively by default', async () => {
+    const { documents, openFile } = setup();
+    const state = await openFile('/notes/a.md');
+    expect(await documents.followMove(state, { from: '/NOTES', to: '/x' })).toBeNull();
+  });
+
   it('matches paths case-insensitively when the file system does', async () => {
     const services = createMemoryServices();
     const documents = createDocuments({

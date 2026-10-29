@@ -35,6 +35,7 @@ const looksLikeYaml = (lines: readonly string[]): boolean => {
 export const splitFrontMatter = (text: string): FrontMatterSplit => {
   const lines = splitLines(text.startsWith('\uFEFF') ? text.slice(1) : text);
   const noFrontMatter = { frontMatter: null, body: text, bodyStartLine: 0 };
+  // Stryker disable next-line StringLiteral: split() always yields a first line; the fallback only satisfies the type checker.
   if (!FRONT_MATTER_FENCE.test(lines[0] ?? '')) return noFrontMatter;
 
   const close = lines.findIndex((line, index) => index > 0 && FRONT_MATTER_CLOSE.test(line));

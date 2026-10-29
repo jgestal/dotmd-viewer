@@ -192,3 +192,53 @@ describe('computeStatistics: reading time', () => {
     expect(computeStatistics(text(101), 50).readingMinutes).toBe(3);
   });
 });
+
+describe('computeStatistics: exact syntax boundaries', () => {
+  const characters = (markdown: string) => computeStatistics(markdown).characters;
+
+  it('turns a table pipe into a word break', () => {
+    expect(words('a|b')).toBe(2);
+    expect(characters('a|b')).toBe(3);
+  });
+
+  it('drops indented, tight and nested blockquote markers', () => {
+    expect(characters('  > quoted')).toBe(6);
+    expect(characters('>quoted')).toBe(6);
+    expect(characters('>>quoted')).toBe(6);
+  });
+
+  it('drops multi-digit list numbers and every space after a marker', () => {
+    expect(characters('10. item')).toBe(4);
+    expect(characters('-   item')).toBe(4);
+  });
+
+  it('drops task boxes only at the start of a line, with all their trailing spaces', () => {
+    expect(characters('  [x] done')).toBe(4);
+    expect(characters('- [x]   done')).toBe(4);
+    expect(characters('see [x] here')).toBe(12);
+  });
+
+  it('drops heading markers only at the start of a line, with all their spaces', () => {
+    expect(characters('  # Title')).toBe(5);
+    expect(characters('#   Title')).toBe(5);
+    expect(characters('a # b')).toBe(5);
+  });
+
+  it('keeps the text of a collapsed reference link', () => {
+    expect(characters('[text][]')).toBe(4);
+  });
+
+  it('drops footnote references with long labels', () => {
+    expect(characters('a[^12]')).toBe(1);
+  });
+
+  it('keeps plain http autolinks and bare URLs as one word', () => {
+    expect(words('<http://example.com>')).toBe(1);
+    expect(characters('<http://example.com>')).toBe(18);
+    expect(words('see http://example.com/a/b')).toBe(2);
+  });
+
+  it('keeps a single equals sign, which is not a highlight marker', () => {
+    expect(characters('a = b')).toBe(5);
+  });
+});

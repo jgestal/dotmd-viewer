@@ -9,6 +9,7 @@ import {
   newDocument,
   openDocument,
   reloadFromDisk,
+  retargetDocument,
   serialise,
   type Document,
 } from './document';
@@ -97,6 +98,10 @@ describe('newDocument', () => {
     const guide = newDocument('# Guide\r\n', 'User Guide');
     expect(guide).toMatchObject({ path: null, content: '# Guide\n', name: 'User Guide' });
     expect(isDirty(guide)).toBe(false);
+  });
+
+  it('has no name key unless one is given', () => {
+    expect('name' in newDocument()).toBe(false);
   });
 });
 
@@ -255,5 +260,37 @@ describe('markUnsaved', () => {
 
   it('also works for an empty document', () => {
     expect(isDirty(markUnsaved(open('')))).toBe(true);
+  });
+
+  it('records an empty saved text for a non-empty document and a newline for an empty one', () => {
+    expect(markUnsaved(open('hello')).savedContent).toBe('');
+    expect(markUnsaved(open('')).savedContent).toBe('\n');
+  });
+});
+
+describe('retargetDocument', () => {
+  it('moves a document at or inside the renamed path', () => {
+    expect(retargetDocument(open('x', '/notes/a.md'), '/notes', '/ideas').path).toBe('/ideas/a.md');
+    expect(retargetDocument(open('x', '/notes/a.md'), '/notes/a.md', '/b.md').path).toBe('/b.md');
+  });
+
+  it('keeps the rest of the document', () => {
+    const moved = retargetDocument(open('text', '/notes/a.md'), '/notes', '/ideas');
+    expect(moved).toEqual({ ...open('text', '/ideas/a.md') });
+  });
+
+  it('leaves a document elsewhere alone', () => {
+    expect(retargetDocument(open('x', '/other/a.md'), '/notes', '/ideas').path).toBe('/other/a.md');
+  });
+
+  it('leaves an unsaved document without a path alone', () => {
+    const doc = open('x', null);
+    expect(retargetDocument(doc, '/notes', '/ideas')).toBe(doc);
+  });
+
+  it('compares case-sensitively unless asked otherwise', () => {
+    const doc = open('x', '/Notes/a.md');
+    expect(retargetDocument(doc, '/notes', '/ideas').path).toBe('/Notes/a.md');
+    expect(retargetDocument(doc, '/notes', '/ideas', true).path).toBe('/ideas/a.md');
   });
 });

@@ -177,3 +177,72 @@ describe('activeHeadingIndex', () => {
     expect(activeHeadingIndex(outline, 500)).toBe(2);
   });
 });
+
+describe('extractOutline: exact inline and block rules', () => {
+  const texts = (markdown: string) => extractOutline(markdown).map((h) => h.text);
+
+  it('strips emphasis that spans several words', () => {
+    expect(texts('# **bold text**')).toEqual(['bold text']);
+    expect(texts('# ~~gone now~~')).toEqual(['gone now']);
+    expect(texts('# *two words*')).toEqual(['two words']);
+    expect(texts('# _two words_')).toEqual(['two words']);
+  });
+
+  it('strips underscore emphasis at the very start of the heading', () => {
+    expect(texts('# _lead_ text')).toEqual(['lead text']);
+  });
+
+  it('keeps the text of a full reference link', () => {
+    expect(texts('# See [docs][ref]')).toEqual(['See docs']);
+  });
+
+  it('trims code spans and the resulting text', () => {
+    expect(texts('# Use ` code ` now')).toEqual(['Use code now']);
+    expect(texts('# Title <br>')).toEqual(['Title']);
+  });
+
+  it('keeps a backtick inside a double-backtick code span', () => {
+    expect(texts('# ``a`b``')).toEqual(['a`b']);
+  });
+
+  it('strips only a closing sequence at the very end', () => {
+    expect(texts('# A # B')).toEqual(['A # B']);
+    expect(texts('# a #b')).toEqual(['a #b']);
+  });
+
+  it('joins the trimmed lines of a Setext paragraph with one space', () => {
+    expect(texts('Hello\n  world\n===')).toEqual(['Hello world']);
+  });
+
+  it('ends a paragraph at a whitespace-only line', () => {
+    expect(extractOutline('Para\n   \n---')).toEqual([]);
+  });
+
+  it('accepts only a whole line of = or - as a Setext underline', () => {
+    expect(extractOutline('Title\n=== x')).toEqual([]);
+    expect(extractOutline('Title\nfoo ==')).toEqual([]);
+  });
+
+  it('takes lines that only look like block starts later on as paragraph text', () => {
+    expect(extractOutline('a > b\n===')).toEqual([heading(1, 'a > b', 'a--b', 0)]);
+    expect(extractOutline(' Indented one\n===')).toEqual([
+      heading(1, 'Indented one', 'indented-one', 0),
+    ]);
+    expect(extractOutline('12 apples\n===')).toEqual([heading(1, '12 apples', '12-apples', 0)]);
+    expect(extractOutline('_\n===')).toEqual([heading(1, '_', '_', 0)]);
+    expect(texts('--- notes\n===')).toEqual(['--- notes']);
+  });
+
+  it('does not make a Setext heading out of ordered lists or thematic breaks', () => {
+    expect(extractOutline('1. item\n===')).toEqual([]);
+    expect(extractOutline('10. item\n===')).toEqual([]);
+    expect(extractOutline('1) item\n===')).toEqual([]);
+    expect(extractOutline('***\n===')).toEqual([]);
+    expect(extractOutline('_ _ _\n===')).toEqual([]);
+  });
+
+  it('does not make a Setext heading out of multi-hash or empty ATX headings', () => {
+    expect(extractOutline('## ATX\n---')).toEqual([heading(2, 'ATX', 'atx', 0)]);
+    expect(extractOutline('#\n===')).toEqual([heading(1, '', 'section', 0)]);
+  });
+});

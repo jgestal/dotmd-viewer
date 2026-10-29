@@ -72,6 +72,13 @@ describe('exportPdf', () => {
     expect(pdfExporter.exports[0].path).toBe('/out/NOTES.PDF');
   });
 
+  it('adds the extension when .pdf is not at the end of the name', async () => {
+    const { printing, request, dialogs, pdfExporter } = setup();
+    dialogs.answerSaveFile('/out/a.pdf-notes');
+    await printing.exportPdf('notes.md', request);
+    expect(pdfExporter.exports[0].path).toBe('/out/a.pdf-notes.pdf');
+  });
+
   it('does nothing when the dialog is cancelled', async () => {
     const { printing, request, dialogs, pdfExporter, notifier, log } = setup();
     dialogs.answerSaveFile(null);

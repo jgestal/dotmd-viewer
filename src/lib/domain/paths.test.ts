@@ -9,6 +9,7 @@ import {
   joinPath,
   normalisePath,
   resolvePath,
+  retargetPath,
   withoutMarkdownExtension,
 } from './paths';
 
@@ -192,6 +193,10 @@ describe('dirName', () => {
     expect(dirName('a.md')).toBe('.');
     expect(dirName('docs/a.md')).toBe('docs');
   });
+
+  it('returns an empty path unchanged', () => {
+    expect(dirName('')).toBe('');
+  });
 });
 
 describe('joinPath', () => {
@@ -227,6 +232,20 @@ describe('joinPath', () => {
   it('uses slashes for a mixed-separator base', () => {
     expect(joinPath('/a\\b', 'c')).toBe('/a\\b/c');
   });
+
+  it('uses slashes for a base without any separator', () => {
+    expect(joinPath('docs', 'a.md')).toBe('docs/a.md');
+  });
+
+  it('drops every trailing separator of the base', () => {
+    expect(joinPath('/a//', 'b')).toBe('/a/b');
+  });
+
+  it('trims every leading and trailing separator of a segment and keeps inner ones', () => {
+    expect(joinPath('/a', '//b')).toBe('/a/b');
+    expect(joinPath('/a', 'b//')).toBe('/a/b');
+    expect(joinPath('/a', 'b/c')).toBe('/a/b/c');
+  });
 });
 
 describe('resolvePath', () => {
@@ -255,6 +274,33 @@ describe('resolvePath', () => {
 
   it('resolves against a relative base', () => {
     expect(resolvePath('docs', 'a.md')).toBe('docs/a.md');
+  });
+
+  it('takes a drive letter only at the start as a root', () => {
+    expect(resolvePath('/docs', 'a/b:/c.md')).toBe('/docs/a/b:/c.md');
+  });
+
+  it('returns the base itself for an empty or dot path', () => {
+    expect(resolvePath('/docs', '')).toBe('/docs');
+    expect(resolvePath('/docs', '.')).toBe('/docs');
+  });
+
+  it('adds no separator when nothing is left after the root', () => {
+    expect(resolvePath('//server/share', '..')).toBe('//server/share');
+    expect(resolvePath('/', '..')).toBe('/');
+    expect(resolvePath('docs', '..')).toBe('');
+  });
+});
+
+describe('retargetPath', () => {
+  it('maps a path at or inside the old path', () => {
+    expect(retargetPath('/docs/a.md', '/docs', '/x')).toBe('/x/a.md');
+    expect(retargetPath('/docs', '/docs', '/x')).toBe('/x');
+  });
+
+  it('compares case-sensitively unless asked otherwise', () => {
+    expect(retargetPath('/Docs/a.md', '/docs', '/x')).toBe('/Docs/a.md');
+    expect(retargetPath('/Docs/a.md', '/docs', '/x', true)).toBe('/x/a.md');
   });
 });
 
