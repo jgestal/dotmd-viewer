@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Final README: screenshots of the reading, split, pages, slides and settings views in light and dark, the feature list, a keyboard-shortcut table for macOS and Windows/Linux, a guide to opening unsigned builds, build and test instructions, and a Spanish translation in docs/README.es.md (#56).
+
 - Complete Spanish and English translations, with tests that fail on a key the code requests but a dictionary lacks, a key no code uses, an empty or untranslated value, or a placeholder or ellipsis that differs between languages; Spanish menus follow Spain's conventions («Ver», «Edición», «Ajustes» on macOS and Windows, «Preferencias» on Linux) (#51).
 
 - Release workflow: pushing a `v*` tag builds unsigned installers on macOS (universal `.dmg`), Windows (`.msi`, `.exe`) and Linux (`.deb`, `.rpm`, `.AppImage`) into a draft GitHub release, with optional signing secrets and `scripts/bump-version.mjs` for version bumps; see docs/releasing.md (#55).
