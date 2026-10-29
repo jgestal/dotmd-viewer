@@ -28,3 +28,15 @@ export function topLine(scroller: HTMLElement, root: Element): number {
   }));
   return topLineAt(blocks, TOP_TOLERANCE_PX);
 }
+
+/** Every block of the rendered document with its scroll offset in the scroller. */
+export function blockOffsets(
+  scroller: HTMLElement,
+  root: Element,
+): readonly { start: number; top: number }[] {
+  const edge = scroller.getBoundingClientRect().top - scroller.scrollTop;
+  return sourceBlocks(root).map(({ element, start }) => ({
+    start,
+    top: element.getBoundingClientRect().top - edge,
+  }));
+}

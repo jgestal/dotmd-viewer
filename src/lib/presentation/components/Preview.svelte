@@ -20,7 +20,18 @@
   const EDIT_DEBOUNCE_MS = 120;
   const REPORT_INTERVAL_MS = 100;
 
-  let scroller = $state<HTMLElement>();
+  // Embedding: the split view reads the scroller, hears scrolls, and leaves reporting the top
+  // line to the editor.
+  let {
+    scroller = $bindable(),
+    reportsTopLine = true,
+    onScroll,
+  }: {
+    scroller?: HTMLElement;
+    reportsTopLine?: boolean;
+    onScroll?: () => void;
+  } = $props();
+
   let article = $state<HTMLElement>();
   let properties = $state<readonly FrontMatterEntry[]>([]);
   let systemIsDark = $state(matchMedia(SYSTEM_DARK_QUERY).matches);
@@ -43,7 +54,7 @@
   }
 
   const reportTopLine = throttle(() => {
-    if (scroller && article) navigation.reportTopLine(topLine(scroller, article));
+    if (reportsTopLine && scroller && article) navigation.reportTopLine(topLine(scroller, article));
   }, REPORT_INTERVAL_MS);
 
   async function render(
@@ -112,7 +123,10 @@
 <div
   class="scroller"
   bind:this={scroller}
-  onscroll={reportTopLine}
+  onscroll={() => {
+    reportTopLine();
+    onScroll?.();
+  }}
   style:--doc-zoom={app.preferences.zoom}
 >
   <div class="document">

@@ -18,6 +18,10 @@
   // which starts a fresh undo history.
   const REPORT_INTERVAL_MS = 100;
 
+  // Embedding: the split view reads the editor and hears its scrolls.
+  let { editorView = $bindable(), onScroll }: { editorView?: EditorView; onScroll?: () => void } =
+    $props();
+
   let host = $state<HTMLElement>();
   let view: EditorView | undefined;
   let shownPath: string | null = null;
@@ -60,9 +64,17 @@
       parent: host,
     });
     view = editor;
+    editorView = editor;
     shownPath = untrack(() => path);
     app.cursor = caretOf(editor.state);
-    editor.scrollDOM.addEventListener('scroll', reportTopLine, { passive: true });
+    editor.scrollDOM.addEventListener(
+      'scroll',
+      () => {
+        reportTopLine();
+        onScroll?.();
+      },
+      { passive: true },
+    );
     const unregister = activeEditor.register({
       find: () => openSearch(false),
       replace: () => openSearch(true),
@@ -72,6 +84,7 @@
       unregister();
       editor.destroy();
       view = undefined;
+      editorView = undefined;
       app.cursor = null;
     };
   });
