@@ -64,7 +64,11 @@
     markdowns: readonly string[],
     colors: typeof scheme,
   ): Promise<readonly string[]> {
-    const options = { scheme: colors, diagramErrorLabel: i18n.t('preview.diagramError') };
+    const options = {
+      scheme: colors,
+      diagramErrorLabel: i18n.t('preview.diagramError'),
+      images: { documentDir, assetUrls: app.container.assetUrls },
+    };
     const pieces = await Promise.all(
       markdowns.map((markdown) => renderDocument(app.container.renderer, markdown, options)),
     );

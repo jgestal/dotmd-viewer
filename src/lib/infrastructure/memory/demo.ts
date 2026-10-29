@@ -2,6 +2,8 @@
 // workspace to click around in, and dialogs answered with the browser's own prompts. It makes
 // the UI reviewable and screenshot-able without a native window.
 import type { Dialogs, ExternalOpener, UnsavedChoice } from '../../ports';
+import { DEMO_IMAGE_URL } from './demoImage';
+import type { MemoryAssetUrls } from './memoryAssetUrls';
 import { MemoryFileSystem } from './memoryFileSystem';
 
 export const DEMO_FOLDER = '/demo';
@@ -51,6 +53,12 @@ $$
 export const greet = (name: string): string => \`Hello, \${name}!\`;
 \`\`\`
 
+## Image
+
+Local images sit next to the document:
+
+![DotMD Viewer icon](assets/icon.png)
+
 ## Diagram
 
 \`\`\`mermaid
@@ -88,8 +96,9 @@ Nothing yet.
   'notes/Todo.txt': 'Plain text files open too.\n',
 };
 
-export const seedDemo = (fs: MemoryFileSystem): void => {
+export const seedDemo = (fs: MemoryFileSystem, assetUrls: MemoryAssetUrls): void => {
   fs.seedFolder(DEMO_FOLDER);
+  assetUrls.seed(`${DEMO_FOLDER}/assets/icon.png`, DEMO_IMAGE_URL);
   for (const [name, content] of Object.entries(files))
     fs.seedFile(`${DEMO_FOLDER}/${name}`, content);
 };

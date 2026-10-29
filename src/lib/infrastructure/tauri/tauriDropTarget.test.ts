@@ -1,6 +1,6 @@
 import { emit } from '@tauri-apps/api/event';
 import { mockWindows } from '@tauri-apps/api/mocks';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { DropEvent } from '../../ports';
 import { mockBackend, resetMocksAfterEach } from './mockBackend';
 import { TauriDropTarget } from './tauriDropTarget';
@@ -27,11 +27,19 @@ describe('TauriDropTarget', () => {
     await emit('tauri://drag-drop', { paths: ['/a.md', '/b'], position });
     await emit('tauri://drag-leave', {});
     expect(events).toEqual([
-      { type: 'enter', paths: ['/a.md'] },
-      { type: 'over', paths: ['/a.md'] },
-      { type: 'drop', paths: ['/a.md', '/b'] },
+      { type: 'enter', paths: ['/a.md'], position },
+      { type: 'over', paths: ['/a.md'], position },
+      { type: 'drop', paths: ['/a.md', '/b'], position },
       { type: 'leave', paths: [] },
     ]);
+  });
+
+  it('converts the physical pointer position to CSS pixels', async () => {
+    vi.stubGlobal('devicePixelRatio', 2);
+    const { events } = await listening();
+    await emit('tauri://drag-drop', { paths: ['/a.png'], position: { x: 300, y: 100 } });
+    vi.unstubAllGlobals();
+    expect(events).toEqual([{ type: 'drop', paths: ['/a.png'], position: { x: 150, y: 50 } }]);
   });
 
   it('stops reporting after unsubscribing', async () => {

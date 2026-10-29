@@ -67,6 +67,7 @@
       const next = await renderDocument(app.container.renderer, markdown, {
         scheme: colors,
         diagramErrorLabel: i18n.t('preview.diagramError'),
+        images: { documentDir, assetUrls: app.container.assetUrls },
       });
       if (ticket !== latest || !scroller || !article) return;
       const top = forPath === renderedPath ? scroller.scrollTop : 0;

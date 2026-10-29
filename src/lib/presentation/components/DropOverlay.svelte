@@ -1,22 +1,35 @@
 <script lang="ts">
   import { app } from '../app.svelte';
   import { classifyDrop } from '../drop/classifyDrop';
+  import { activeEditor } from '../editor/activeEditor.svelte';
   import { i18n } from '../i18n/i18n.svelte';
   import Icon from './Icon.svelte';
 
   const KEYS = {
     file: 'drop.open',
     folder: 'drop.openFolder',
+    images: 'drop.images',
     rejected: 'drop.rejected',
   } as const;
 
-  const kind = $derived(app.draggedPaths === null ? null : classifyDrop(app.draggedPaths));
+  const kind = $derived(
+    app.draggedPaths === null
+      ? null
+      : classifyDrop(app.draggedPaths, activeEditor.current !== null),
+  );
 </script>
 
 {#if kind !== null}
   <div class="overlay" class:rejected={kind === 'rejected'} role="status" aria-live="polite">
     <div class="card">
-      <Icon name={kind === 'folder' ? 'folder' : kind === 'file' ? 'upload' : 'close'} size={36} />
+      <Icon
+        name={kind === 'folder'
+          ? 'folder'
+          : kind === 'file' || kind === 'images'
+            ? 'upload'
+            : 'close'}
+        size={36}
+      />
       <span>{i18n.t(KEYS[kind])}</span>
     </div>
   </div>

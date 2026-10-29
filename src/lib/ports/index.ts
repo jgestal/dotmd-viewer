@@ -34,6 +34,8 @@ export interface FileSystem {
   rename(from: string, to: string): Promise<void>;
   /** Sends to the system trash / recycle bin. */
   trash(path: string): Promise<void>;
+  /** Creates the folder and any missing parents; does nothing when it already exists. */
+  ensureDir(path: string): Promise<void>;
   /** Copies a file into a directory under a free name and returns the new file's path. */
   copyInto(source: string, directory: string): Promise<string>;
   /** Shows the item in Finder / Explorer / the file manager. */
@@ -156,6 +158,8 @@ export interface OpenRequests {
 export interface DropEvent {
   readonly type: 'enter' | 'over' | 'leave' | 'drop';
   readonly paths: readonly string[];
+  /** Where the pointer is, in CSS pixels from the window's top-left; absent on `leave`. */
+  readonly position?: { readonly x: number; readonly y: number };
 }
 
 /** Drag and drop of files and folders from the OS onto the window. */
@@ -208,6 +212,12 @@ export type ExportOutcome = 'saved' | 'printDialog';
 /** Writes what the webview currently shows (the printable document) to a PDF file. */
 export interface PdfExporter {
   export(path: string, page: PageSetup): Promise<ExportOutcome>;
+}
+
+/** Addresses the webview can load a local file from (images in the rendered document). */
+export interface AssetUrls {
+  /** The URL that shows the file at `path`, or `null` when this environment cannot load it. */
+  toUrl(path: string): string | null;
 }
 
 /** Short, non-blocking messages to the user. */

@@ -143,6 +143,13 @@ export class MemoryFileSystem implements FileSystem {
     this.trashed.push(key);
   }
 
+  async ensureDir(path: string): Promise<void> {
+    this.begin('ensureDir', path);
+    const key = normalisePath(path);
+    if (this.files.has(key)) throw appError('invalidInput', 'Is a file', path);
+    this.seedFolder(key);
+  }
+
   async copyInto(source: string, directory: string): Promise<string> {
     this.begin('copyInto', source, directory);
     const file = this.fileAt(normalisePath(source), source);

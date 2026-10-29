@@ -108,6 +108,11 @@ pub fn copy_file_into(source: &Path, directory: &Path) -> AppResult<PathBuf> {
     Ok(target)
 }
 
+/// Creates `path` and any missing parents; nothing happens when the folder already exists.
+pub fn ensure_dir(path: &Path) -> AppResult<()> {
+    fs::create_dir_all(path).map_err(|error| AppError::io(error, path))
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Platform {
     MacOs,
@@ -216,6 +221,11 @@ pub async fn trash_path(path: String) -> AppResult<()> {
 pub async fn copy_into(source: String, directory: String) -> AppResult<String> {
     copy_file_into(Path::new(&source), Path::new(&directory))
         .map(|target| target.to_string_lossy().into_owned())
+}
+
+#[tauri::command]
+pub async fn ensure_dir_path(path: String) -> AppResult<()> {
+    ensure_dir(Path::new(&path))
 }
 
 #[tauri::command]
@@ -359,6 +369,31 @@ mod tests {
             kind_of(trash(&dir.path().join("nope.md"))),
             ErrorKind::NotFound
         );
+    }
+
+    #[test]
+    fn ensure_dir_creates_missing_folders_and_parents() {
+        let dir = TempDir::new().unwrap();
+        let target = dir.path().join("a/assets");
+        ensure_dir(&target).unwrap();
+        assert!(target.is_dir());
+    }
+
+    #[test]
+    fn ensure_dir_keeps_an_existing_folder_and_its_content() {
+        let dir = TempDir::new().unwrap();
+        fs::write(dir.path().join("img.png"), "x").unwrap();
+        ensure_dir(dir.path()).unwrap();
+        assert_eq!(fs::read_to_string(dir.path().join("img.png")).unwrap(), "x");
+    }
+
+    #[test]
+    fn ensure_dir_refuses_a_path_taken_by_a_file() {
+        let dir = TempDir::new().unwrap();
+        let file = dir.path().join("assets");
+        fs::write(&file, "x").unwrap();
+        let error = ensure_dir(&file).unwrap_err();
+        assert_eq!(error.path.as_deref(), file.to_str());
     }
 
     #[test]

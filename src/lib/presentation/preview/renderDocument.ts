@@ -2,11 +2,14 @@ import type { MarkdownRenderer } from '$lib/ports';
 import type { ColorScheme } from './colorScheme';
 import { enhance } from './enhance';
 import { parseFrontMatter, type FrontMatterEntry } from './frontMatter';
+import { resolveLocalImages, type ImageSources } from './localImages';
 import { sanitize } from './sanitize';
 
 export interface RenderOptions {
   readonly scheme: ColorScheme;
   readonly diagramErrorLabel: string;
+  /** Where local images are looked for and how they reach the webview. */
+  readonly images: ImageSources;
 }
 
 export interface RenderedDocument {
@@ -24,6 +27,7 @@ export async function renderDocument(
   const { html, frontMatter } = await renderer.render(markdown);
   const root = document.createElement('div');
   root.innerHTML = sanitize(html);
+  resolveLocalImages(root, options.images);
   await enhance(root, { scheme: options.scheme, diagramErrorLabel: options.diagramErrorLabel });
   return { root, properties: frontMatter === null ? [] : parseFrontMatter(frontMatter) };
 }

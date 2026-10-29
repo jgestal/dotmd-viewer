@@ -245,4 +245,8 @@ export const en = {
   'about.version': 'Version {version}',
   'about.licence': 'Released under the MIT licence.',
   'about.source': 'Source code on GitHub',
+  // T42 · images
+  'drop.images': 'Drop to insert images',
+  'images.saveFirst': 'Save the document first so its images can be stored next to it',
+  'images.copyFailed': 'Could not copy {name}: {reason}',
 } as const satisfies Record<string, string>;

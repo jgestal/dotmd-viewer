@@ -36,6 +36,7 @@ export const fileCommands = (fs: MemoryFileSystem): CommandHandlers => ({
   path_kind: ({ path }) => fs.kind(path as string),
   rename_path: ({ from, to }) => fs.rename(from as string, to as string),
   trash_path: ({ path }) => fs.trash(path as string),
+  ensure_dir_path: ({ path }) => fs.ensureDir(path as string),
   copy_into: ({ source, directory }) => fs.copyInto(source as string, directory as string),
   reveal_path: ({ path }) => fs.reveal(path as string),
 });

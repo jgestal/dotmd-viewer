@@ -248,4 +248,8 @@ export const es = {
   'about.version': 'Versión {version}',
   'about.licence': 'Publicado bajo la licencia MIT.',
   'about.source': 'Código fuente en GitHub',
+  // T42 · images
+  'drop.images': 'Suelta para insertar imágenes',
+  'images.saveFirst': 'Guarda el documento primero para guardar sus imágenes a su lado',
+  'images.copyFailed': 'No se pudo copiar {name}: {reason}',
 } as const satisfies Record<keyof typeof en, string>;

@@ -9,6 +9,7 @@ import type { MarkdownRenderer } from '$lib/ports';
 import { measureBlocks } from '../pages/measure';
 import { paginate, type PageRange } from '../pages/paginate';
 import { sheetGeometry, type PageSize, type SheetGeometry } from '../pages/sheet';
+import type { ImageSources } from '../preview/localImages';
 import { renderDocument } from '../preview/renderDocument';
 
 const ROOT_ID = 'print-root';
@@ -20,6 +21,7 @@ export interface PrintableOptions {
   readonly pageSize: PageSize;
   readonly setup: PageSetup;
   readonly diagramErrorLabel: string;
+  readonly images: ImageSources;
 }
 
 const element = <K extends keyof HTMLElementTagNameMap>(
@@ -108,6 +110,7 @@ export async function mountPrintable(
   const { root } = await renderDocument(renderer, markdown, {
     scheme: 'light',
     diagramErrorLabel: options.diagramErrorLabel,
+    images: options.images,
   });
   const style = document.createElement('style');
   style.textContent = pageRule(options.setup);

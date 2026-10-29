@@ -28,6 +28,7 @@ describe('tauriFileSystem command mapping', () => {
     await tauriFileSystem.listDir('/d');
     await tauriFileSystem.exists('/d');
     await tauriFileSystem.kind('/d');
+    await tauriFileSystem.ensureDir('/e/assets');
     await tauriFileSystem.copyInto('/d/a.md', '/e');
     await tauriFileSystem.rename('/d/a.md', '/d/b.md');
     await tauriFileSystem.reveal('/d/b.md');
@@ -42,6 +43,7 @@ describe('tauriFileSystem command mapping', () => {
       { command: 'list_dir', args: { path: '/d' } },
       { command: 'path_exists', args: { path: '/d' } },
       { command: 'path_kind', args: { path: '/d' } },
+      { command: 'ensure_dir_path', args: { path: '/e/assets' } },
       { command: 'copy_into', args: { source: '/d/a.md', directory: '/e' } },
       { command: 'rename_path', args: { from: '/d/a.md', to: '/d/b.md' } },
       { command: 'reveal_path', args: { path: '/d/b.md' } },
