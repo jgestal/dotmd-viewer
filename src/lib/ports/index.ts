@@ -162,6 +162,12 @@ export interface DropTarget {
   onDrag(listener: (event: DropEvent) => void): () => void;
 }
 
+/** Hands files to the operating system as a drag that continues outside the window. */
+export interface DragOut {
+  /** `iconPath` is the image under the cursor; the adapter picks a default when it is omitted. */
+  start(paths: readonly string[], iconPath?: string): Promise<void>;
+}
+
 /** Opens addresses in the user's default browser or mail client. */
 export interface ExternalOpener {
   openExternal(url: string): Promise<void>;

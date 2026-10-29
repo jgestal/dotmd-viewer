@@ -5,10 +5,16 @@
   import { showEntryMenu } from '../contextMenu/entryActions';
   import { favouriteLabel, reorderTarget } from '../favouriteLabel';
   import { rowShortcut } from '../explorer/rowKeys';
+  import { sidebarDrag } from '../explorer/sidebarDrag';
   import { i18n } from '../i18n/i18n.svelte';
   import Icon from './Icon.svelte';
 
   let list = $state<HTMLUListElement>();
+
+  const target = $derived(sidebarDrag.current?.target ?? null);
+  const draggedIndex = $derived(
+    sidebarDrag.current?.source.kind === 'favourite' ? sidebarDrag.current.source.index : null,
+  );
 
   // Re-check the disk whenever the list changes; `refreshFavourites` drops stale answers.
   $effect(() => {
@@ -26,6 +32,10 @@
 
   function openMenu(fav: Favourite, at: { x: number; y: number }): void {
     void showEntryMenu({ path: fav.path, kind: fav.kind, missing: fav.missing }, at);
+  }
+
+  function startDrag(event: PointerEvent, fav: Favourite, index: number): void {
+    sidebarDrag.press(event, { kind: 'favourite', index, path: fav.path, entryKind: fav.kind });
   }
 
   async function onKeydown(event: KeyboardEvent, fav: Favourite, index: number): Promise<void> {
@@ -46,18 +56,28 @@
 </script>
 
 {#if app.favourites.length === 0}
-  <div class="empty">
+  <div class="empty" class:drop-target={target?.action === 'favourite'} data-drop="favourites">
     <Icon name="star" size={28} />
     <p class="title">{i18n.t('favourites.empty.title')}</p>
     <p class="hint">{i18n.t('favourites.empty.hint')}</p>
   </div>
 {:else}
-  <ul class="list" bind:this={list} aria-label={i18n.t('favourites.list')}>
+  <ul
+    class="list"
+    class:drop-target={target?.action === 'favourite'}
+    data-drop="favourites"
+    bind:this={list}
+    aria-label={i18n.t('favourites.list')}
+  >
     {#each app.favourites as fav, index (fav.path)}
       {@const label = favouriteLabel(fav.path)}
       <li
         class="item"
         class:missing={fav.missing}
+        class:drop-target={target?.action === 'reorder' && target.to === index}
+        class:dragged={draggedIndex === index}
+        data-drop="favourite"
+        data-index={index}
         class:current={app.document?.path != null && isSamePath(app.document.path, fav.path)}
       >
         <button
@@ -69,6 +89,7 @@
             ? `${i18n.t('favourites.missing')}\n${fav.path}`
             : `${fav.path}\n${i18n.t('favourites.reorderHint')}`}
           onclick={() => activate(fav)}
+          onpointerdown={(event) => startDrag(event, fav, index)}
           oncontextmenu={(event) => {
             event.preventDefault();
             openMenu(fav, { x: event.clientX, y: event.clientY });
@@ -102,6 +123,20 @@
   .item {
     display: flex;
     align-items: center;
+    border-radius: 6px;
+  }
+
+  .item.dragged {
+    opacity: 0.45;
+  }
+
+  .item.drop-target {
+    background: var(--accent-soft);
+    box-shadow: inset 0 0 0 1.5px var(--accent);
+  }
+
+  .list.drop-target {
+    background: var(--accent-soft);
     border-radius: 6px;
   }
 
@@ -162,6 +197,10 @@
   .item:hover .remove,
   .item:focus-within .remove {
     opacity: 1;
+  }
+
+  .empty.drop-target {
+    background: var(--accent-soft);
   }
 
   .empty {

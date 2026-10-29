@@ -31,6 +31,12 @@ export async function renameEntry(
   return change?.to ?? null;
 }
 
+/** Moves into `folder` and refreshes the folders involved; failures such as a name clash are toasts. */
+export async function moveEntry(path: string, folder: string): Promise<void> {
+  const change = await app.moveEntry(path, folder);
+  if (change) await explorer.refreshAround(change.from, change.to, folder);
+}
+
 /** Trashes after asking, refreshes the folder it was in, and answers whether it happened. */
 export async function trashEntry(path: string): Promise<boolean> {
   const trashed = await app.trashEntry(path);

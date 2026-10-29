@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
   import { app, type SidebarTab } from '../app.svelte';
+  import { sidebarDrag } from '../explorer/sidebarDrag';
   import { i18n } from '../i18n/i18n.svelte';
   import Icon, { type IconName } from './Icon.svelte';
 
@@ -19,6 +20,7 @@
 
   const panels = $derived({ explorer, favourites, outline });
   const active = $derived(app.preferences.sidebarTab);
+  const addsFavourite = $derived(sidebarDrag.current?.target?.action === 'favourite');
 </script>
 
 <aside class="sidebar" aria-label={i18n.t(`sidebar.${active}`)}>
@@ -30,6 +32,8 @@
         id="sidebar-tab-{tab.id}"
         aria-controls="sidebar-panel"
         aria-selected={active === tab.id}
+        class:drop-target={tab.id === 'favourites' && addsFavourite}
+        data-drop={tab.id === 'favourites' ? 'favourites' : undefined}
         title={i18n.t(`sidebar.${tab.id}`)}
         onclick={() => app.showSidebarTab(tab.id)}
       >
@@ -69,6 +73,12 @@
 
   .tabs .tb[aria-selected='false'] .label {
     display: none;
+  }
+
+  .tabs .tb.drop-target {
+    background: var(--accent-soft);
+    box-shadow: inset 0 0 0 1.5px var(--accent);
+    color: var(--accent);
   }
 
   .label {

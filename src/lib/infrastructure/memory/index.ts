@@ -2,6 +2,7 @@
 import { fakeTranslate } from './fakeTranslate';
 import { MemoryContextMenu } from './memoryContextMenu';
 import { MemoryDialogs } from './memoryDialogs';
+import { MemoryDragOut } from './memoryDragOut';
 import { MemoryFileSystem } from './memoryFileSystem';
 import { MemoryOpener } from './memoryOpener';
 import { MemoryNotifier } from './memoryNotifier';
@@ -15,6 +16,7 @@ export * from './browserDropTarget';
 export * from './fakeTranslate';
 export * from './memoryContextMenu';
 export * from './memoryDialogs';
+export * from './memoryDragOut';
 export * from './memoryFileSystem';
 export * from './memoryMenu';
 export * from './memoryNotifier';
@@ -30,6 +32,7 @@ export interface MemoryServices {
   readonly watcher: MemoryWatcher;
   readonly renderer: MemoryRenderer;
   readonly dialogs: MemoryDialogs;
+  readonly dragOut: MemoryDragOut;
   readonly window: MemoryWindow;
   readonly preferences: MemoryPreferencesStore;
   readonly openRequests: MemoryOpenRequests;
@@ -47,6 +50,7 @@ export const createMemoryServices = (): MemoryServices => {
     watcher: new MemoryWatcher(fs),
     renderer: new MemoryRenderer(),
     dialogs: new MemoryDialogs(),
+    dragOut: new MemoryDragOut(),
     window: new MemoryWindow(),
     preferences: new MemoryPreferencesStore(),
     openRequests: new MemoryOpenRequests(),

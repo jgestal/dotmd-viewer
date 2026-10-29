@@ -14,7 +14,9 @@
     visibleRows,
     type TreeRow,
   } from '../explorer/tree';
+  import { highlightedFolder } from '../explorer/dragMove';
   import { rowShortcut, type RowShortcut } from '../explorer/rowKeys';
+  import { sidebarDrag } from '../explorer/sidebarDrag';
   import { i18n } from '../i18n/i18n.svelte';
   import Icon from './Icon.svelte';
   import RenameInput from './RenameInput.svelte';
@@ -25,6 +27,9 @@
   const activePath = $derived(app.document?.path ?? null);
   const rows = $derived(root === null ? [] : visibleRows(explorer.tree, root));
   const listedEmpty = $derived(root !== null && explorer.tree.children.get(root)?.length === 0);
+
+  const dropFolder = $derived(highlightedFolder(sidebarDrag.current));
+  const draggedPath = $derived(sidebarDrag.current?.source.path ?? null);
 
   let focused = $state<string | null>(null);
   /** Path of the row whose name is being edited. */
@@ -111,6 +116,12 @@
     void actions[shortcut]();
   }
 
+  function startDrag(event: PointerEvent, row: TreeRow): void {
+    const { path, kind } = row.entry;
+    if (renaming === path) return;
+    sidebarDrag.press(event, { kind: 'entry', path, entryKind: kind });
+  }
+
   function onKeydown(event: KeyboardEvent, row: TreeRow): void {
     const shortcut = rowShortcut(event, app.platform);
     if (shortcut) {
@@ -144,7 +155,7 @@
     </button>
   </div>
 {:else}
-  <div class="header">
+  <div class="header" class:drop-target={dropFolder === root} data-drop="root" data-path={root}>
     <span class="folder-name" title={root}>{baseName(root) || root}</span>
     <button
       class="tb"
@@ -164,6 +175,11 @@
       <li
         class="row"
         class:active={path === activePath}
+        class:drop-target={dropFolder === path}
+        class:dragged={draggedPath === path}
+        data-drop="row"
+        data-path={path}
+        data-kind={row.entry.kind}
         role="treeitem"
         aria-level={row.level}
         aria-expanded={row.expandable ? row.expanded : undefined}
@@ -172,6 +188,7 @@
         title={path}
         bind:this={elements[path]}
         onclick={() => activate(row)}
+        onpointerdown={(event) => startDrag(event, row)}
         oncontextmenu={(event) => {
           event.preventDefault();
           openMenu(row, { x: event.clientX, y: event.clientY });
@@ -209,6 +226,7 @@
     justify-content: space-between;
     gap: 4px;
     padding: 2px 8px 2px 14px;
+    border-radius: 6px;
   }
 
   .folder-name {
@@ -243,6 +261,16 @@
 
   .row:hover {
     background: var(--bg-hover);
+  }
+
+  .row.dragged {
+    opacity: 0.45;
+  }
+
+  .row.drop-target,
+  .header.drop-target {
+    background: var(--accent-soft);
+    box-shadow: inset 0 0 0 1.5px var(--accent);
   }
 
   .row.active {
