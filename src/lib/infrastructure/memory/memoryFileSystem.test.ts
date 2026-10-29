@@ -109,3 +109,20 @@ describe('MemoryFileSystem test helpers', () => {
     });
   });
 });
+
+describe('MemoryFileSystem binary files', () => {
+  it('reads a seeded binary file as base64 and shows it as a file', async () => {
+    const fs = new MemoryFileSystem();
+    fs.seedBinary('/d/pic.png', new Uint8Array([0, 1, 2, 255]));
+    expect(await fs.readBase64('/d/pic.png', 10)).toBe('AAEC/w==');
+    expect(await fs.kind('/d/pic.png')).toBe('file');
+    expect(await fs.exists('/d/pic.png')).toBe(true);
+  });
+
+  it('skips a binary file larger than the limit', async () => {
+    const fs = new MemoryFileSystem();
+    fs.seedBinary('/d/pic.png', new Uint8Array(4));
+    expect(await fs.readBase64('/d/pic.png', 3)).toBeNull();
+    expect(await fs.readBase64('/d/pic.png', 4)).not.toBeNull();
+  });
+});

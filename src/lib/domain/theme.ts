@@ -4,9 +4,12 @@ export const THEMES = ['system', 'light', 'dark', 'sepia', 'night'] as const;
 
 export type Theme = (typeof THEMES)[number];
 
+/** A theme that fixes the look by itself, i.e. every theme but `system`. */
+export type ShownTheme = Exclude<Theme, 'system'>;
+
 export type BaseScheme = 'light' | 'dark';
 
-const BASES: Readonly<Record<Exclude<Theme, 'system'>, BaseScheme>> = {
+const BASES: Readonly<Record<ShownTheme, BaseScheme>> = {
   light: 'light',
   dark: 'dark',
   sepia: 'light',

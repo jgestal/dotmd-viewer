@@ -66,6 +66,9 @@ página continua, como hojas A4 o Carta paginadas, o como diapositivas. Está he
   (Servicios), el Explorador de archivos o Dolphin. El PDF se guarda junto al archivo y se muestra en el gestor de
   archivos. Las mismas acciones funcionan desde la línea de órdenes: `simpledotmd --export-pdf notas.md [--out
 notas.pdf]`, `--print notas.md`, `--new`.
+- **Exportar a HTML** (Archivo ▸ Exportar a HTML…) guarda un único archivo `.html` autocontenido: los estilos del tema
+  actual, fórmulas y código renderizados, diagramas Mermaid como SVG incrustado e imágenes locales incluidas (hasta
+  10 MB cada una). Las fórmulas usan las fuentes del sistema del lector.
 
 **Integración con el escritorio**
 

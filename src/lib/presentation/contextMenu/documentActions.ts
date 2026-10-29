@@ -20,6 +20,7 @@ import {
 const COMMANDS: Partial<Record<DocumentMenuId, CommandId>> = {
   toggleEdit: 'view.toggleEdit',
   exportPdf: 'file.exportPdf',
+  exportHtml: 'file.exportHtml',
   print: 'file.print',
   find: 'edit.find',
 };

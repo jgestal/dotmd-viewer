@@ -180,6 +180,18 @@ describe('buildMenu', () => {
     });
   });
 
+  it.each(['mac', 'windows', 'linux'] as const)(
+    'puts Export to HTML right after Export to PDF on %s, without a shortcut',
+    (platform) => {
+      const file = submenu(buildMenu(context(platform)), 'menu.file');
+      const ids = file.flatMap((node) => (node.kind === 'command' ? [node.id] : []));
+      expect(ids.indexOf('file.exportHtml')).toBe(ids.indexOf('file.exportPdf') + 1);
+      const item = file.find((n) => n.kind === 'command' && n.id === 'file.exportHtml');
+      expect(item).toMatchObject({ accelerator: undefined });
+      expect(item?.kind === 'command' && strip(item.label)).toBe('[menu.exportHtml]');
+    },
+  );
+
   it('lists recent files by name, then Clear Recents', () => {
     const recent = submenu(
       submenu(buildMenu(context('mac', {}, ['/a/one.md', 'C:\\b\\two.md'])), 'menu.file'),

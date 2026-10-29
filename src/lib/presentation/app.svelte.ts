@@ -30,10 +30,12 @@ import { isImageDrop } from './drop/classifyDrop';
 import { activeEditor } from './editor/activeEditor.svelte';
 import type { CommandId } from './commands/ids';
 import { createRegistry, type CommandRegistry } from './commands/registry';
+import { pageTheme, SYSTEM_DARK_QUERY } from './preview/colorScheme';
 import { userGuide } from './guide/guide';
 import { i18n } from './i18n/i18n.svelte';
 import { currentPlatform } from './platform';
 import { fallbackContextMenu } from './contextMenu/fallbackMenu.svelte';
+import { renderStandaloneHtml } from './export/renderStandaloneHtml';
 import { mountPrintable, unmountPrintable } from './print/printable';
 import { notifier } from './toasts.svelte';
 
@@ -272,6 +274,23 @@ class App {
     if (!request || !this.document) return Promise.resolve();
     const name = displayName(this.document, i18n.t('document.untitled'));
     return this.container.printing.exportPdf(name, request);
+  }
+
+  /** Saves the open document as a self-contained HTML page, in the theme it is shown in. */
+  exportHtml(): Promise<void> {
+    const doc = this.document;
+    if (!doc) return Promise.resolve();
+    const title = displayName(doc, i18n.t('document.untitled'));
+    const { renderer, htmlExport } = this.container;
+    return htmlExport.exportHtml(doc.path ?? title, (images) =>
+      renderStandaloneHtml(renderer, images, doc.content, {
+        title,
+        lang: i18n.locale,
+        theme: pageTheme(this.preferences.theme, matchMedia(SYSTEM_DARK_QUERY).matches),
+        diagramErrorLabel: i18n.t('preview.diagramError'),
+        documentDir: doc.path === null ? null : dirName(doc.path),
+      }),
+    );
   }
 
   /** Writes the open document as a PDF at `path` without asking (file manager, command line). */

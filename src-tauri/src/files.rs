@@ -5,6 +5,8 @@ use std::fs;
 use std::io::Write;
 use std::path::Path;
 
+use base64::Engine;
+use base64::engine::general_purpose::STANDARD;
 use encoding_rs::{UTF_16BE, UTF_16LE, WINDOWS_1252};
 use serde::{Deserialize, Serialize};
 use tempfile::NamedTempFile;
@@ -105,6 +107,19 @@ pub fn read_text(path: &Path) -> AppResult<TextFile> {
     decode(&bytes, path)
 }
 
+/// The file's bytes as standard base64, or `None` when it is larger than `max_bytes`: an image
+/// is embedded in an exported page, so a huge one is left out rather than read.
+pub fn read_base64(path: &Path, max_bytes: u64) -> AppResult<Option<String>> {
+    let size = fs::metadata(path)
+        .map_err(|error| AppError::io(error, path))?
+        .len();
+    if size > max_bytes {
+        return Ok(None);
+    }
+    let bytes = fs::read(path).map_err(|error| AppError::io(error, path))?;
+    Ok(Some(STANDARD.encode(bytes)))
+}
+
 fn encode_utf16(content: &str, to_bytes: fn(u16) -> [u8; 2]) -> Vec<u8> {
     content.encode_utf16().flat_map(to_bytes).collect()
 }
@@ -176,6 +191,11 @@ pub fn write_text(path: &Path, content: &str, encoding: Encoding, has_bom: bool)
 #[tauri::command]
 pub async fn read_file(path: String) -> AppResult<TextFile> {
     read_text(Path::new(&path))
+}
+
+#[tauri::command]
+pub async fn read_file_base64(path: String, max_bytes: u64) -> AppResult<Option<String>> {
+    read_base64(Path::new(&path), max_bytes)
 }
 
 #[tauri::command]
@@ -270,6 +290,34 @@ mod tests {
             read_text(&path).unwrap(),
             text_file("hi".into(), Encoding::Utf8, true)
         );
+    }
+
+    #[test]
+    fn read_base64_encodes_the_bytes() {
+        let dir = TempDir::new().unwrap();
+        let path = file_with(&dir, &[0, 1, 2, 255]);
+        assert_eq!(read_base64(&path, 10).unwrap(), Some("AAEC/w==".into()));
+    }
+
+    #[test]
+    fn read_base64_accepts_a_file_exactly_at_the_limit() {
+        let dir = TempDir::new().unwrap();
+        let path = file_with(&dir, b"abc");
+        assert_eq!(read_base64(&path, 3).unwrap(), Some("YWJj".into()));
+    }
+
+    #[test]
+    fn read_base64_skips_a_file_over_the_limit() {
+        let dir = TempDir::new().unwrap();
+        let path = file_with(&dir, b"abcd");
+        assert_eq!(read_base64(&path, 3).unwrap(), None);
+    }
+
+    #[test]
+    fn read_base64_reports_a_missing_file_with_its_path() {
+        let dir = TempDir::new().unwrap();
+        let error = read_base64(&dir.path().join("none.png"), 10).unwrap_err();
+        assert_eq!(error.kind, ErrorKind::NotFound);
     }
 
     #[test]

@@ -48,7 +48,7 @@ flowchart LR
 ## Guardar, exportar e imprimir
 
 - **Archivo ▸ Guardar** (`Cmd/Ctrl+S`) y **Guardar como…** (`Cmd/Ctrl+Mayús+S`). La app pregunta antes de cerrar un documento con cambios sin guardar.
-- **Archivo ▸ Exportar a PDF…** (`Cmd/Ctrl+Mayús+E`) e **Imprimir…** (`Cmd/Ctrl+P`).
+- **Archivo ▸ Exportar a PDF…** (`Cmd/Ctrl+Mayús+E`) e **Imprimir…** (`Cmd/Ctrl+P`). **Archivo ▸ Exportar a HTML…** guarda una única página `.html` autocontenida (estilos, fórmulas, diagramas e imágenes locales incluidos; las fórmulas usan las fuentes del sistema del lector).
 
 ## Ajustes
 

@@ -29,6 +29,7 @@ export const mockBackend = (handlers: CommandHandlers): InvokeRecord[] => {
 /** The file commands of the Rust side, served by a MemoryFileSystem. */
 export const fileCommands = (fs: MemoryFileSystem): CommandHandlers => ({
   read_file: ({ path }) => fs.readText(path as string),
+  read_file_base64: ({ path, maxBytes }) => fs.readBase64(path as string, maxBytes as number),
   write_file: ({ path, content, encoding, hasBom }) =>
     fs.writeText(path as string, { content, encoding, hasBom } as never),
   list_dir: ({ path }) => fs.listDir(path as string),

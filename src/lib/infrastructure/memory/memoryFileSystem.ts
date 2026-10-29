@@ -35,6 +35,9 @@ const isDirectChild = (folder: string, path: string): boolean =>
 const isSameOrBelow = (root: string, path: string): boolean =>
   path === root || path.startsWith(root.endsWith('/') ? root : `${root}/`);
 
+const toBase64 = (bytes: Uint8Array): string =>
+  btoa(Array.from(bytes, (byte) => String.fromCharCode(byte)).join(''));
+
 /** Folders first, then natural case-insensitive order (`a2` before `a10`). */
 const compareEntries = (a: DirEntry, b: DirEntry): number =>
   Number(b.kind === 'folder') - Number(a.kind === 'folder') || naturalOrder.compare(a.name, b.name);
@@ -48,6 +51,7 @@ export class MemoryFileSystem implements FileSystem {
   readonly calls: FileSystemCall[] = [];
 
   private readonly files = new Map<string, TextFile>();
+  private readonly binaries = new Map<string, Uint8Array>();
   private readonly folders = new Set<string>();
   private readonly failures = new Map<FileSystemMethod, AppError[]>();
   private readonly externalWriteListeners = new Set<ExternalWriteListener>();
@@ -61,6 +65,13 @@ export class MemoryFileSystem implements FileSystem {
       encoding: options.encoding ?? 'utf-8',
       hasBom: options.hasBom ?? false,
     });
+  }
+
+  /** Creates (or overwrites) a binary file such as an image, and any missing folders above it. */
+  seedBinary(path: string, bytes: Uint8Array): void {
+    const key = normalisePath(path);
+    this.seedFolder(dirName(key));
+    this.binaries.set(key, bytes);
   }
 
   /** Creates a folder and every folder above it. */
@@ -97,6 +108,14 @@ export class MemoryFileSystem implements FileSystem {
     return this.fileAt(normalisePath(path), path);
   }
 
+  async readBase64(path: string, maxBytes: number): Promise<string | null> {
+    this.begin('readBase64', path);
+    const key = normalisePath(path);
+    const bytes =
+      this.binaries.get(key) ?? new TextEncoder().encode(this.fileAt(key, path).content);
+    return bytes.length > maxBytes ? null : toBase64(bytes);
+  }
+
   async writeText(path: string, file: TextFile): Promise<void> {
     this.begin('writeText', path);
     const key = normalisePath(path);
@@ -122,7 +141,7 @@ export class MemoryFileSystem implements FileSystem {
     this.begin('kind', path);
     const key = normalisePath(path);
     if (this.folders.has(key)) return 'folder';
-    return this.files.has(key) ? 'file' : 'missing';
+    return this.files.has(key) || this.binaries.has(key) ? 'file' : 'missing';
   }
 
   async rename(from: string, to: string): Promise<void> {
@@ -192,7 +211,7 @@ export class MemoryFileSystem implements FileSystem {
   }
 
   private isTaken(key: string): boolean {
-    return this.files.has(key) || this.folders.has(key);
+    return this.files.has(key) || this.binaries.has(key) || this.folders.has(key);
   }
 
   /** First of `name`, `name-1`, `name-2`, … that is not used in the folder. */

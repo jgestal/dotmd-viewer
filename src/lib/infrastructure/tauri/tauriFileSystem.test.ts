@@ -24,6 +24,7 @@ describe('tauriFileSystem command mapping', () => {
     const calls = mockBackend(fileCommands(memory));
 
     await tauriFileSystem.readText('/d/a.md');
+    await tauriFileSystem.readBase64('/d/a.md', 99);
     await tauriFileSystem.writeText('/d/a.md', { content: 'y', encoding: 'utf-8', hasBom: true });
     await tauriFileSystem.listDir('/d');
     await tauriFileSystem.exists('/d');
@@ -36,6 +37,7 @@ describe('tauriFileSystem command mapping', () => {
 
     expect(calls).toEqual([
       { command: 'read_file', args: { path: '/d/a.md' } },
+      { command: 'read_file_base64', args: { path: '/d/a.md', maxBytes: 99 } },
       {
         command: 'write_file',
         args: { path: '/d/a.md', content: 'y', encoding: 'utf-8', hasBom: true },

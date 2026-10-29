@@ -4,6 +4,7 @@ import { call } from './invoke';
 /** FileSystem over the Rust commands in files.rs, folders.rs and file_ops.rs. */
 export const tauriFileSystem: FileSystem = {
   readText: (path) => call<TextFile>('read_file', { path }),
+  readBase64: (path, maxBytes) => call<string | null>('read_file_base64', { path, maxBytes }),
   writeText: (path, { content, encoding, hasBom }) =>
     call<void>('write_file', { path, content, encoding, hasBom }),
   listDir: (path) => call<readonly DirEntry[]>('list_dir', { path }),

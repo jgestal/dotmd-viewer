@@ -270,4 +270,7 @@ export const es = {
   'documentMenu.copyImage': 'Copiar ruta de la imagen',
   'documentMenu.showInSidebar': 'Mostrar en la barra lateral',
   'documentMenu.clipboardFailed': 'El portapapeles no está disponible.',
+  // T67 · Exportar a HTML independiente
+  'menu.exportHtml': 'Exportar a HTML…',
+  'filter.html': 'Páginas HTML',
 } as const satisfies Record<keyof typeof en, string>;

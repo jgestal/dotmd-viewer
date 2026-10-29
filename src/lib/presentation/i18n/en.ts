@@ -267,4 +267,7 @@ export const en = {
   'documentMenu.copyImage': 'Copy Image Path',
   'documentMenu.showInSidebar': 'Show in Sidebar',
   'documentMenu.clipboardFailed': 'The clipboard is not available.',
+  // T67 · Export to standalone HTML
+  'menu.exportHtml': 'Export to HTML…',
+  'filter.html': 'HTML pages',
 } as const satisfies Record<string, string>;

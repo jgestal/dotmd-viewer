@@ -49,6 +49,7 @@ pub fn run() {
             // Commands are registered here, one line per command.
             render::render_markdown,
             files::read_file,
+            files::read_file_base64,
             files::write_file,
             folders::list_dir,
             open_requests::take_pending_open,
