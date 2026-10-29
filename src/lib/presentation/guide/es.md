@@ -52,7 +52,7 @@ flowchart LR
 
 ## Ajustes
 
-**Ajustes** (`Cmd/Ctrl+,`) cambia el idioma, el tema (claro, oscuro o el del sistema) y el tamaño de página.
+**Ajustes** (`Cmd/Ctrl+,`) cambia el idioma, el tema (claro, oscuro, sepia, noche o el del sistema) y el tamaño de página.
 **Ayuda ▸ Atajos de teclado** muestra todos los atajos.
 
 ---

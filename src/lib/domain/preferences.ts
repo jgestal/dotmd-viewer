@@ -1,10 +1,11 @@
 // User preferences: defaults, tolerant parsing of stored values and validated updates.
 import { MAX_RECENTS } from './recents';
+import { THEMES, type Theme } from './theme';
 import type { Favourite } from './workspace';
 
 export interface Preferences {
   readonly language: 'system' | 'en' | 'es';
-  readonly theme: 'system' | 'light' | 'dark';
+  readonly theme: Theme;
   readonly editMode: 'preview' | 'code' | 'split';
   readonly layout: 'continuous' | 'pages' | 'slides';
   readonly pageSize: 'a4' | 'letter';
@@ -80,7 +81,7 @@ type FieldParsers = { readonly [K in keyof Preferences]: (raw: unknown) => Prefe
 
 const fieldParsers: FieldParsers = {
   language: oneOf(['system', 'en', 'es'], defaultPreferences.language),
-  theme: oneOf(['system', 'light', 'dark'], defaultPreferences.theme),
+  theme: oneOf(THEMES, defaultPreferences.theme),
   editMode: oneOf(['preview', 'code', 'split'], defaultPreferences.editMode),
   layout: oneOf(['continuous', 'pages', 'slides'], defaultPreferences.layout),
   pageSize: oneOf(['a4', 'letter'], defaultPreferences.pageSize),

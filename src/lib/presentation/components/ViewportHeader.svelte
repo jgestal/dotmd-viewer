@@ -3,6 +3,7 @@
   import { app, type EditMode, type Layout } from '../app.svelte';
   import { i18n } from '../i18n/i18n.svelte';
   import Icon from './Icon.svelte';
+  import ThemePicker from './ThemePicker.svelte';
 
   const modes: readonly EditMode[] = ['preview', 'code', 'split'];
   const layouts: readonly Layout[] = ['continuous', 'pages', 'slides'];
@@ -68,6 +69,7 @@
       {i18n.t(app.editing ? 'action.stopEditing' : 'action.edit')}
     </button>
   {/if}
+  <ThemePicker />
 </header>
 
 <style>

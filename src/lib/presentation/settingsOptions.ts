@@ -17,7 +17,13 @@ export const themeOptions: readonly Option<Preferences['theme']>[] = [
   { value: 'system', label: 'settings.system' },
   { value: 'light', label: 'settings.theme.light' },
   { value: 'dark', label: 'settings.theme.dark' },
+  { value: 'sepia', label: 'settings.theme.sepia' },
+  { value: 'night', label: 'settings.theme.night' },
 ];
+
+/** i18n key of a theme's name. */
+export const themeLabel = (theme: Preferences['theme']): string =>
+  theme === 'system' ? 'settings.system' : `settings.theme.${theme}`;
 
 export const pageSizeOptions: readonly Option<Preferences['pageSize']>[] = [
   { value: 'a4', label: 'pages.size.a4' },

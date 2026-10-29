@@ -106,7 +106,7 @@ describe('defaultAccelerators', () => {
 
   it('lists every command id exactly once', () => {
     expect(new Set(COMMAND_IDS).size).toBe(COMMAND_IDS.length);
-    expect(COMMAND_IDS).toHaveLength(32);
+    expect(COMMAND_IDS).toHaveLength(38);
   });
 
   it('only assigns accelerators to known commands and they all parse', () => {

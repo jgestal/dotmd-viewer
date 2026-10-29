@@ -108,6 +108,13 @@ describe('parsePreferences', () => {
     );
   });
 
+  it.each(['system', 'light', 'dark', 'sepia', 'night'] as const)(
+    'accepts the %s theme',
+    (theme) => {
+      expect(parsePreferences({ theme }).theme).toBe(theme);
+    },
+  );
+
   it('is case sensitive for enumerations', () => {
     expect(parsePreferences({ theme: 'Dark' }).theme).toBe('system');
   });

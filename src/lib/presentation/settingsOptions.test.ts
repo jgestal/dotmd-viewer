@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { defaultPreferences } from '$lib/domain/preferences';
+import { THEMES } from '$lib/domain/theme';
 import { en } from './i18n/en';
 import { languageOptions, pageSizeOptions, themeOptions, zoomLabel } from './settingsOptions';
 
@@ -8,8 +9,8 @@ describe('settings options', () => {
     expect(languageOptions.map((option) => option.value)).toEqual(['system', 'es', 'en']);
   });
 
-  it('offers system, light and dark themes in that order', () => {
-    expect(themeOptions.map((option) => option.value)).toEqual(['system', 'light', 'dark']);
+  it('offers the themes in the order they are cycled', () => {
+    expect(themeOptions.map((option) => option.value)).toEqual(THEMES);
   });
 
   it('offers A4 and Letter pages', () => {

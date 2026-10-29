@@ -52,7 +52,7 @@ flowchart LR
 
 ## Settings
 
-**Settings** (`Cmd/Ctrl+,`) changes the language, the theme (light, dark or the system's) and the page size.
+**Settings** (`Cmd/Ctrl+,`) changes the language, the theme (light, dark, sepia, night or the system's) and the page size.
 **Help ▸ Keyboard Shortcuts** lists every shortcut.
 
 ---

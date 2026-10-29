@@ -125,6 +125,32 @@ describe('buildMenu', () => {
     });
   });
 
+  it('offers the themes as a View submenu of checkable items followed by Next Theme', () => {
+    const menu = buildMenu(
+      context('linux', { 'view.theme.sepia': { enabled: true, checked: true } }),
+    );
+    const theme = submenu(submenu(menu, 'menu.view'), 'menu.theme');
+    expect(labels(theme)).toEqual([
+      '[settings.system]',
+      '[settings.theme.light]',
+      '[settings.theme.dark]',
+      '[settings.theme.sepia]',
+      '[settings.theme.night]',
+      '—',
+      '[menu.nextTheme]',
+    ]);
+    expect(theme.map((node) => (node.kind === 'command' ? node.id : null))).toEqual([
+      'view.theme.system',
+      'view.theme.light',
+      'view.theme.dark',
+      'view.theme.sepia',
+      'view.theme.night',
+      null,
+      'view.theme.next',
+    ]);
+    expect(theme[3]).toMatchObject({ checked: true });
+  });
+
   it('copies accelerator, enabled and checked from the command state', () => {
     const menu = buildMenu(
       context('mac', {
