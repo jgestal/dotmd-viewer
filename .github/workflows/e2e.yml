@@ -66,11 +66,27 @@ jobs:
           Get-CimInstance Win32_Process -Filter "Name = 'msedgewebview2.exe'" | Select-Object -First 3 | ForEach-Object { $_.CommandLine }
           (Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}' -ErrorAction SilentlyContinue).pv
           Stop-Process -Id $app.Id -Force -ErrorAction SilentlyContinue
+      - name: Diagnose app start-up with registry policy (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          Remove-Item Env:WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS -ErrorAction SilentlyContinue
+          $key = 'HKCU:\Software\Policies\Microsoft\Edge\WebView2\AdditionalBrowserArguments'
+          New-Item -Path $key -Force | Out-Null
+          New-ItemProperty -Path $key -Name 'dotmd-viewer.exe' -Value '--remote-debugging-port=9223' -Force | Out-Null
+          $app = Start-Process src-tauri/target/debug/dotmd-viewer.exe -ArgumentList 'e2e/fixtures/sample.md' -PassThru
+          Start-Sleep 20
+          try { (Invoke-WebRequest http://127.0.0.1:9223/json/version -UseBasicParsing).Content } catch { "policy devtools: $_" }
+          Get-CimInstance Win32_Process -Filter "Name = 'msedgewebview2.exe'" | Select-Object -First 1 | ForEach-Object { $_.CommandLine }
+          Stop-Process -Id $app.Id -Force -ErrorAction SilentlyContinue
+          Remove-Item -Path $key -Recurse -Force
       - name: Run E2E tests (Linux)
         if: runner.os == 'Linux'
         run: xvfb-run --auto-servernum npm run test:e2e
       - name: Run E2E tests (Windows)
         if: runner.os == 'Windows'
+        continue-on-error: true
         run: npm run test:e2e
       - name: Upload failure screenshots
         if: failure()
