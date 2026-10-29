@@ -91,6 +91,10 @@ export function isMarkdownPath(path: string): boolean {
   return MARKDOWN_EXTENSION.test(baseName(path));
 }
 
+/** The file name without its Markdown or text extension (`notes.md` → `notes`). */
+export const withoutMarkdownExtension = (name: string): string =>
+  name.replace(MARKDOWN_EXTENSION, '');
+
 /** Maps `path` through a rename or move of `oldPath` to `newPath`; a path outside `oldPath` is returned unchanged. */
 export function retargetPath(
   path: string,

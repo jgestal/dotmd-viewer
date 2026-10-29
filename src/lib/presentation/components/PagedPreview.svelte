@@ -288,34 +288,4 @@
   .measurer > :global(:first-child) {
     margin-top: 0;
   }
-
-  @media print {
-    .paged,
-    .desk {
-      height: auto;
-      overflow: visible;
-      background: none;
-    }
-
-    .size-switch,
-    .measurer {
-      display: none;
-    }
-
-    .sheets {
-      display: block;
-      padding: 0;
-    }
-
-    .slot {
-      width: var(--sheet-w);
-      height: var(--sheet-h);
-      break-after: page;
-    }
-
-    .sheet {
-      box-shadow: none;
-      transform: none;
-    }
-  }
 </style>

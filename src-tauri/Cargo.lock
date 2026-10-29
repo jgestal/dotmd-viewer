@@ -862,9 +862,12 @@ version = "0.0.1"
 dependencies = [
  "comrak",
  "encoding_rs",
+ "gtk",
  "notify-debouncer-mini",
+ "objc2",
  "objc2-app-kit",
  "objc2-foundation",
+ "objc2-web-kit",
  "serde",
  "serde_json",
  "tauri",
@@ -877,6 +880,9 @@ dependencies = [
  "tempfile",
  "trash",
  "unicode-normalization",
+ "webkit2gtk",
+ "webview2-com",
+ "windows",
 ]
 
 [[package]]

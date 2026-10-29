@@ -9,7 +9,21 @@ import {
   joinPath,
   normalisePath,
   resolvePath,
+  withoutMarkdownExtension,
 } from './paths';
+
+describe('withoutMarkdownExtension', () => {
+  it('drops a Markdown or text extension whatever its case', () => {
+    expect(withoutMarkdownExtension('a.md')).toBe('a');
+    expect(withoutMarkdownExtension('b.TXT')).toBe('b');
+    expect(withoutMarkdownExtension('c.v2.markdown')).toBe('c.v2');
+  });
+
+  it('keeps any other name as it is', () => {
+    expect(withoutMarkdownExtension('d.png')).toBe('d.png');
+    expect(withoutMarkdownExtension('md')).toBe('md');
+  });
+});
 
 describe('normalisePath', () => {
   it('leaves a clean POSIX path untouched', () => {

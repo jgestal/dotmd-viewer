@@ -6,6 +6,7 @@ import { mockBackend, resetMocksAfterEach } from './mockBackend';
 import { TauriOpenRequests } from './tauriOpenRequests';
 import { tauriDragOut } from './tauriDragOut';
 import { tauriPreferencesStore } from './tauriPreferencesStore';
+import { tauriPdfExporter, tauriPrinter } from './tauriPrinting';
 import { tauriRenderer } from './tauriRenderer';
 import { tauriWatcher } from './tauriWatcher';
 import { tauriWindow } from './tauriWindow';
@@ -112,6 +113,33 @@ describe('tauriWindow', () => {
     mockWindows('main');
     mockBackend({ 'plugin:window|show': () => Promise.reject('no window') });
     await expect(tauriWindow.reveal()).rejects.toEqual({ kind: 'io', message: 'no window' });
+  });
+});
+
+describe('tauriPrinter', () => {
+  it('prints through print_page', async () => {
+    const calls = mockBackend({ print_page: () => undefined });
+    await tauriPrinter.print();
+    expect(calls).toEqual([{ command: 'print_page', args: {} }]);
+  });
+});
+
+describe('tauriPdfExporter', () => {
+  it('exports through export_pdf with the paper and margin', async () => {
+    const calls = mockBackend({ export_pdf: () => undefined });
+    const outcome = await tauriPdfExporter.export('/o/a.pdf', { size: 'letter', marginMm: 20 });
+    expect(outcome).toBe('saved');
+    expect(calls).toEqual([
+      { command: 'export_pdf', args: { path: '/o/a.pdf', pageSize: 'letter', marginMm: 20 } },
+    ]);
+  });
+
+  it('reports a backend failure as an AppError', async () => {
+    mockBackend({ export_pdf: () => Promise.reject({ kind: 'io', message: 'disk full' }) });
+    await expect(tauriPdfExporter.export('/o/a.pdf', { size: 'a4', marginMm: 0 })).rejects.toEqual({
+      kind: 'io',
+      message: 'disk full',
+    });
   });
 });
 

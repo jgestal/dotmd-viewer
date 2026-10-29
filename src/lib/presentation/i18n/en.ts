@@ -187,4 +187,10 @@ export const en = {
   'slides.fullscreenFailed': 'Full screen is not available here.',
   // T32 · Split view
   'split.resize': 'Resize the code and preview panes',
+  // T48 + T49 · Export to PDF and print
+  'filter.pdf': 'PDF documents',
+  'export.done': 'Exported to {name}',
+  'export.choosePdf': 'Choose "Save as PDF" in the print dialog to create {name}.',
+  'error.export': 'Could not export "{name}": {message}',
+  'error.print': 'Could not print: {message}',
 } as const satisfies Record<string, string>;

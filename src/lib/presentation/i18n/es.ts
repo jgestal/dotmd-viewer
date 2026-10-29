@@ -190,4 +190,10 @@ export const es = {
   'slides.fullscreenFailed': 'La pantalla completa no está disponible aquí.',
   // T32 · Vista dividida
   'split.resize': 'Cambiar el tamaño de los paneles de código y vista previa',
+  // T48 + T49 · Export to PDF and print
+  'filter.pdf': 'Documentos PDF',
+  'export.done': 'Exportado a {name}',
+  'export.choosePdf': 'Elige «Guardar como PDF» en el diálogo de impresión para crear {name}.',
+  'error.export': 'No se pudo exportar «{name}»: {message}',
+  'error.print': 'No se pudo imprimir: {message}',
 } as const satisfies Record<keyof typeof en, string>;

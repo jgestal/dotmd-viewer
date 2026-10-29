@@ -8,11 +8,14 @@ import { MemoryOpener } from './memoryOpener';
 import { MemoryNotifier } from './memoryNotifier';
 import { MemoryOpenRequests } from './memoryOpenRequests';
 import { MemoryPreferencesStore } from './memoryPreferencesStore';
+import { MemoryPdfExporter, MemoryPrinter } from './memoryPrinting';
 import { MemoryRenderer } from './memoryRenderer';
 import { MemoryWatcher } from './memoryWatcher';
 import { MemoryWindow } from './memoryWindow';
 
 export * from './browserDropTarget';
+export * from './browserPrinting';
+export * from './memoryPrinting';
 export * from './fakeTranslate';
 export * from './memoryContextMenu';
 export * from './memoryDialogs';
@@ -39,6 +42,8 @@ export interface MemoryServices {
   readonly opener: MemoryOpener;
   readonly contextMenu: MemoryContextMenu;
   readonly notifier: MemoryNotifier;
+  readonly printer: MemoryPrinter;
+  readonly pdfExporter: MemoryPdfExporter;
   readonly translate: typeof fakeTranslate;
 }
 
@@ -57,6 +62,8 @@ export const createMemoryServices = (): MemoryServices => {
     opener: new MemoryOpener(),
     contextMenu: new MemoryContextMenu(),
     notifier: new MemoryNotifier(),
+    printer: new MemoryPrinter(),
+    pdfExporter: new MemoryPdfExporter(),
     translate: fakeTranslate,
   };
 };
