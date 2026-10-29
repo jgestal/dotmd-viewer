@@ -9,6 +9,7 @@ const setup = (caseInsensitive = false) => {
   const workspace = createWorkspace({
     fs: services.fs,
     dialogs: services.dialogs,
+    osRecents: services.osRecents,
     notifier: services.notifier,
     t: services.translate,
     caseInsensitive,
@@ -140,6 +141,25 @@ describe('recents', () => {
     const result = workspace.rememberOpened(prefs, '/b.md');
     expect(result.recents).toEqual(['/b.md', '/a.md']);
     expect(result.lastFile).toBe('/b.md');
+  });
+
+  it('tells the system about the document it remembers', () => {
+    const { workspace, osRecents } = setup();
+    workspace.rememberOpened(prefsWith({}), '/a.md');
+    expect(osRecents.paths).toEqual(['/a.md']);
+  });
+
+  it('keeps working when the system refuses the recent document', () => {
+    const { workspace, osRecents } = setup();
+    osRecents.add = () => Promise.reject(new Error('no'));
+    expect(workspace.rememberOpened(prefsWith({}), '/a.md').recents).toEqual(['/a.md']);
+  });
+
+  it('clears the system list together with the recents', () => {
+    const { workspace, osRecents } = setup();
+    workspace.rememberOpened(prefsWith({}), '/a.md');
+    workspace.clearRecents(prefsWith({ recents: ['/a.md'] }));
+    expect(osRecents.paths).toEqual([]);
   });
 
   it('forgets one recent and clears them all', () => {

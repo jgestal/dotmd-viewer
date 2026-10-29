@@ -14,11 +14,20 @@ import type { Preferences } from '../domain/preferences';
 import { addRecent, clearRecents, removeRecent, renameRecent } from '../domain/recents';
 import * as rules from '../domain/workspace';
 import type { FavouriteWithStatus, Workspace } from '../domain/workspace';
-import type { Dialogs, DirEntry, EntryKind, FileSystem, Notifier, Translate } from '../ports';
+import type {
+  Dialogs,
+  DirEntry,
+  EntryKind,
+  FileSystem,
+  Notifier,
+  OsRecents,
+  Translate,
+} from '../ports';
 
 export interface WorkspaceDeps {
   readonly fs: FileSystem;
   readonly dialogs: Dialogs;
+  readonly osRecents: OsRecents;
   readonly notifier: Notifier;
   readonly t: Translate;
   readonly caseInsensitive: boolean;
@@ -69,7 +78,14 @@ const extensionOf = (name: string): string => {
 const withKeptExtension = (newName: string, oldName: string, kind: EntryKind): string =>
   kind === 'file' && extensionOf(newName) === '' ? newName + extensionOf(oldName) : newName;
 
-export function createWorkspace({ fs, dialogs, notifier, t, caseInsensitive }: WorkspaceDeps) {
+export function createWorkspace({
+  fs,
+  dialogs,
+  osRecents,
+  notifier,
+  t,
+  caseInsensitive,
+}: WorkspaceDeps) {
   const sameOrInside = (parent: string, child: string) =>
     isSameOrInside(parent, child, caseInsensitive);
 
@@ -167,21 +183,25 @@ export function createWorkspace({ fs, dialogs, notifier, t, caseInsensitive }: W
     return rules.withMissing(prefs.favourites, (path) => existing.has(path));
   };
 
-  const rememberOpened = (prefs: Preferences, path: string): Preferences => ({
-    ...prefs,
-    recents: addRecent(prefs.recents, path),
-    lastFile: path,
-  });
+  /** The system list is a courtesy: a failure there must never get in the way of the document. */
+  const tellSystem = (action: Promise<void>): void => {
+    action.catch(() => undefined);
+  };
+
+  const rememberOpened = (prefs: Preferences, path: string): Preferences => {
+    tellSystem(osRecents.add(path));
+    return { ...prefs, recents: addRecent(prefs.recents, path), lastFile: path };
+  };
 
   const forgetRecent = (prefs: Preferences, path: string): Preferences => ({
     ...prefs,
     recents: removeRecent(prefs.recents, path),
   });
 
-  const clearAllRecents = (prefs: Preferences): Preferences => ({
-    ...prefs,
-    recents: clearRecents(),
-  });
+  const clearAllRecents = (prefs: Preferences): Preferences => {
+    tellSystem(osRecents.clear());
+    return { ...prefs, recents: clearRecents() };
+  };
 
   /** Lists a folder for the explorer; a folder that cannot be read is reported and shows as empty. */
   const browse = async (path: string): Promise<readonly DirEntry[]> => {

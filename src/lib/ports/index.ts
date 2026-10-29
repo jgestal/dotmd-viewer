@@ -173,6 +173,12 @@ export interface DragOut {
   start(paths: readonly string[], iconPath?: string): Promise<void>;
 }
 
+/** The system's list of recently used documents (Dock menu, Jump List, recently-used files). */
+export interface OsRecents {
+  add(path: string): Promise<void>;
+  clear(): Promise<void>;
+}
+
 /** Opens addresses in the user's default browser or mail client. */
 export interface ExternalOpener {
   openExternal(url: string): Promise<void>;

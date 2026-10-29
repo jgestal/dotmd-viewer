@@ -5,6 +5,7 @@ import { fakeTranslate } from '../memory';
 import { mockBackend, resetMocksAfterEach } from './mockBackend';
 import { TauriOpenRequests } from './tauriOpenRequests';
 import { tauriDragOut } from './tauriDragOut';
+import { tauriOsRecents } from './tauriOsRecents';
 import { tauriPreferencesStore } from './tauriPreferencesStore';
 import { tauriPdfExporter, tauriPrinter } from './tauriPrinting';
 import { tauriRenderer } from './tauriRenderer';
@@ -266,5 +267,24 @@ describe('tauriDragOut', () => {
   it('reports a refused drag as an app error', async () => {
     mockBackend({ drag_icon: () => '/tmp/icon.png' });
     await expect(tauriDragOut.start(['/w/a.md'])).rejects.toMatchObject({ kind: 'io' });
+  });
+});
+
+describe('tauriOsRecents', () => {
+  it('adds a path through add_os_recent', async () => {
+    const calls = mockBackend({ add_os_recent: () => null });
+    await tauriOsRecents.add('/w/a.md');
+    expect(calls).toMatchObject([{ command: 'add_os_recent', args: { path: '/w/a.md' } }]);
+  });
+
+  it('clears through clear_os_recents', async () => {
+    const calls = mockBackend({ clear_os_recents: () => null });
+    await tauriOsRecents.clear();
+    expect(calls.map(({ command }) => command)).toEqual(['clear_os_recents']);
+  });
+
+  it('reports a refusal as an app error', async () => {
+    mockBackend({});
+    await expect(tauriOsRecents.add('/w/a.md')).rejects.toMatchObject({ kind: 'io' });
   });
 });

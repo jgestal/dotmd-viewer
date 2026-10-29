@@ -23,6 +23,7 @@ import {
   tauriAssetUrls,
   tauriContextMenu,
   tauriDragOut,
+  tauriOsRecents,
   tauriFileSystem,
   tauriAppInfo,
   tauriOpener,
@@ -49,6 +50,7 @@ import type {
   MarkdownRenderer,
   Notifier,
   OpenRequests,
+  OsRecents,
   PdfExporter,
   PreferencesStore,
   Printer,
@@ -102,6 +104,7 @@ interface Ports {
   readonly menu: NativeMenu;
   readonly dropTarget: DropTarget;
   readonly dragOut: DragOut;
+  readonly osRecents: OsRecents;
   readonly contextMenu: ContextMenu;
   readonly printer: Printer;
   readonly pdfExporter: PdfExporter;
@@ -121,6 +124,7 @@ const tauriPorts = (t: Translate): Ports => ({
   menu: new TauriMenu(),
   dropTarget: new TauriDropTarget(),
   dragOut: tauriDragOut,
+  osRecents: tauriOsRecents,
   contextMenu: tauriContextMenu,
   printer: tauriPrinter,
   pdfExporter: tauriPdfExporter,
@@ -169,7 +173,14 @@ export const createContainer = ({
   const { fs, dialogs, window, watcher, renderer, store, openRequests, opener } = ports;
   return {
     documents: createDocuments({ fs, dialogs, window, watcher, notifier, t, caseInsensitive }),
-    workspace: createWorkspace({ fs, dialogs, notifier, t, caseInsensitive }),
+    workspace: createWorkspace({
+      fs,
+      dialogs,
+      osRecents: ports.osRecents,
+      notifier,
+      t,
+      caseInsensitive,
+    }),
     drop: createDrop({ fs, notifier, t }),
     images: createImages({ fs, notifier, t }),
     preferences: createPreferences({ store, notifier, t }),
