@@ -1,14 +1,15 @@
-import { spawn, type ChildProcess } from 'node:child_process';
+import { execFileSync, spawn, type ChildProcess } from 'node:child_process';
 import { copyFileSync, mkdirSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const onWindows = os.platform() === 'win32';
 const binary = path.join(
   process.env.CARGO_TARGET_DIR ?? path.join(root, 'src-tauri', 'target'),
   'debug',
-  os.platform() === 'win32' ? 'simpledotmd.exe' : 'simpledotmd',
+  onWindows ? 'simpledotmd.exe' : 'simpledotmd',
 );
 const screenshots = path.join(root, 'e2e', 'screenshots');
 const fixtures = path.join(root, 'e2e', 'fixtures');
@@ -18,13 +19,26 @@ const workDir = path.join(os.tmpdir(), 'dotmd-e2e');
 const documentCopy = path.join(workDir, 'sample.md');
 process.env.E2E_DOCUMENT = documentCopy;
 
+interface TauriOptions {
+  readonly application: string;
+  readonly args: string[];
+}
+type TauriCapabilities = WebdriverIO.Capabilities & { 'tauri:options'?: TauriOptions };
+
 // The app takes its document or folder from the command line, so each scenario that needs a
 // different one is its own capability, pinned to its spec file.
-const launching = (specs: string[], argument: string) =>
-  ({
-    'wdio:specs': specs,
-    'tauri:options': { application: binary, args: [argument] },
-  }) as WebdriverIO.Capabilities;
+const launching = (specs: string[], argument: string): TauriCapabilities => ({
+  'wdio:specs': specs,
+  'tauri:options': { application: binary, args: [argument] },
+});
+
+// msedgedriver turns every `args` entry into a browser switch (`--c:\\path`), which the app
+// ignores. On Windows the scenario's argument goes to the running app as a second launch
+// instead, the same path a double-click in File Explorer takes.
+const handArgumentsToRunningApp = (capabilities: TauriCapabilities) => {
+  const args = capabilities['tauri:options']?.args ?? [];
+  if (onWindows && args.length > 0) execFileSync(binary, args);
+};
 
 let tauriDriver: ChildProcess | undefined;
 
@@ -62,6 +76,8 @@ export const config: WebdriverIO.Config = {
       { stdio: [null, process.stdout, process.stderr] },
     );
   },
+
+  before: handArgumentsToRunningApp,
 
   afterSession: stopDriver,
 
