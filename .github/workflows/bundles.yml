@@ -53,7 +53,8 @@ jobs:
       - name: Validate the generated .desktop (Linux)
         if: runner.os == 'Linux'
         run: |
-          desktop=$(find src-tauri/target/release/bundle/deb -name '*.desktop' | head -n 1)
+          # The launcher only: the Dolphin service menu is a KDE `Type=Service` file, not a desktop entry.
+          desktop=$(find src-tauri/target/release/bundle/deb -path '*/share/applications/*.desktop' | head -n 1)
           test -n "$desktop"
           cat "$desktop"
           desktop-file-validate "$desktop"
