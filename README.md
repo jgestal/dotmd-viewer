@@ -93,6 +93,8 @@ Mutation testing must score at least 85 %. The Rust target needs `cargo install 
 - [CONTRIBUTING.md](CONTRIBUTING.md): branches, commits, pull requests and the definition of done
 - [ARCHITECTURE.md](ARCHITECTURE.md): layers, dependency rules and testing strategy
 - [CHANGELOG.md](CHANGELOG.md): release history
+- [Releases](https://github.com/jgestal/dotmd-viewer/releases): installers for each version
+- [docs/releasing.md](docs/releasing.md): how a release is cut and how to add the signing secrets
 
 ## Credits
 

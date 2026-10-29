@@ -7,7 +7,7 @@ export default defineConfig({
   resolve: { conditions: ['browser'] },
   test: {
     environment: 'jsdom',
-    include: ['src/**/*.test.ts'],
+    include: ['src/**/*.test.ts', 'scripts/**/*.test.mjs'],
     coverage: {
       provider: 'v8',
       // Vitest 4 measures only files that exist, so the command passes while these folders are empty.
