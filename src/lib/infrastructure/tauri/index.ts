@@ -4,6 +4,7 @@ export * from './tauriAssetUrls';
 export * from './tauriContextMenu';
 export * from './tauriDialogs';
 export * from './tauriDragOut';
+export * from './tauriOsRecents';
 export * from './tauriDropTarget';
 export * from './tauriFileSystem';
 export * from './tauriMenu';

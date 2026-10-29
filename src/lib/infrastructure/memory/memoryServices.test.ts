@@ -5,6 +5,7 @@ import { MemoryContextMenu } from './memoryContextMenu';
 import { MemoryDialogs } from './memoryDialogs';
 import { MemoryNotifier } from './memoryNotifier';
 import { MemoryDragOut } from './memoryDragOut';
+import { MemoryOsRecents } from './memoryOsRecents';
 import { MemoryAppInfo } from './memoryAppInfo';
 import { MemoryOpener } from './memoryOpener';
 import { MemoryOpenRequests } from './memoryOpenRequests';
@@ -274,5 +275,16 @@ describe('MemoryContextMenu', () => {
 describe('MemoryAppInfo', () => {
   it('answers the version in package.json', async () => {
     expect(await new MemoryAppInfo().version()).toMatch(/^\d+\.\d+\.\d+/);
+  });
+});
+
+describe('MemoryOsRecents', () => {
+  it('keeps the announced paths in order until cleared', async () => {
+    const osRecents = new MemoryOsRecents();
+    await osRecents.add('/w/a.md');
+    await osRecents.add('/w/b.md');
+    expect(osRecents.paths).toEqual(['/w/a.md', '/w/b.md']);
+    await osRecents.clear();
+    expect(osRecents.paths).toEqual([]);
   });
 });

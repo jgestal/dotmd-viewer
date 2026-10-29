@@ -7,6 +7,7 @@ mod file_ops;
 mod files;
 mod folders;
 mod open_requests;
+mod os_recents;
 mod preferences_file;
 mod printing;
 mod quit;
@@ -64,6 +65,8 @@ pub fn run() {
             drag_out::drag_icon,
             printing::print_page,
             printing::export_pdf,
+            os_recents::add_os_recent,
+            os_recents::clear_os_recents,
         ])
         .setup(|app| {
             show_window_if_frontend_stalls(app.handle().clone());
