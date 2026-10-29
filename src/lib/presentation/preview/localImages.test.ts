@@ -57,4 +57,22 @@ describe('resolveLocalImages', () => {
     resolveLocalImages(root, sources());
     expect(srcs(root)).toEqual([null]);
   });
+
+  it('resolves the srcset of picture sources and images, keeping descriptors', () => {
+    const root = page(
+      '<picture><source media="(prefers-color-scheme: dark)" srcset="../assets/a.png">' +
+        '<img src="/abs/c.png" srcset="/abs/c.png 1x, ../../img/b.jpg 2x, https://x.org/r.png 3x"></picture>',
+    );
+    resolveLocalImages(root, sources());
+    expect(root.querySelector('source')?.getAttribute('srcset')).toBe('asset://a');
+    expect(root.querySelector('img')?.getAttribute('srcset')).toBe(
+      'asset://c 1x, asset://b 2x, https://x.org/r.png 3x',
+    );
+  });
+
+  it('leaves a srcset candidate the environment cannot load as it is', () => {
+    const root = page('<img srcset="missing.png 2x">');
+    resolveLocalImages(root, sources());
+    expect(root.querySelector('img')?.getAttribute('srcset')).toBe('missing.png 2x');
+  });
 });
