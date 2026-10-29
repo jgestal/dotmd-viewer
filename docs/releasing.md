@@ -39,7 +39,8 @@ Gatekeeper, SmartScreen and `chmod +x` for the AppImage.
 
 4. Wait for the **Release** workflow to finish. The workflow refuses to run when the tag does not match the
    `version` in `package.json`.
-5. Open the draft under **Releases**, check the assets, test at least one installer per system, then publish it.
+5. Open the draft under **Releases**, check the assets, run the [manual test checklist](manual-testing.md) with the
+   installer of each system, then publish it.
 
 To rebuild an existing tag (for example after a failed runner), start the **Release** workflow by hand from the
 Actions tab with `tag` set to that tag. The assets are added to the tag's draft release.
