@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { appError } from '../domain/errors';
 import { createMemoryServices } from '../infrastructure/memory';
 import { createPrinting, type PrintRequest } from './printing';
 
@@ -14,6 +15,7 @@ const setup = () => {
   };
   const printing = createPrinting({
     dialogs: services.dialogs,
+    fs: services.fs,
     printer: services.printer,
     exporter: services.pdfExporter,
     notifier: services.notifier,
@@ -94,6 +96,54 @@ describe('exportPdf', () => {
     await printing.exportPdf('notes.md', request);
     expect(notifier.errors).toEqual(['error.export {"name":"notes.pdf","message":"disk full"}']);
     expect(notifier.infos).toEqual([]);
+    expect(log).toEqual(['prepare', 'release']);
+  });
+});
+
+describe('exportPdfTo', () => {
+  // The memory exporter records exports without writing, so the PDF is seeded to be revealed.
+  it('writes the PDF without asking, confirms and shows it in the file manager', async () => {
+    const { printing, request, dialogs, pdfExporter, notifier, fs, log } = setup();
+    fs.seedFile('/w/notes.pdf', '');
+    await printing.exportPdfTo('/w/notes.pdf', request);
+    expect(dialogs.calls).toEqual([]);
+    expect(pdfExporter.exports).toEqual([{ path: '/w/notes.pdf', page: SETUP }]);
+    expect(notifier.infos).toEqual(['export.done {"name":"notes.pdf"}']);
+    expect(fs.revealed).toEqual(['/w/notes.pdf']);
+    expect(log).toEqual(['prepare', 'release']);
+  });
+
+  it('adds the extension to a destination that lacks it', async () => {
+    const { printing, request, pdfExporter } = setup();
+    await printing.exportPdfTo('/w/report', request);
+    expect(pdfExporter.exports[0].path).toBe('/w/report.pdf');
+  });
+
+  it('still confirms when the file manager cannot show the PDF', async () => {
+    const { printing, request, notifier, fs } = setup();
+    fs.seedFile('/w/notes.pdf', '');
+    fs.failNext('reveal', appError('io', 'no file manager'));
+    await printing.exportPdfTo('/w/notes.pdf', request);
+    expect(notifier.infos).toEqual(['export.done {"name":"notes.pdf"}']);
+    expect(notifier.errors).toEqual([]);
+    expect(fs.revealed).toEqual([]);
+  });
+
+  it('reveals nothing when the platform only opened the print dialog', async () => {
+    const { printing, request, pdfExporter, notifier, fs } = setup();
+    pdfExporter.outcome = 'printDialog';
+    fs.seedFile('/w/notes.pdf', '');
+    await printing.exportPdfTo('/w/notes.pdf', request);
+    expect(notifier.infos).toEqual(['export.choosePdf {"name":"notes.pdf"}']);
+    expect(fs.calls).toEqual([]);
+  });
+
+  it('reports a failure and reveals nothing', async () => {
+    const { printing, request, pdfExporter, notifier, fs, log } = setup();
+    pdfExporter.failWith = new Error('disk full');
+    await printing.exportPdfTo('/w/notes.pdf', request);
+    expect(notifier.errors).toEqual(['error.export {"name":"notes.pdf","message":"disk full"}']);
+    expect(fs.calls).toEqual([]);
     expect(log).toEqual(['prepare', 'release']);
   });
 });

@@ -13,3 +13,9 @@ Exec={{exec}} %F
 Icon={{icon}}
 Terminal=false
 StartupWMClass=simpledotmd
+Actions=new-document;
+
+[Desktop Action new-document]
+Name=New Document
+Name[es]=Nuevo documento
+Exec={{exec}} --new

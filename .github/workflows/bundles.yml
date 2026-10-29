@@ -58,6 +58,26 @@ jobs:
           cat "$desktop"
           desktop-file-validate "$desktop"
           grep -q '^MimeType=.*text/markdown;' "$desktop"
+          grep -q '^Actions=new-document;' "$desktop"
+      - name: Check the Dolphin service menu in the .deb (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          deb=$(find src-tauri/target/release/bundle/deb -name '*.deb' | head -n 1)
+          dpkg-deb -c "$deb" | grep -q 'usr/share/kio/servicemenus/simpledotmd-export.desktop'
+      - name: Check the Finder services in Info.plist (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          plist=$(find src-tauri/target/release/bundle/macos -name Info.plist -path '*.app/Contents/*' | head -n 1)
+          plutil -p "$plist" | grep -q '"NSMessage" => "exportPdf"'
+          app=$(dirname "$(dirname "$plist")")
+          test -f "$app/Contents/Resources/es.lproj/ServicesMenu.strings"
+      - name: Check the Explorer verbs in the NSIS script (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          nsi=$(find src-tauri/target/release/nsis -name 'installer.nsi' | head -n 1)
+          test -n "$nsi"
+          grep -n 'hooks.nsh' "$nsi"
       - name: Check the file association in the generated WiX source (Windows)
         if: runner.os == 'Windows'
         shell: bash

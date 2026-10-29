@@ -34,8 +34,8 @@ trash = "5"
 
 [target.'cfg(target_os = "macos")'.dependencies]
 objc2 = "0.6"
-objc2-app-kit = { version = "0.3", features = ["NSWindow", "NSPrintInfo", "NSPrintOperation", "NSView", "NSResponder", "NSGraphics", "NSDocumentController", "NSAppearance", "NSButton", "NSControl"] }
-objc2-foundation = { version = "0.3", features = ["NSString", "NSURL", "NSGeometry", "NSDictionary", "NSObject"] }
+objc2-app-kit = { version = "0.3", features = ["NSWindow", "NSPrintInfo", "NSPrintOperation", "NSView", "NSResponder", "NSGraphics", "NSDocumentController", "NSAppearance", "NSButton", "NSControl", "NSApplication", "NSPasteboard", "NSPasteboardItem"] }
+objc2-foundation = { version = "0.3", features = ["NSString", "NSURL", "NSGeometry", "NSDictionary", "NSObject", "NSArray"] }
 objc2-web-kit = { version = "0.3", default-features = false, features = ["std", "WKWebView", "objc2-app-kit"] }
 
 [target.'cfg(target_os = "linux")'.dependencies]

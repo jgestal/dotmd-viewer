@@ -148,25 +148,31 @@ describe('TauriOpenRequests', () => {
   it('registers the listener before taking the pending requests', async () => {
     mockBackend({
       take_pending_open: async () => {
-        await emit('open-paths', ['/arrived-meanwhile.md']);
-        return ['/a.md'];
+        await emit('open-requests', [{ action: 'open', path: '/arrived-meanwhile.md' }]);
+        return [{ action: 'open', path: '/a.md' }];
       },
     });
     const requests = new TauriOpenRequests();
     const listener = vi.fn();
     requests.onOpen(listener);
-    expect(await requests.takePending()).toEqual(['/a.md']);
-    expect(listener).toHaveBeenCalledWith(['/arrived-meanwhile.md']);
+    expect(await requests.takePending()).toEqual([{ action: 'open', path: '/a.md' }]);
+    expect(listener).toHaveBeenCalledWith([{ action: 'open', path: '/arrived-meanwhile.md' }]);
   });
 
-  it('delivers open-paths events to listeners', async () => {
+  it('delivers open-requests events to listeners', async () => {
     mockBackend({ take_pending_open: () => [] });
     const requests = new TauriOpenRequests();
     const listener = vi.fn();
     requests.onOpen(listener);
     await requests.takePending();
-    await emit('open-paths', ['/x.md', '/y.md']);
-    expect(listener).toHaveBeenCalledWith(['/x.md', '/y.md']);
+    await emit('open-requests', [
+      { action: 'open', path: '/x.md' },
+      { action: 'exportPdf', path: '/y.md' },
+    ]);
+    expect(listener).toHaveBeenCalledWith([
+      { action: 'open', path: '/x.md' },
+      { action: 'exportPdf', path: '/y.md' },
+    ]);
   });
 });
 

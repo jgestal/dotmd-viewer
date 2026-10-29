@@ -186,6 +186,7 @@ export const createContainer = ({
     preferences: createPreferences({ store, notifier, t }),
     printing: createPrinting({
       dialogs,
+      fs,
       printer: ports.printer,
       exporter: ports.pdfExporter,
       notifier,

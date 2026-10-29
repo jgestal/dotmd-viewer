@@ -78,6 +78,11 @@
         }
       }
     ],
+    "macOS": {
+      "files": {
+        "Resources/es.lproj/ServicesMenu.strings": "bundle/macos/es.lproj/ServicesMenu.strings"
+      }
+    },
     "windows": {
       "webviewInstallMode": {
         "type": "embedBootstrapper"
@@ -88,7 +93,8 @@
           "English",
           "Spanish"
         ],
-        "displayLanguageSelector": false
+        "displayLanguageSelector": false,
+        "installerHooks": "bundle/windows/hooks.nsh"
       },
       "wix": {
         "language": "en-US"
@@ -100,13 +106,19 @@
           "libwebkit2gtk-4.1-0",
           "libgtk-3-0"
         ],
-        "desktopTemplate": "bundle/linux/simpledotmd.desktop"
+        "desktopTemplate": "bundle/linux/simpledotmd.desktop",
+        "files": {
+          "/usr/share/kio/servicemenus/simpledotmd-export.desktop": "bundle/linux/simpledotmd-export.desktop"
+        }
       },
       "rpm": {
         "depends": [
           "webkit2gtk4.1"
         ],
-        "desktopTemplate": "bundle/linux/simpledotmd.desktop"
+        "desktopTemplate": "bundle/linux/simpledotmd.desktop",
+        "files": {
+          "/usr/share/kio/servicemenus/simpledotmd-export.desktop": "bundle/linux/simpledotmd-export.desktop"
+        }
       },
       "appimage": {
         "bundleMediaFramework": false

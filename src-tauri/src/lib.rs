@@ -5,6 +5,8 @@ mod drag_out;
 pub mod error;
 mod file_ops;
 mod files;
+#[cfg(target_os = "macos")]
+mod finder_services;
 mod folders;
 mod open_requests;
 mod os_recents;
@@ -20,7 +22,7 @@ use open_requests::OpenRequests;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let cwd = std::env::current_dir().unwrap_or_default();
-    let launch_paths = open_requests::paths_from_args(std::env::args().skip(1), &cwd);
+    let launch_requests = open_requests::requests_from_args(std::env::args().skip(1), &cwd);
 
     let app = tauri::Builder::default()
         // Registered first, so a second launch exits before any other plugin starts.
@@ -40,7 +42,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_drag::init())
-        .manage(OpenRequests::with_pending(launch_paths))
+        .manage(OpenRequests::with_pending(launch_requests))
         .manage(watcher::WatcherState::default())
         .manage(quit::QuitState::default())
         .invoke_handler(tauri::generate_handler![
@@ -71,6 +73,8 @@ pub fn run() {
         ])
         .setup(|app| {
             show_window_if_frontend_stalls(app.handle().clone());
+            #[cfg(target_os = "macos")]
+            finder_services::register(app.handle());
             Ok(())
         })
         .build(tauri::generate_context!())
@@ -89,9 +93,8 @@ pub fn run() {
             let paths = urls
                 .iter()
                 .filter_map(|url| url.to_file_path().ok())
-                .map(|path| path.to_string_lossy().into_owned())
-                .collect();
-            open_requests::deliver(app, paths);
+                .map(|path| path.to_string_lossy().into_owned());
+            open_requests::deliver(app, open_requests::open_all(paths));
         }
     });
 }

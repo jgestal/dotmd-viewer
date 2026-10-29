@@ -1,0 +1,4 @@
+/* Finder services (Info.plist NSServices), in Spanish. */
+"Open in SimpleDotMD" = "Abrir en SimpleDotMD";
+"Export to PDF with SimpleDotMD" = "Exportar a PDF con SimpleDotMD";
+"Print with SimpleDotMD" = "Imprimir con SimpleDotMD";
