@@ -54,6 +54,7 @@ export function createAppCommands(app: App): Command[] {
     'view.zoomIn': { label: 'menu.zoomIn', run: () => app.zoomIn() },
     'view.zoomOut': { label: 'menu.zoomOut', run: () => app.zoomOut() },
     'view.zoomReset': { label: 'menu.zoomReset', run: () => app.resetZoom() },
+    'app.quit': { label: 'menu.quit', run: () => app.quit() },
     'help.website': { label: 'menu.website', run: () => void window.open(WEBSITE, '_blank') },
   };
 

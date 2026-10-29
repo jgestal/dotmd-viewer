@@ -110,6 +110,43 @@ describe('MemoryWindow', () => {
   });
 });
 
+describe('MemoryWindow closing', () => {
+  it('closes and quits when every close handler agrees', async () => {
+    const window = new MemoryWindow();
+    window.onCloseRequested(async () => true);
+    expect(await window.requestClose()).toBe(true);
+    expect(window.quitCalled).toBe(true);
+  });
+
+  it('stays open when a close handler refuses', async () => {
+    const window = new MemoryWindow();
+    window.onCloseRequested(async () => true);
+    window.onCloseRequested(async () => false);
+    expect(await window.requestClose()).toBe(false);
+    expect(window.quitCalled).toBe(false);
+  });
+
+  it('stops asking a handler once it is removed', async () => {
+    const window = new MemoryWindow();
+    const remove = window.onCloseRequested(async () => false);
+    remove();
+    expect(await window.requestClose()).toBe(true);
+  });
+
+  it('delivers quit requests until the handler is removed, and quits on demand', async () => {
+    const window = new MemoryWindow();
+    const handler = vi.fn();
+    const remove = window.onQuitRequested(handler);
+    window.requestQuit();
+    remove();
+    window.requestQuit();
+    expect(handler).toHaveBeenCalledTimes(1);
+    expect(window.quitCalled).toBe(false);
+    await window.quit();
+    expect(window.quitCalled).toBe(true);
+  });
+});
+
 describe('MemoryPreferencesStore', () => {
   it('loads the raw value it was given', async () => {
     expect(await new MemoryPreferencesStore({ zoom: 2 }).load()).toEqual({ zoom: 2 });

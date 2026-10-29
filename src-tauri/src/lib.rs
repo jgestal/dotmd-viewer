@@ -7,6 +7,7 @@ mod files;
 mod folders;
 mod open_requests;
 mod preferences_file;
+mod quit;
 mod render;
 mod watcher;
 mod window_state;
@@ -37,6 +38,7 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .manage(OpenRequests::with_pending(launch_paths))
         .manage(watcher::WatcherState::default())
+        .manage(quit::QuitState::default())
         .invoke_handler(tauri::generate_handler![
             // Commands are registered here, one line per command.
             render::render_markdown,
@@ -54,6 +56,7 @@ pub fn run() {
             preferences_file::load_preferences,
             preferences_file::save_preferences,
             window_state::set_document_state,
+            quit::quit_app,
         ])
         .setup(|app| {
             show_window_if_frontend_stalls(app.handle().clone());
@@ -62,16 +65,22 @@ pub fn run() {
         .build(tauri::generate_context!())
         .expect("error while building DotMD Viewer");
 
-    app.run(|_app, _event| {
+    app.run(|app, event| {
+        // Quit from the Dock, Cmd+Q or the last window closing: ask the frontend first.
+        if let tauri::RunEvent::ExitRequested { code, api, .. } = &event
+            && quit::hold_exit(app, *code)
+        {
+            api.prevent_exit();
+        }
         // Finder double-click and "Open With" arrive as an event, even on a cold start.
         #[cfg(target_os = "macos")]
-        if let tauri::RunEvent::Opened { urls } = _event {
+        if let tauri::RunEvent::Opened { urls } = event {
             let paths = urls
                 .iter()
                 .filter_map(|url| url.to_file_path().ok())
                 .map(|path| path.to_string_lossy().into_owned())
                 .collect();
-            open_requests::deliver(_app, paths);
+            open_requests::deliver(app, paths);
         }
     });
 }

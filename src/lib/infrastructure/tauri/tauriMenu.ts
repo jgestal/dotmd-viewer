@@ -35,7 +35,6 @@ const PREDEFINED: Readonly<Record<Exclude<Predefined, 'about'>, TauriPredefined>
   hide: 'Hide',
   hideOthers: 'HideOthers',
   showAll: 'ShowAll',
-  quit: 'Quit',
 };
 
 /**

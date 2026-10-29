@@ -1,6 +1,7 @@
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import type { AppWindow } from '../../ports';
 import { attempt, call } from './invoke';
+import { subscribe } from './subscription';
 import { formatWindowTitle, runsOnMac } from './windowTitle';
 
 /**
@@ -20,4 +21,20 @@ export const tauriWindow: AppWindow = {
   },
 
   reveal: () => attempt(() => getCurrentWindow().show()),
+
+  onCloseRequested(handler) {
+    // The close is always held back: when the user agrees, `quit_app` exits (and tells Rust not to
+    // ask again), instead of the window closing and the system's exit request asking a second time.
+    const unlisten = attempt(() =>
+      getCurrentWindow().onCloseRequested(async (event) => {
+        event.preventDefault();
+        if (await handler()) await call<void>('quit_app');
+      }),
+    );
+    return () => void unlisten.then((stop) => stop()).catch(() => undefined);
+  },
+
+  onQuitRequested: (handler) => subscribe<void>('quit-requested', handler).unsubscribe,
+
+  quit: () => call<void>('quit_app'),
 };

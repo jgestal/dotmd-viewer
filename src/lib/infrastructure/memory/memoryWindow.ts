@@ -28,7 +28,44 @@ export class MemoryWindow implements AppWindow {
     this.fullscreen = !this.fullscreen;
   }
 
+  /** Whether `quit` was called: the app has exited. */
+  quitCalled = false;
+
+  private closeHandlers: (() => Promise<boolean>)[] = [];
+  private quitHandlers: (() => void)[] = [];
+
   async reveal(): Promise<void> {
     this.reveals += 1;
+  }
+
+  onCloseRequested(handler: () => Promise<boolean>): () => void {
+    this.closeHandlers.push(handler);
+    return () => {
+      this.closeHandlers = this.closeHandlers.filter((registered) => registered !== handler);
+    };
+  }
+
+  onQuitRequested(handler: () => void): () => void {
+    this.quitHandlers.push(handler);
+    return () => {
+      this.quitHandlers = this.quitHandlers.filter((registered) => registered !== handler);
+    };
+  }
+
+  async quit(): Promise<void> {
+    this.quitCalled = true;
+  }
+
+  /** Simulates the user closing the window; true when it closed (and the app quit). */
+  async requestClose(): Promise<boolean> {
+    const answers = await Promise.all(this.closeHandlers.map((handler) => handler()));
+    const allowed = answers.every(Boolean);
+    if (allowed) this.quitCalled = true;
+    return allowed;
+  }
+
+  /** Simulates the system asking to quit (Dock, Cmd+Q). */
+  requestQuit(): void {
+    for (const handler of this.quitHandlers) handler();
   }
 }
