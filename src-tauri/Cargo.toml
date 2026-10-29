@@ -49,6 +49,14 @@ windows = "0.62"
 [dev-dependencies]
 tempfile = "3"
 
+# Debug builds without debug info: they are a fraction of the size on disk and link faster.
+# Use `CARGO_PROFILE_DEV_DEBUG=true` when you need a debugger.
+[profile.dev]
+debug = false
+
+[profile.dev.package."*"]
+debug = false
+
 [profile.release]
 codegen-units = 1
 lto = true
