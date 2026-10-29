@@ -59,13 +59,16 @@ mod platform {
     use super::file_url;
 
     pub fn add(path: &str) {
-        gtk::RecentManager::default().add_item(&file_url(path));
+        if let Some(manager) = gtk::RecentManager::default() {
+            manager.add_item(&file_url(path));
+        }
     }
 
     /// Removes only the entries this app added; other apps' entries stay.
     pub fn clear() {
-        let manager = gtk::RecentManager::default();
-        let Some(app_name) = glib::application_name() else {
+        let (Some(manager), Some(app_name)) =
+            (gtk::RecentManager::default(), glib::application_name())
+        else {
             return;
         };
         for item in manager.items() {
