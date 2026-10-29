@@ -78,7 +78,7 @@ describe('buildMenu', () => {
 
   it('puts Preferences at the end of Edit and Quit in File on Linux', () => {
     const menu = buildMenu(context('linux'));
-    expect(labels(submenu(menu, 'menu.edit')).slice(-2)).toEqual(['—', '[menu.settings]']);
+    expect(labels(submenu(menu, 'menu.edit')).slice(-2)).toEqual(['—', '[menu.preferences]']);
     const quit = submenu(menu, 'menu.file').at(-1);
     expect(quit).toMatchObject({ kind: 'command', id: 'app.quit' });
     expect(strip(quit?.kind === 'command' ? quit.label : '')).toBe('[menu.quit]');

@@ -11,9 +11,10 @@ type Binding = Pick<Command, 'run' | 'enabled' | 'checked'> & { readonly label: 
 
 const WEBSITE = 'https://www.gestal.es';
 
-const editModes: readonly EditMode[] = ['preview', 'code', 'split'];
-const layouts: readonly Layout[] = ['continuous', 'pages', 'slides'];
-const sidebarTabs: readonly SidebarTab[] = ['explorer', 'favourites', 'outline'];
+// Exported so the i18n tests can enumerate the keys built from these lists (`mode.${mode}`, ...).
+export const editModes: readonly EditMode[] = ['preview', 'code', 'split'];
+export const layouts: readonly Layout[] = ['continuous', 'pages', 'slides'];
+export const sidebarTabs: readonly SidebarTab[] = ['explorer', 'favourites', 'outline'];
 
 export function createAppCommands(app: App): Command[] {
   const hasDocument = () => app.document !== null;
