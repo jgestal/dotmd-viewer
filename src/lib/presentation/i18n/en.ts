@@ -1,6 +1,6 @@
 // English dictionary: the source of truth for the translation keys (es.ts must match it exactly).
 export const en = {
-  'app.name': 'DotMD Viewer',
+  'app.name': 'SimpleDotMD',
 
   'titlebar.edited': 'Edited',
   'document.untitled': 'Untitled',
@@ -13,7 +13,7 @@ export const en = {
   'preferences.saveFailed': 'Could not save your settings.',
   'reload.conflict.title': 'File changed on disk',
   'reload.conflict.message':
-    '"{name}" was modified outside DotMD Viewer and you have unsaved changes.',
+    '"{name}" was modified outside SimpleDotMD and you have unsaved changes.',
   'reload.keepMine': 'Keep my changes',
   'reload.useDisk': 'Use the version on disk',
 
@@ -85,13 +85,13 @@ export const en = {
   'guide.title': 'User Guide',
   'menu.keyboardShortcuts': 'Keyboard Shortcuts',
   'menu.website': 'Website',
-  'menu.about': 'About DotMD Viewer',
+  'menu.about': 'About SimpleDotMD',
   'menu.settings': 'Settings…',
   'menu.services': 'Services',
-  'menu.hide': 'Hide DotMD Viewer',
+  'menu.hide': 'Hide SimpleDotMD',
   'menu.hideOthers': 'Hide Others',
   'menu.showAll': 'Show All',
-  'menu.quit': 'Quit DotMD Viewer',
+  'menu.quit': 'Quit SimpleDotMD',
 
   'welcome.hint': 'Open a Markdown file or a folder, or drop one here.',
   'document.unsaved': 'Unsaved changes',

@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    dotmd_viewer_lib::run()
+    simpledotmd_lib::run()
 }

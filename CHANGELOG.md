@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The app is now called **SimpleDotMD — Markdown Viewer & Editor**; the repository moved to `jgestal/simpledotmd`. The bundle identifier is unchanged, so settings and file associations carry over.
+
 ### Added
 
 - End-to-end smoke tests (`npm run test:e2e`, WebdriverIO + `tauri-driver`) in a separate `E2E` workflow: open a file and a folder from the command line, switch Preview/Code/Split, edit and save, with failure screenshots uploaded on Windows and Linux; macOS gets a start-up smoke test. PDF export is not driven (native save dialog) and stays covered by unit tests (#92).
@@ -67,4 +71,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In-memory test doubles for every port (`createMemoryServices()`) and a reusable `FileSystem` contract suite
 - Status bar: words, characters, lines, reading time, cursor position, mode, encoding (with BOM) and line ending, with statistics debounced while typing (#27)
 
-[Unreleased]: https://github.com/jgestal/dotmd-viewer/commits/main
+[Unreleased]: https://github.com/jgestal/simpledotmd/commits/main

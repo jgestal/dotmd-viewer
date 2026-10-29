@@ -1,5 +1,5 @@
 {
-  "name": "dotmd-viewer",
+  "name": "simpledotmd",
   "version": "0.0.1",
   "description": "Cross-platform Markdown viewer with optional editing",
   "type": "module",

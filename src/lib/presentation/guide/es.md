@@ -1,13 +1,13 @@
-# Te damos la bienvenida a DotMD Viewer
+# Te damos la bienvenida a SimpleDotMD
 
-DotMD Viewer abre documentos Markdown para **leerlos** y te deja **editarlos** cuando quieras.
+SimpleDotMD abre documentos Markdown para **leerlos** y te deja **editarlos** cuando quieras.
 Puedes volver a abrir esta guía cuando quieras desde **Ayuda ▸ Guía de uso**. Se abre en vista **Dividida**: el Markdown a un lado y el resultado al otro.
 
 ## Abrir documentos
 
 - **Archivo ▸ Abrir…** (`Cmd/Ctrl+O`) abre un archivo y **Archivo ▸ Abrir carpeta…** (`Cmd/Ctrl+Mayús+O`) abre una carpeta en el Explorador.
 - Suelta archivos Markdown o carpetas en cualquier parte de la ventana.
-- Usa **Abrir con ▸ DotMD Viewer** desde el gestor de archivos, o suelta archivos sobre el icono de la app.
+- Usa **Abrir con ▸ SimpleDotMD** desde el gestor de archivos, o suelta archivos sobre el icono de la app.
 - **Archivo ▸ Abrir reciente** muestra los últimos documentos que has abierto.
 
 ## La barra lateral
@@ -57,4 +57,4 @@ flowchart LR
 
 ---
 
-DotMD Viewer es software libre con licencia MIT, hecho por Juan Gestal — [gestal.es](https://gestal.es).
+SimpleDotMD es software libre con licencia MIT, hecho por Juan Gestal — [gestal.es](https://gestal.es).

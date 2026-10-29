@@ -1,6 +1,6 @@
-# DotMD Viewer architecture
+# SimpleDotMD architecture
 
-DotMD Viewer is a Tauri 2 app: a Rust backend (files, rendering, OS integration, CLI) and a Svelte 5
+SimpleDotMD is a Tauri 2 app: a Rust backend (files, rendering, OS integration, CLI) and a Svelte 5
 frontend. The frontend follows **Clean Architecture**: business rules sit in the middle, frameworks at the
 edges, and dependencies point inwards only.
 

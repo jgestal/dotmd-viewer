@@ -9,7 +9,7 @@ import {
 } from './bump-version.mjs';
 
 const CARGO_TOML = `[package]
-name = "dotmd-viewer"
+name = "simpledotmd"
 version = "0.0.1"
 authors = ["Juan Gestal <juan@gestal.es>"]
 
@@ -18,7 +18,7 @@ tauri = { version = "2", features = [] }
 `;
 
 const CARGO_LOCK = `[[package]]
-name = "dotmd-viewer"
+name = "simpledotmd"
 version = "0.0.1"
 dependencies = [
  "serde",
@@ -58,10 +58,10 @@ describe('assertVersion', () => {
 
 describe('bumpJsonVersion', () => {
   it('changes only the version and keeps two-space indentation and the final newline', () => {
-    const json = '{\n  "name": "dotmd-viewer",\n  "version": "0.0.1",\n  "private": true\n}\n';
+    const json = '{\n  "name": "simpledotmd",\n  "version": "0.0.1",\n  "private": true\n}\n';
 
     expect(bumpJsonVersion(json, '0.1.0')).toBe(
-      '{\n  "name": "dotmd-viewer",\n  "version": "0.1.0",\n  "private": true\n}\n',
+      '{\n  "name": "simpledotmd",\n  "version": "0.1.0",\n  "private": true\n}\n',
     );
   });
 
@@ -93,8 +93,8 @@ describe('bumpCargoLock', () => {
   it('changes only the version of the application package', () => {
     expect(bumpCargoLock(CARGO_LOCK, '0.1.0')).toBe(
       CARGO_LOCK.replace(
-        'name = "dotmd-viewer"\nversion = "0.0.1"',
-        'name = "dotmd-viewer"\nversion = "0.1.0"',
+        'name = "simpledotmd"\nversion = "0.0.1"',
+        'name = "simpledotmd"\nversion = "0.1.0"',
       ),
     );
   });

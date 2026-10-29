@@ -1,4 +1,4 @@
-//! DotMD Viewer backend: file access, Markdown rendering and OS integration, exposed to the
+//! SimpleDotMD backend: file access, Markdown rendering and OS integration, exposed to the
 //! frontend as Tauri commands. Each feature lives in its own module; this file only wires them.
 
 mod drag_out;
@@ -74,7 +74,7 @@ pub fn run() {
             Ok(())
         })
         .build(tauri::generate_context!())
-        .expect("error while building DotMD Viewer");
+        .expect("error while building SimpleDotMD");
 
     app.run(|app, event| {
         // Quit from the Dock, Cmd+Q or the last window closing: ask the frontend first.

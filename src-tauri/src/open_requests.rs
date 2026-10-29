@@ -1,4 +1,4 @@
-//! Files the operating system asks us to open: launch arguments (`dotmd-viewer notes.md`), a
+//! Files the operating system asks us to open: launch arguments (`simpledotmd notes.md`), a
 //! second launch handing its arguments to the running window, and macOS Finder "Open With" /
 //! double-click events. Until the frontend says it is listening (by taking the pending list),
 //! requests are queued; afterwards they are emitted as the `open-paths` event, so nothing is

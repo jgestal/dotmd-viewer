@@ -1,10 +1,10 @@
 <p align="center">
-  <img src="assets/icon.png" width="128" alt="DotMD Viewer icon">
+  <img src="assets/icon.png" width="128" alt="SimpleDotMD icon">
 </p>
 
-# DotMD Viewer
+# SimpleDotMD — Markdown Viewer & Editor
 
-[![CI](https://github.com/jgestal/dotmd-viewer/actions/workflows/ci.yml/badge.svg)](https://github.com/jgestal/dotmd-viewer/actions/workflows/ci.yml)
+[![CI](https://github.com/jgestal/simpledotmd/actions/workflows/ci.yml/badge.svg)](https://github.com/jgestal/simpledotmd/actions/workflows/ci.yml)
 
 A simple, cross-platform Markdown viewer, with optional editing, for macOS, Windows and Linux.
 The little sibling of [DotMD](https://github.com/jgestal/dotmd).
@@ -13,10 +13,10 @@ The little sibling of [DotMD](https://github.com/jgestal/dotmd).
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/readme-reading-dark.png">
-  <img alt="DotMD Viewer reading Welcome.md with the Explorer open" src="docs/screenshots/readme-reading-light.png">
+  <img alt="SimpleDotMD reading Welcome.md with the Explorer open" src="docs/screenshots/readme-reading-light.png">
 </picture>
 
-DotMD Viewer opens every document in a read-only preview and switches to editing only when you ask.
+SimpleDotMD opens every document in a read-only preview and switches to editing only when you ask.
 It renders GitHub-flavoured Markdown, maths with KaTeX and diagrams with Mermaid, and shows each document as a
 continuous page, as paginated A4 or Letter sheets, or as slides. It is built with Tauri 2, Rust and SvelteKit.
 
@@ -92,46 +92,46 @@ continuous page, as paginated A4 or Letter sheets, or as slides. It is built wit
 `Mod` is `⌘` (Cmd) on macOS and `Ctrl` on Windows and Linux. Each shortcut is also listed in the app under
 **Help › Keyboard Shortcuts**.
 
-| Command                         | macOS | Windows / Linux |
-| ------------------------------- | ----- | --------------- |
-| File › New                      | `⌘N`  | `Ctrl+N`        |
-| File › Open…                    | `⌘O`  | `Ctrl+O`        |
-| File › Open Folder…             | `⌘⇧O` | `Ctrl+Shift+O`  |
-| File › Save                     | `⌘S`  | `Ctrl+S`        |
-| File › Save As…                 | `⌘⇧S` | `Ctrl+Shift+S`  |
-| File › Export to PDF…           | `⌘⇧E` | `Ctrl+Shift+E`  |
-| File › Print…                   | `⌘P`  | `Ctrl+P`        |
-| File › Close                    | `⌘W`  | `Ctrl+W`        |
-| Edit › Find…                    | `⌘F`  | `Ctrl+F`        |
-| Edit › Find and Replace…        | `⌘⌥F` | `Ctrl+Alt+F`    |
-| View › Edit                     | `⌘E`  | `Ctrl+E`        |
-| View › Preview                  | `⌘1`  | `Ctrl+1`        |
-| View › Code                     | `⌘2`  | `Ctrl+2`        |
-| View › Split                    | `⌘3`  | `Ctrl+3`        |
-| View › Continuous               | `⌘⌥1` | `Ctrl+Alt+1`    |
-| View › Pages                    | `⌘⌥2` | `Ctrl+Alt+2`    |
-| View › Slides                   | `⌘⌥3` | `Ctrl+Alt+3`    |
-| View › Show Sidebar             | `⌘\`  | `Ctrl+\`        |
-| View › Explorer                 | `⌘⇧1` | `Ctrl+Shift+1`  |
-| View › Favourites               | `⌘⇧2` | `Ctrl+Shift+2`  |
-| View › Outline                  | `⌘⇧3` | `Ctrl+Shift+3`  |
-| View › Zoom In                  | `⌘=`  | `Ctrl+=`        |
-| View › Zoom Out                 | `⌘-`  | `Ctrl+-`        |
-| View › Actual Size              | `⌘0`  | `Ctrl+0`        |
-| View › Enter Full Screen        | `⌃⌘F` | `F11`           |
-| Application › Settings…         | `⌘,`  | `Ctrl+,`        |
-| Application › Quit DotMD Viewer | `⌘Q`  | —               |
+| Command                        | macOS | Windows / Linux |
+| ------------------------------ | ----- | --------------- |
+| File › New                     | `⌘N`  | `Ctrl+N`        |
+| File › Open…                   | `⌘O`  | `Ctrl+O`        |
+| File › Open Folder…            | `⌘⇧O` | `Ctrl+Shift+O`  |
+| File › Save                    | `⌘S`  | `Ctrl+S`        |
+| File › Save As…                | `⌘⇧S` | `Ctrl+Shift+S`  |
+| File › Export to PDF…          | `⌘⇧E` | `Ctrl+Shift+E`  |
+| File › Print…                  | `⌘P`  | `Ctrl+P`        |
+| File › Close                   | `⌘W`  | `Ctrl+W`        |
+| Edit › Find…                   | `⌘F`  | `Ctrl+F`        |
+| Edit › Find and Replace…       | `⌘⌥F` | `Ctrl+Alt+F`    |
+| View › Edit                    | `⌘E`  | `Ctrl+E`        |
+| View › Preview                 | `⌘1`  | `Ctrl+1`        |
+| View › Code                    | `⌘2`  | `Ctrl+2`        |
+| View › Split                   | `⌘3`  | `Ctrl+3`        |
+| View › Continuous              | `⌘⌥1` | `Ctrl+Alt+1`    |
+| View › Pages                   | `⌘⌥2` | `Ctrl+Alt+2`    |
+| View › Slides                  | `⌘⌥3` | `Ctrl+Alt+3`    |
+| View › Show Sidebar            | `⌘\`  | `Ctrl+\`        |
+| View › Explorer                | `⌘⇧1` | `Ctrl+Shift+1`  |
+| View › Favourites              | `⌘⇧2` | `Ctrl+Shift+2`  |
+| View › Outline                 | `⌘⇧3` | `Ctrl+Shift+3`  |
+| View › Zoom In                 | `⌘=`  | `Ctrl+=`        |
+| View › Zoom Out                | `⌘-`  | `Ctrl+-`        |
+| View › Actual Size             | `⌘0`  | `Ctrl+0`        |
+| View › Enter Full Screen       | `⌃⌘F` | `F11`           |
+| Application › Settings…        | `⌘,`  | `Ctrl+,`        |
+| Application › Quit SimpleDotMD | `⌘Q`  | —               |
 
 ## Installing
 
-Download the installer for your system from the [releases page](https://github.com/jgestal/dotmd-viewer/releases).
+Download the installer for your system from the [releases page](https://github.com/jgestal/simpledotmd/releases).
 The builds are not code-signed yet, so your system asks you to confirm the first time you open them.
 See [Opening unsigned builds](#opening-unsigned-builds) below.
 
 ### macOS
 
-Open the `.dmg` and drag DotMD Viewer to Applications.
-To make it the default app for Markdown: select a `.md` file in Finder, press `Cmd+I`, pick DotMD Viewer under
+Open the `.dmg` and drag SimpleDotMD to Applications.
+To make it the default app for Markdown: select a `.md` file in Finder, press `Cmd+I`, pick SimpleDotMD under
 **Open with** and click **Change All...**. The app is registered as an alternate handler, so installing it never
 changes your current default.
 
@@ -139,34 +139,34 @@ changes your current default.
 
 Run the `.exe` (per-user install, no administrator rights needed) or the `.msi`. The installer registers the `.md`,
 `.markdown`, `.mdown` and `.mkd` extensions and creates a Start menu shortcut; WebView2 is installed if it is missing.
-To make it the default: right-click a `.md` file, **Open with > Choose another app**, select DotMD Viewer and
+To make it the default: right-click a `.md` file, **Open with > Choose another app**, select SimpleDotMD and
 tick **Always use this app** (or **Settings > Apps > Default apps**).
 
 ### Linux
 
-- Debian/Ubuntu: `sudo apt install ./dotmd-viewer_*.deb`
-- Fedora/openSUSE: `sudo dnf install ./dotmd-viewer-*.rpm`
+- Debian/Ubuntu: `sudo apt install ./simpledotmd_*.deb`
+- Fedora/openSUSE: `sudo dnf install ./simpledotmd-*.rpm`
 - Any distribution: `chmod +x DotMD*.AppImage && ./DotMD*.AppImage`
 
-The `.deb` and `.rpm` add a menu entry and the Markdown MIME types, so DotMD Viewer shows up in **Open With** in
+The `.deb` and `.rpm` add a menu entry and the Markdown MIME types, so SimpleDotMD shows up in **Open With** in
 your file manager. To make it the default for Markdown:
 
 ```sh
-xdg-mime default dotmd-viewer.desktop text/markdown text/x-markdown
+xdg-mime default simpledotmd.desktop text/markdown text/x-markdown
 ```
 
 If the window stays blank on some Wayland/NVIDIA setups, start the app with `WEBKIT_DISABLE_DMABUF_RENDERER=1`.
 
 ## Opening unsigned builds
 
-Until the builds are signed, each system shows a warning the first time you run DotMD Viewer. The app is safe to open;
+Until the builds are signed, each system shows a warning the first time you run SimpleDotMD. The app is safe to open;
 the warning only means the publisher is not verified.
 
-| System  | What you see                                                                                           | What to do                                                                                                                                                                                                                       |
-| ------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| macOS   | A message that the app cannot be opened because its developer cannot be verified.                      | Try to open the app once. Then go to **System Settings > Privacy & Security**, scroll to the message about DotMD Viewer and click **Open Anyway**. On older macOS versions you can also right-click the app and choose **Open**. |
-| Windows | **Windows protected your PC** (SmartScreen).                                                           | Click **More info**, then **Run anyway**.                                                                                                                                                                                        |
-| Linux   | Usually nothing for the `.deb` and `.rpm` packages. An AppImage will not start until it is executable. | Run `chmod +x` on the AppImage, then start it.                                                                                                                                                                                   |
+| System  | What you see                                                                                           | What to do                                                                                                                                                                                                                      |
+| ------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| macOS   | A message that the app cannot be opened because its developer cannot be verified.                      | Try to open the app once. Then go to **System Settings > Privacy & Security**, scroll to the message about SimpleDotMD and click **Open Anyway**. On older macOS versions you can also right-click the app and choose **Open**. |
+| Windows | **Windows protected your PC** (SmartScreen).                                                           | Click **More info**, then **Run anyway**.                                                                                                                                                                                       |
+| Linux   | Usually nothing for the `.deb` and `.rpm` packages. An AppImage will not start until it is executable. | Run `chmod +x` on the AppImage, then start it.                                                                                                                                                                                  |
 
 ## Building from source
 
@@ -211,7 +211,7 @@ Rust target needs `cargo install cargo-mutants` once.
 - [CHANGELOG.md](CHANGELOG.md): release history
 - [docs/platforms.md](docs/platforms.md): what each operating system provides and how the app uses it
 - [docs/releasing.md](docs/releasing.md): how a release is cut and how to add the signing secrets
-- [Releases](https://github.com/jgestal/dotmd-viewer/releases): installers for each version
+- [Releases](https://github.com/jgestal/simpledotmd/releases): installers for each version
 
 ## Credits
 

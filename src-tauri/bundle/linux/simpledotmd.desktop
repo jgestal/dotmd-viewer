@@ -12,4 +12,4 @@ MimeType=text/markdown;text/x-markdown;
 Exec={{exec}} %F
 Icon={{icon}}
 Terminal=false
-StartupWMClass=dotmd-viewer
+StartupWMClass=simpledotmd

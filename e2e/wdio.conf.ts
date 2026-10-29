@@ -8,7 +8,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const binary = path.join(
   process.env.CARGO_TARGET_DIR ?? path.join(root, 'src-tauri', 'target'),
   'debug',
-  os.platform() === 'win32' ? 'dotmd-viewer.exe' : 'dotmd-viewer',
+  os.platform() === 'win32' ? 'simpledotmd.exe' : 'simpledotmd',
 );
 const screenshots = path.join(root, 'e2e', 'screenshots');
 const fixtures = path.join(root, 'e2e', 'fixtures');

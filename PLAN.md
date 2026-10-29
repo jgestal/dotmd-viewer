@@ -1,4 +1,4 @@
-# DotMD Viewer — Plan
+# SimpleDotMD — Plan
 
 Visor Markdown multiplataforma con edición opcional. Hermano simplificado de DotMD (`../dotMD`).
 Requisitos completos en [PROMPT.md](PROMPT.md).
@@ -16,9 +16,9 @@ Requisitos completos en [PROMPT.md](PROMPT.md).
 | Calidad               | ESLint + Prettier · clippy `-D warnings` · cobertura ≥ 90 % domain/application                |
 | Mutación              | StrykerJS + cargo-mutants, score ≥ 85 %, en local al terminar y por `workflow_dispatch`       |
 | Idiomas               | es / en, según el sistema, cambiable en Ajustes                                               |
-| Repositorio           | `jgestal/dotmd-viewer`, público, MIT, Conventional Commits, una rama y un PR por ticket       |
+| Repositorio           | `jgestal/simpledotmd`, público, MIT, Conventional Commits, una rama y un PR por ticket        |
 | Release               | Instaladores sin firmar; firma preparada como paso opcional                                   |
-| Identificador         | `es.gestal.dotmdviewer` · binario `dotmd-viewer`                                              |
+| Identificador         | `es.gestal.dotmdviewer` · binario `simpledotmd`                                               |
 
 ## Delegación
 

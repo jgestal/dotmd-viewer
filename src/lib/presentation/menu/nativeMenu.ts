@@ -8,7 +8,7 @@ import type { Translate } from '$lib/ports';
 import { buildMenu, type MenuNode } from './menuModel';
 
 export const ABOUT: AboutInfo = {
-  name: 'DotMD Viewer',
+  name: 'SimpleDotMD',
   credits: 'Juan Gestal · juan@gestal.es',
   website: 'https://gestal.es',
   copyright: '© 2026 Juan Gestal · MIT License',

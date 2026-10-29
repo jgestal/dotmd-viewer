@@ -1,6 +1,6 @@
-# Contributing to DotMD Viewer
+# Contributing to SimpleDotMD
 
-Thanks for your interest in DotMD Viewer. This guide explains how work is organized and what a change
+Thanks for your interest in SimpleDotMD. This guide explains how work is organized and what a change
 needs before it can be merged.
 
 ## Workflow

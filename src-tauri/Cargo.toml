@@ -1,16 +1,16 @@
 [package]
-name = "dotmd-viewer"
+name = "simpledotmd"
 version = "0.0.1"
 description = "Cross-platform Markdown viewer with optional editing"
 authors = ["Juan Gestal <juan@gestal.es>"]
-repository = "https://github.com/jgestal/dotmd-viewer"
+repository = "https://github.com/jgestal/simpledotmd"
 license = "MIT"
 edition = "2024"
 
 [lib]
 # The `_lib` suffix avoids a name clash with the bin on Windows,
 # see https://github.com/rust-lang/cargo/issues/8519
-name = "dotmd_viewer_lib"
+name = "simpledotmd_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]

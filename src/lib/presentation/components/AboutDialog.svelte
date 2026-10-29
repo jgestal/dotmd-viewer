@@ -3,7 +3,7 @@
   import { app } from '../app.svelte';
   import { dialogs } from '../dialogs.svelte';
   import { i18n } from '../i18n/i18n.svelte';
-  import { AUTHOR_EMAIL, AUTHOR_NAME, AUTHOR_WEBSITE, REPOSITORY } from '../credits';
+  import { AUTHOR_EMAIL, AUTHOR_NAME, AUTHOR_WEBSITE, REPOSITORY, TAGLINE } from '../credits';
   import Dialog from './Dialog.svelte';
 
   let version = $state('');
@@ -29,6 +29,7 @@
   <div class="about">
     <img src="/favicon.png" alt="" width="96" height="96" />
     <h3>{i18n.t('app.name')}</h3>
+    <p class="tagline">{TAGLINE}</p>
     <p class="muted">{i18n.t('about.version', { version })}</p>
     <section class="credits" aria-label={i18n.t('about.credits')}>
       <h4>{i18n.t('about.credits')}</h4>
@@ -83,6 +84,11 @@
   .author {
     font-size: 15px;
     font-weight: 600;
+  }
+
+  .tagline {
+    margin-top: 2px;
+    font-size: 14px;
   }
 
   .muted {
