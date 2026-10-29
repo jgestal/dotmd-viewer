@@ -49,6 +49,24 @@ cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings
 The mutation tests (`npm run test:mutation`) are run locally before a release rather than on every pull
 request.
 
+## End-to-end tests
+
+`npm run test:e2e` drives a debug build (`npx tauri build --debug --no-bundle`) through `tauri-driver` and
+WebdriverIO. It needs `cargo install tauri-driver --locked`, plus `webkit2gtk-driver` on Linux or, on Windows, an
+msedgedriver that matches the installed WebView2 runtime (pass its path in `NATIVE_WEBDRIVER`). macOS has no WebDriver
+for WKWebView.
+
+Two Windows details, both handled in `e2e/wdio.conf.ts` and `.github/workflows/e2e.yml`:
+
+- Run the tests from a terminal that is **not elevated**. Since WebView2 Runtime 150, an app running as administrator
+  ignores `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS`, which is how msedgedriver turns on the remote debugging port, and
+  the session fails with `DevToolsActivePort file doesn't exist`
+  ([WebView2Feedback#5645](https://github.com/MicrosoftEdge/WebView2Feedback/issues/5645)). GitHub's Windows runners are
+  elevated, so CI runs the tests at medium integrity with `gsudo --integrity Medium`.
+- msedgedriver turns every entry of `args` into a browser switch (`--c:\path\to\file.md`), which the app ignores. On
+  Windows the config hands each scenario's file or folder to the running app as a second launch instead, the same
+  path a double-click in File Explorer takes. The app itself has no test-only switches.
+
 ## Code style
 
 - Keep functions small and names clear. Avoid duplication and dead code.

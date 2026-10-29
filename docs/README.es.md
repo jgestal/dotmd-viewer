@@ -214,7 +214,7 @@ y Linux.
 La prueba de mutaciones debe alcanzar al menos un 85 %. Es un flujo manual (**Mutation testing** en GitHub Actions), y
 el destino de Rust necesita `cargo install cargo-mutants` una vez.
 
-`npm run test:e2e` ejecuta pruebas de humo con WebDriver (tauri-driver) sobre una compilación de depuración; la CI las ejecuta en Linux, más una prueba de arranque en macOS. El trabajo de Windows todavía no bloquea: msedgedriver no consigue conectarse a WebView2 en el runner de GitHub.
+`npm run test:e2e` ejecuta pruebas de humo con WebDriver (tauri-driver) sobre una compilación de depuración; la CI las ejecuta en Linux y Windows, más una prueba de arranque en macOS. En Windows, ejecútalas desde una terminal sin privilegios de administrador: WebView2 ignora los parámetros de depuración que necesita msedgedriver cuando la app se ejecuta como administrador (ver [CONTRIBUTING.md](../CONTRIBUTING.md#end-to-end-tests)).
 
 ## Documentación
 

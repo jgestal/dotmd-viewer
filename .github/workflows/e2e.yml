@@ -16,11 +16,6 @@ jobs:
   # macOS has no WebDriver for WKWebView, so it only gets a start-up smoke test below.
   webdriver:
     name: WebDriver (${{ matrix.os }})
-    # TODO: Windows does not get a session yet. msedgedriver matches the WebView2 runtime
-    # (155.0.4283.62) but the app's WebView2 never opens the remote debugging port (not through
-    # WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS nor the AdditionalBrowserArguments policy), so it fails
-    # with "DevToolsActivePort file doesn't exist". Make it blocking once that is solved.
-    continue-on-error: ${{ matrix.os == 'windows-latest' }}
     strategy:
       fail-fast: false
       matrix:
@@ -61,9 +56,18 @@ jobs:
       - name: Run E2E tests (Linux)
         if: runner.os == 'Linux'
         run: xvfb-run --auto-servernum npm run test:e2e
+      # The runner is elevated, and WebView2 150+ ignores WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS in
+      # elevated processes, so msedgedriver's --remote-debugging-port never reaches the app
+      # (https://github.com/MicrosoftEdge/WebView2Feedback/issues/5645). Run the tests at medium
+      # integrity, as a normal user would; that process must be able to write to the workspace.
       - name: Run E2E tests (Windows)
         if: runner.os == 'Windows'
-        run: npm run test:e2e
+        shell: pwsh
+        run: |
+          choco install gsudo --version 2.6.1 -y --no-progress
+          $env:Path += ";C:\tools\gsudo\Current"
+          icacls "$env:GITHUB_WORKSPACE" /grant "Everyone:(OI)(CI)F" /T /Q | Out-Null
+          gsudo --integrity Medium npm run test:e2e
       - name: Upload failure screenshots
         if: failure()
         uses: actions/upload-artifact@v4

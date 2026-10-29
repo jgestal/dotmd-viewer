@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - The app is now called **SimpleDotMD — Markdown Viewer & Editor**; the repository moved to `jgestal/simpledotmd`. The bundle identifier is unchanged, so settings and file associations carry over.
+- The Windows WebDriver E2E job now runs every scenario and blocks pull requests again: CI runs it at medium integrity, because WebView2 150+ drops msedgedriver's debugging switch in elevated processes, and hands each scenario's file to the running app, because msedgedriver rewrites `args` as browser switches (#139).
 
 ### Added
 
