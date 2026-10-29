@@ -65,6 +65,10 @@ describe('localImagePath', () => {
     expect(localImagePath('/pics/a.png', null)).toBe('/pics/a.png');
   });
 
+  it('looks for a scheme only at the start of the address', () => {
+    expect(localImagePath('img/x:y.png', '/docs')).toBe('/docs/img/x:y.png');
+  });
+
   it('trims the address', () => {
     expect(localImagePath('  a.png ', '/d')).toBe('/d/a.png');
   });

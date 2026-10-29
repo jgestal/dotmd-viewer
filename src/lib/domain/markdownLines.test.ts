@@ -44,6 +44,30 @@ describe('splitFrontMatter', () => {
     });
   });
 
+  it('accepts blank lines between the keys', () => {
+    expect(splitFrontMatter('---\ntitle: x\n\nauthor: y\n---\nBody')).toEqual({
+      frontMatter: 'title: x\n\nauthor: y',
+      body: 'Body',
+      bodyStartLine: 5,
+    });
+  });
+
+  it('accepts trailing spaces after the closing fence but nothing else', () => {
+    expect(splitFrontMatter('---\ntitle: a\n---  \nbody').frontMatter).toBe('title: a');
+    expect(splitFrontMatter('---\ntitle: a\n---x\nbody').frontMatter).toBeNull();
+  });
+
+  it('needs a key at the start of a line, not inside a comment or list item', () => {
+    expect(splitFrontMatter('---\n# note: x\n---\nbody').frontMatter).toBeNull();
+    expect(splitFrontMatter('---\n- a: b\n---\nbody').frontMatter).toBeNull();
+  });
+
+  it('rejects a line that only contains YAML syntax somewhere in the middle', () => {
+    expect(splitFrontMatter('---\ntitle: a\nWhat - now\n---\nbody').frontMatter).toBeNull();
+    expect(splitFrontMatter('---\ntitle: a\nC# rocks\n---\nbody').frontMatter).toBeNull();
+    expect(splitFrontMatter('---\ntitle: a\n-x\n---\nbody').frontMatter).toBeNull();
+  });
+
   it('ignores a byte order mark before the opening fence', () => {
     expect(splitFrontMatter('\uFEFF---\na: 1\n---\nbody').frontMatter).toBe('a: 1');
   });

@@ -27,6 +27,7 @@ export interface DocumentStatistics {
 export const DEFAULT_WORDS_PER_MINUTE = 230;
 
 const wordSegmenter = new Intl.Segmenter(undefined, { granularity: 'word' });
+// Stryker disable next-line ObjectLiteral: 'grapheme' is Intl.Segmenter's default granularity; kept explicit for readers.
 const graphemeSegmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
 
 const SYNTAX_ONLY_LINE = /^[\s|:*_=~-]*$/;
@@ -41,6 +42,7 @@ const AUTOLINK = /<((?:https?|mailto):[^>\s]+)>/g;
 const HTML_TAG = /<\/?[A-Za-z][^>]*>/g;
 const BARE_URL = /\bhttps?:\/\/\S+/g;
 const EMPHASIS_MARKER = /[*~]+|={2,}|(?<![\p{L}\p{N}])_+|_+(?![\p{L}\p{N}])/gu;
+// Stryker disable next-line Regex: with the global flag, removing one backtick at a time removes the same runs.
 const INLINE_CODE_TICKS = /`+/g;
 const TABLE_PIPE = /\|/g;
 const WHITESPACE = /\s/gu;

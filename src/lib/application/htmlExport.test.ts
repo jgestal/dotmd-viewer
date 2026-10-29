@@ -61,6 +61,7 @@ describe('exportHtml', () => {
     ['C:\\out\\notes', 'C:\\out\\notes.html'],
     ['/out/notes.htm', '/out/notes.htm'],
     ['/out/NOTES.HTML', '/out/NOTES.HTML'],
+    ['/out/a.html-notes', '/out/a.html-notes.html'],
   ])('writes %s as %s', async (chosen, written) => {
     const { htmlExport, dialogs, fs } = setup();
     dialogs.answerSaveFile(chosen);

@@ -27,6 +27,7 @@ describe('imageMimeType', () => {
     ['/a/p.avif', 'image/avif'],
     ['/a/p.bmp', 'image/bmp'],
     ['/a/favicon.ico', 'image/x-icon'],
+    ['/a/.png', 'image/png'],
   ])('maps %s to %s', (path, expected) => {
     expect(imageMimeType(path)).toBe(expected);
   });

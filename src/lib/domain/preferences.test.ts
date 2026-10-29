@@ -115,6 +115,32 @@ describe('parsePreferences', () => {
     },
   );
 
+  it.each([
+    ['language', 'system'],
+    ['language', 'en'],
+    ['language', 'es'],
+    ['editMode', 'preview'],
+    ['editMode', 'code'],
+    ['editMode', 'split'],
+    ['layout', 'continuous'],
+    ['layout', 'pages'],
+    ['layout', 'slides'],
+    ['pageSize', 'a4'],
+    ['pageSize', 'letter'],
+    ['sidebarTab', 'explorer'],
+    ['sidebarTab', 'favourites'],
+    ['sidebarTab', 'outline'],
+  ] as const)('accepts %s %j', (key, value) => {
+    expect(parsePreferences({ ...custom, [key]: value })[key]).toBe(value);
+  });
+
+  it.each(['language', 'editMode', 'layout', 'pageSize', 'sidebarTab'] as const)(
+    'rejects an empty %s',
+    (key) => {
+      expect(parsePreferences({ ...custom, [key]: '' })[key]).toBe(defaultPreferences[key]);
+    },
+  );
+
   it('is case sensitive for enumerations', () => {
     expect(parsePreferences({ theme: 'Dark' }).theme).toBe('system');
   });

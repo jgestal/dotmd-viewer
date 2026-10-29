@@ -214,6 +214,26 @@ describe('rename', () => {
     expect(result.change).toEqual({ from: '/a/dir', to: '/a/v1' });
   });
 
+  it('does not carry a dotted folder name over to its new name', async () => {
+    const { workspace, fs } = setup();
+    fs.seedFile('/a/v1.0/inner.md', '');
+    const result = await workspace.rename(defaultPreferences, '/a/v1.0', 'v2', 'folder');
+    expect(result.change).toEqual({ from: '/a/v1.0', to: '/a/v2' });
+  });
+
+  it('treats a leading dot as part of the name, not as an extension', async () => {
+    const { workspace } = seeded();
+    const result = await workspace.rename(defaultPreferences, '/a/old.md', '.hidden', 'file');
+    expect(result.change).toEqual({ from: '/a/old.md', to: '/a/.hidden.md' });
+  });
+
+  it('re-points only the recents inside the renamed item', async () => {
+    const { workspace } = seeded();
+    const prefs = prefsWith({ recents: ['/x//y.md', '/x/y.md'] });
+    const result = await workspace.rename(prefs, '/a/old.md', 'new', 'file');
+    expect(result.prefs.recents).toEqual(['/x//y.md', '/x/y.md']);
+  });
+
   it('is a no-op when the name does not change', async () => {
     const { workspace, fs } = seeded();
     const result = await workspace.rename(defaultPreferences, '/a/old.md', 'old', 'file');
