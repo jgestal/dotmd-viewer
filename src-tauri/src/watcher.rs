@@ -13,6 +13,7 @@ use serde::Serialize;
 use tauri::{AppHandle, Emitter, State};
 
 use crate::error::{AppError, AppResult, ErrorKind};
+use crate::files::parent_directory;
 
 const FILE_CHANGED_EVENT: &str = "file-changed";
 const DEBOUNCE: Duration = Duration::from_millis(200);
@@ -32,10 +33,7 @@ struct FileChanged {
 /// The path events are reported with: the canonical parent (macOS reports `/private/var` for
 /// `/var`) plus the file name, which may not exist any more when the file was removed.
 fn event_target(path: &Path) -> AppResult<(PathBuf, PathBuf)> {
-    let parent = path
-        .parent()
-        .filter(|parent| !parent.as_os_str().is_empty())
-        .unwrap_or(Path::new("."));
+    let parent = parent_directory(path);
     let file_name = path
         .file_name()
         .ok_or_else(|| AppError::invalid_input("Not a file path").with_path(path))?;

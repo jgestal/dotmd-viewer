@@ -167,6 +167,17 @@ mod tests {
     }
 
     #[test]
+    fn a_written_file_is_only_accepted_once_its_size_holds_for_a_poll() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("a.pdf");
+        fs::write(&path, b"%PDF-1.4").unwrap();
+        let (_keep_open, outcome) = mpsc::channel();
+        let started = Instant::now();
+        wait_for_pdf(&path, &outcome, SHORT * 10).unwrap();
+        assert!(started.elapsed() >= POLL_INTERVAL * 2);
+    }
+
+    #[test]
     fn waiting_ends_when_the_platform_reports_success() {
         let dir = tempfile::tempdir().unwrap();
         let (report, outcome) = mpsc::channel();
