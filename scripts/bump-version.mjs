@@ -1,4 +1,4 @@
-// Sets DotMD Viewer's version everywhere it is written and turns the CHANGELOG's
+// Sets SimpleDotMD's version everywhere it is written and turns the CHANGELOG's
 // [Unreleased] section into that version. Usage: node scripts/bump-version.mjs <x.y.z>
 import fs from 'node:fs';
 import path from 'node:path';
@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SEMVER = /^\d+\.\d+\.\d+$/;
-const APP_NAME = 'dotmd-viewer';
+const APP_NAME = 'simpledotmd';
 
 export function assertVersion(version) {
   if (!SEMVER.test(version)) {

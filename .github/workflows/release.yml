@@ -115,8 +115,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tagName: ${{ inputs.tag || github.ref_name }}
-          releaseName: 'DotMD Viewer ${{ inputs.tag || github.ref_name }}'
-          releaseBody: 'See [CHANGELOG.md](https://github.com/jgestal/dotmd-viewer/blob/main/CHANGELOG.md) for what changed. The builds are not code-signed yet: the [Installing section of the README](https://github.com/jgestal/dotmd-viewer/blob/main/README.md#installing) explains how to open the app on macOS, Windows and Linux.'
+          releaseName: 'SimpleDotMD ${{ inputs.tag || github.ref_name }}'
+          releaseBody: 'See [CHANGELOG.md](https://github.com/jgestal/simpledotmd/blob/main/CHANGELOG.md) for what changed. The builds are not code-signed yet: the [Installing section of the README](https://github.com/jgestal/simpledotmd/blob/main/README.md#installing) explains how to open the app on macOS, Windows and Linux.'
           releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}

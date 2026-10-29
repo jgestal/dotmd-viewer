@@ -84,7 +84,7 @@ describe('tauriWindow', () => {
       // jsdom is not macOS, so the Windows/Linux title format applies.
       {
         command: 'plugin:window|set_title',
-        args: { label: 'main', value: '*a.md - DotMD Viewer' },
+        args: { label: 'main', value: '*a.md - SimpleDotMD' },
       },
       { command: 'set_document_state', args: { path: '/d/a.md', edited: true } },
     ]);

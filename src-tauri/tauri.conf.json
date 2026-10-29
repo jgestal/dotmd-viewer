@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "DotMD Viewer",
+  "productName": "SimpleDotMD",
   "version": "0.0.1",
   "identifier": "es.gestal.dotmdviewer",
   "build": {
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "DotMD Viewer",
+        "title": "SimpleDotMD",
         "width": 1200,
         "height": 800,
         "minWidth": 640,
@@ -51,7 +51,7 @@
       "icons/icon.ico"
     ],
     "publisher": "Juan Gestal",
-    "homepage": "https://github.com/jgestal/dotmd-viewer",
+    "homepage": "https://github.com/jgestal/simpledotmd",
     "copyright": "© 2026 Juan Gestal. MIT License.",
     "shortDescription": "Markdown viewer with optional editing",
     "fileAssociations": [
@@ -100,13 +100,13 @@
           "libwebkit2gtk-4.1-0",
           "libgtk-3-0"
         ],
-        "desktopTemplate": "bundle/linux/dotmd-viewer.desktop"
+        "desktopTemplate": "bundle/linux/simpledotmd.desktop"
       },
       "rpm": {
         "depends": [
           "webkit2gtk4.1"
         ],
-        "desktopTemplate": "bundle/linux/dotmd-viewer.desktop"
+        "desktopTemplate": "bundle/linux/simpledotmd.desktop"
       },
       "appimage": {
         "bundleMediaFramework": false

@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 
 use crate::error::{AppError, AppResult};
 
-const ICON_FILE_NAME: &str = "dotmd-viewer-drag-icon.png";
+const ICON_FILE_NAME: &str = "simpledotmd-drag-icon.png";
 const ICON_BYTES: &[u8] = include_bytes!("../icons/32x32.png");
 
 /// Writes the drag image into `folder` (once) and returns its path.

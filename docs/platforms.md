@@ -1,6 +1,6 @@
 # Platform conventions
 
-DotMD Viewer follows each desktop's habits instead of one menu for all. The menu tree is built
+SimpleDotMD follows each desktop's habits instead of one menu for all. The menu tree is built
 by `src/lib/presentation/menu/menuModel.ts` (pure, unit-tested per platform) and installed by
 `src/lib/infrastructure/tauri/tauriMenu.ts`.
 
@@ -15,7 +15,7 @@ by `src/lib/presentation/menu/menuModel.ts` (pure, unit-tested per platform) and
 | Mnemonics            | —                                                                   | Alt+letter (`&File`)           | Alt+letter (`&File`)        |
 | Full screen          | View → Enter Full Screen ⌃⌘F (system item)                          | View → Full Screen F11         | View → Full Screen F11      |
 | Shortcut display     | ⌘⇧S                                                                 | Ctrl+Shift+S                   | Ctrl+Shift+S                |
-| Window title         | `notes.md` (unsaved dot in the close button, proxy icon)            | `*notes.md - DotMD Viewer`     | `*notes.md - DotMD Viewer`  |
+| Window title         | `notes.md` (unsaved dot in the close button, proxy icon)            | `*notes.md - SimpleDotMD`     | `*notes.md - SimpleDotMD`  |
 | Open with…           | `CFBundleDocumentTypes`                                             | Installer registers the ProgId | `.desktop` with `MimeType`  |
 
 Undo, Redo, Cut, Copy, Paste and Select All are the system's own items everywhere, so they act

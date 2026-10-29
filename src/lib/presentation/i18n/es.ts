@@ -2,7 +2,7 @@ import type { en } from './en';
 
 // Spanish dictionary: a missing or extra key compared with en.ts is a type error.
 export const es = {
-  'app.name': 'DotMD Viewer',
+  'app.name': 'SimpleDotMD',
 
   'titlebar.edited': 'Editado',
   'document.untitled': 'Sin título',
@@ -15,7 +15,7 @@ export const es = {
   'preferences.saveFailed': 'No se pudieron guardar tus ajustes.',
   'reload.conflict.title': 'El archivo cambió en el disco',
   'reload.conflict.message':
-    '«{name}» se modificó fuera de DotMD Viewer y tienes cambios sin guardar.',
+    '«{name}» se modificó fuera de SimpleDotMD y tienes cambios sin guardar.',
   'reload.keepMine': 'Conservar mis cambios',
   'reload.useDisk': 'Usar la versión del disco',
 
@@ -87,13 +87,13 @@ export const es = {
   'guide.title': 'Guía de uso',
   'menu.keyboardShortcuts': 'Atajos de teclado',
   'menu.website': 'Sitio web',
-  'menu.about': 'Acerca de DotMD Viewer',
+  'menu.about': 'Acerca de SimpleDotMD',
   'menu.settings': 'Ajustes…',
   'menu.services': 'Servicios',
-  'menu.hide': 'Ocultar DotMD Viewer',
+  'menu.hide': 'Ocultar SimpleDotMD',
   'menu.hideOthers': 'Ocultar otros',
   'menu.showAll': 'Mostrar todo',
-  'menu.quit': 'Salir de DotMD Viewer',
+  'menu.quit': 'Salir de SimpleDotMD',
 
   'welcome.hint': 'Abre un archivo Markdown o una carpeta, o suéltalos aquí.',
   'document.unsaved': 'Cambios sin guardar',

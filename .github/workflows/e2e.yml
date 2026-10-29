@@ -91,7 +91,7 @@ jobs:
         run: npx tauri build --debug --no-bundle
       - name: App starts with a document and stays up
         run: |
-          src-tauri/target/debug/dotmd-viewer e2e/fixtures/sample.md &
+          src-tauri/target/debug/simpledotmd e2e/fixtures/sample.md &
           pid=$!
           sleep 15
           kill -0 "$pid" || { echo "The app exited during start-up"; exit 1; }

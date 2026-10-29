@@ -1,10 +1,10 @@
-# Prompt: DotMD Viewer
+# Prompt: SimpleDotMD
 
 ## Contexto
 
 En `../dotMD` está **DotMD**, mi editor Markdown (Tauri 2 + Rust + Svelte 5 + TypeScript, Clean Architecture
 documentada en `../dotMD/ARCHITECTURE.md`). Quiero crear en esta carpeta (`dotMDViewer`) una aplicación
-hermana, **DotMD Viewer**: un visor/editor Markdown multiplataforma (macOS, Windows, Linux) mucho más simple.
+hermana, **SimpleDotMD**: un visor/editor Markdown multiplataforma (macOS, Windows, Linux) mucho más simple.
 Es una versión recortada: pocas opciones, bien hechas. Ante la duda, menos.
 
 Antes de escribir código, lee `ARCHITECTURE.md`, `package.json`, `src-tauri/tauri.conf.json` y la estructura
@@ -49,7 +49,7 @@ Exportar a **PDF** (respetando la disposición elegida) e **imprimir**.
 
 - Asociación de archivos `.md`/`.markdown` y aparición en «Abrir con…» en los tres sistemas.
 - Abrir archivos al hacer doble clic, arrastrándolos a la ventana o al icono del Dock/barra de tareas,
-  y desde la línea de comandos (`dotmd-viewer archivo.md`).
+  y desde la línea de comandos (`simpledotmd archivo.md`).
 - Instancia única: abrir un segundo archivo lo envía a la ventana existente.
 - Archivos recientes (menú del sistema y Dock/Jump List).
 - Recarga automática si el archivo cambia en disco, avisando si hay cambios sin guardar.
@@ -71,7 +71,7 @@ Exportar a **PDF** (respetando la disposición elegida) e **imprimir**.
 
 ### Menús nativos
 
-- **macOS — DotMD Viewer**: Acerca de, Ajustes…, Servicios, Ocultar, Salir.
+- **macOS — SimpleDotMD**: Acerca de, Ajustes…, Servicios, Ocultar, Salir.
 - **Archivo**: Nuevo, Abrir…, Abrir carpeta…, Abrir reciente ▸, Guardar, Guardar como…, Exportar a PDF…,
   Imprimir…, Cerrar.
 - **Edición**: Deshacer, Rehacer, Cortar, Copiar, Pegar, Seleccionar todo, Buscar…, Buscar y reemplazar…
@@ -116,7 +116,7 @@ y favicon. Incluye un script reproducible como `scripts/render-icon.mjs` de DotM
 
 ## Repositorio
 
-- `git init`, repositorio **público** en GitHub `jgestal/dotmd-viewer` con `gh repo create`, licencia **MIT**.
+- `git init`, repositorio **público** en GitHub `jgestal/simpledotmd` con `gh repo create`, licencia **MIT**.
 - README (capturas, funciones, atajos, instalación, compilación, tests, créditos), LICENSE MIT,
   CHANGELOG, ARCHITECTURE.md, CONTRIBUTING.md, `.gitignore`, `.editorconfig`.
 - Conventional Commits; una rama y un PR por ticket.

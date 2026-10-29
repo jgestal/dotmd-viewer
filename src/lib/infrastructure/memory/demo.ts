@@ -14,7 +14,7 @@ title: Welcome
 tags: [demo]
 ---
 
-# Welcome to DotMD Viewer
+# Welcome to SimpleDotMD
 
 A **simple** viewer for *Markdown*, with ==highlights==, ~~mistakes~~ and \`inline code\`.
 
@@ -57,7 +57,7 @@ export const greet = (name: string): string => \`Hello, \${name}!\`;
 
 Local images sit next to the document:
 
-![DotMD Viewer icon](assets/icon.png)
+![SimpleDotMD icon](assets/icon.png)
 
 ## Diagram
 
@@ -83,7 +83,7 @@ Use the **Slides** layout to present.
 
 ## Thanks
 
-Made with DotMD Viewer.
+Made with SimpleDotMD.
 `,
   'notes/Ideas.md': `# Ideas
 
