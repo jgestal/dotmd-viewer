@@ -80,6 +80,7 @@ export function buildMenu(context: MenuContext): MenuNode[] {
     command('file.saveAs', 'menu.saveAs'),
     separator,
     command('file.exportPdf', 'menu.exportPdf'),
+    command('file.exportHtml', 'menu.exportHtml'),
     command('file.print', 'menu.print'),
     separator,
     command('file.close', 'menu.close'),

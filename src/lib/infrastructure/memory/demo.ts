@@ -96,9 +96,16 @@ Nothing yet.
   'notes/Todo.txt': 'Plain text files open too.\n',
 };
 
+/** The demo image's bytes, so exports can embed it as they would a file on disk. */
+const demoImageBytes = (): Uint8Array =>
+  Uint8Array.from(atob(DEMO_IMAGE_URL.slice(DEMO_IMAGE_URL.indexOf(',') + 1)), (char) =>
+    char.charCodeAt(0),
+  );
+
 export const seedDemo = (fs: MemoryFileSystem, assetUrls: MemoryAssetUrls): void => {
   fs.seedFolder(DEMO_FOLDER);
   assetUrls.seed(`${DEMO_FOLDER}/assets/icon.png`, DEMO_IMAGE_URL);
+  fs.seedBinary(`${DEMO_FOLDER}/assets/icon.png`, demoImageBytes());
   for (const [name, content] of Object.entries(files))
     fs.seedFile(`${DEMO_FOLDER}/${name}`, content);
 };

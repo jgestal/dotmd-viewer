@@ -3,6 +3,7 @@
 import { createDrop, type DropUseCases } from './application/drop';
 import { createImages, type ImageUseCases } from './application/images';
 import { createDocuments, type Documents } from './application/documents';
+import { createHtmlExport, type HtmlExport } from './application/htmlExport';
 import { createPreferences, type PreferencesUseCases } from './application/preferences';
 import { createPrinting, type Printing } from './application/printing';
 import { createWorkspace, type WorkspaceUseCases } from './application/workspace';
@@ -76,6 +77,7 @@ export interface Container {
   readonly images: ImageUseCases;
   readonly preferences: PreferencesUseCases;
   readonly printing: Printing;
+  readonly htmlExport: HtmlExport;
   /** Ports the presentation subscribes to directly. */
   readonly watcher: FileWatcher;
   readonly renderer: MarkdownRenderer;
@@ -192,6 +194,7 @@ export const createContainer = ({
       notifier,
       t,
     }),
+    htmlExport: createHtmlExport({ dialogs, fs, notifier, t }),
     watcher,
     renderer,
     assetUrls: ports.assetUrls,

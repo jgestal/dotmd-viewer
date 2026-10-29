@@ -7,6 +7,7 @@ export const COMMAND_IDS = [
   'file.save',
   'file.saveAs',
   'file.exportPdf',
+  'file.exportHtml',
   'file.print',
   'file.close',
   'file.clearRecents',

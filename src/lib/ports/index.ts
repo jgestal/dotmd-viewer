@@ -26,6 +26,8 @@ export interface DirEntry {
 /** Files on disk. Listing only returns Markdown/text files and folders, hidden entries excluded. */
 export interface FileSystem {
   readText(path: string): Promise<TextFile>;
+  /** The file's bytes as base64, or `null` when it is larger than `maxBytes` (not read at all). */
+  readBase64(path: string, maxBytes: number): Promise<string | null>;
   writeText(path: string, file: TextFile): Promise<void>;
   listDir(path: string): Promise<readonly DirEntry[]>;
   exists(path: string): Promise<boolean>;

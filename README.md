@@ -63,6 +63,9 @@ continuous page, as paginated A4 or Letter sheets, or as slides. It is built wit
 - **Export to PDF** and **Print** straight from the file manager: right-click a Markdown file in Finder (Services),
   File Explorer or Dolphin. The PDF is written next to the file and shown in the file manager. The same actions work
   from the command line: `simpledotmd --export-pdf notes.md [--out notes.pdf]`, `--print notes.md`, `--new`.
+- **Export to HTML** (File ▸ Export to HTML…) writes a single self-contained `.html` file: the styles of your current
+  theme, rendered maths and code, Mermaid diagrams as inline SVG and local images embedded (up to 10 MB each). Maths
+  falls back to the reader's system fonts.
 
 **Desktop integration**
 

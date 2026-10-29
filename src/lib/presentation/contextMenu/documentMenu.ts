@@ -14,6 +14,7 @@ export type DocumentMenuId =
   | 'copyImage'
   | 'toggleEdit'
   | 'exportPdf'
+  | 'exportHtml'
   | 'print'
   | 'reveal'
   | 'copyPath'
@@ -87,6 +88,7 @@ export function buildPreviewMenu(context: PreviewMenuContext, t: Translate): Men
       separatorBefore: true,
     }),
     entry('exportPdf', t('menu.exportPdf')),
+    entry('exportHtml', t('menu.exportHtml')),
     entry('print', t('menu.print')),
     entry('reveal', t(REVEAL_LABEL[platform]), { enabled: hasPath, separatorBefore: true }),
     entry('copyPath', t('entryMenu.copyPath'), { enabled: hasPath }),
@@ -99,6 +101,7 @@ export function buildCodeMenu(context: DocumentMenuContext, t: Translate): MenuI
     ...clipboardItems(true, context.hasSelection, t),
     entry('find', t('menu.find'), { separatorBefore: true }),
     entry('exportPdf', t('menu.exportPdf'), { separatorBefore: true }),
+    entry('exportHtml', t('menu.exportHtml')),
     entry('print', t('menu.print')),
   ];
 }

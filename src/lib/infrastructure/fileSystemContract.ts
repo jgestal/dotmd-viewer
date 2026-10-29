@@ -62,6 +62,28 @@ export function describeFileSystemContract(name: string, factory: () => FileSyst
       });
     });
 
+    describe('readBase64', () => {
+      it('returns the file bytes as base64', async () => {
+        const { fileSystem, seedFile } = factory();
+        seedFile('/docs/a.md', 'abc');
+        expect(await fileSystem.readBase64('/docs/a.md', 3)).toBe('YWJj');
+      });
+
+      it('returns null, without reading, when the file is larger than the limit', async () => {
+        const { fileSystem, seedFile } = factory();
+        seedFile('/docs/a.md', 'abcd');
+        expect(await fileSystem.readBase64('/docs/a.md', 3)).toBeNull();
+      });
+
+      it('rejects with notFound when the file is missing, naming the path', async () => {
+        const { fileSystem } = factory();
+        await expect(fileSystem.readBase64('/docs/none.png', 9)).rejects.toMatchObject({
+          kind: 'notFound',
+          path: '/docs/none.png',
+        });
+      });
+    });
+
     describe('exists', () => {
       it('is true for files and folders and false otherwise', async () => {
         const { fileSystem, seedFile } = factory();

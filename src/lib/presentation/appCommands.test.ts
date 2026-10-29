@@ -70,3 +70,21 @@ describe('paper commands', () => {
     expect(find(commandsFor({}), id)?.enabled?.()).toBe(true);
   });
 });
+
+describe('file.exportHtml', () => {
+  it('has no default shortcut', () => {
+    expect(find(commandsFor(null), 'file.exportHtml')?.accelerator).toBeUndefined();
+  });
+
+  it('needs an open document', () => {
+    expect(find(commandsFor(null), 'file.exportHtml')?.enabled?.()).toBe(false);
+    expect(find(commandsFor({}), 'file.exportHtml')?.enabled?.()).toBe(true);
+  });
+
+  it('exports the document to HTML', () => {
+    const exportHtml = vi.fn();
+    const app = { document: {}, preferences: {}, exportHtml } as unknown as App;
+    find(createAppCommands(app), 'file.exportHtml')?.run();
+    expect(exportHtml).toHaveBeenCalledOnce();
+  });
+});

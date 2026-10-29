@@ -29,6 +29,7 @@ describe('buildPreviewMenu', () => {
       { id: 'selectAll', label: 'menu.selectAll', enabled: true, separatorBefore: false },
       { id: 'toggleEdit', label: 'action.edit', enabled: true, separatorBefore: true },
       { id: 'exportPdf', label: 'menu.exportPdf', enabled: true, separatorBefore: false },
+      { id: 'exportHtml', label: 'menu.exportHtml', enabled: true, separatorBefore: false },
       { id: 'print', label: 'menu.print', enabled: true, separatorBefore: false },
       { id: 'reveal', label: 'entryMenu.revealMac', enabled: true, separatorBefore: true },
       { id: 'copyPath', label: 'entryMenu.copyPath', enabled: true, separatorBefore: false },
@@ -96,6 +97,7 @@ describe('buildCodeMenu', () => {
       { id: 'selectAll', label: 'menu.selectAll', enabled: true, separatorBefore: false },
       { id: 'find', label: 'menu.find', enabled: true, separatorBefore: true },
       { id: 'exportPdf', label: 'menu.exportPdf', enabled: true, separatorBefore: true },
+      { id: 'exportHtml', label: 'menu.exportHtml', enabled: true, separatorBefore: false },
       { id: 'print', label: 'menu.print', enabled: true, separatorBefore: false },
     ]);
   });

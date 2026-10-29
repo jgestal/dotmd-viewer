@@ -48,7 +48,7 @@ flowchart LR
 ## Save, export and print
 
 - **File ▸ Save** (`Cmd/Ctrl+S`) and **Save As…** (`Cmd/Ctrl+Shift+S`). The app asks before closing a document with unsaved changes.
-- **File ▸ Export to PDF…** (`Cmd/Ctrl+Shift+E`) and **Print…** (`Cmd/Ctrl+P`).
+- **File ▸ Export to PDF…** (`Cmd/Ctrl+Shift+E`) and **Print…** (`Cmd/Ctrl+P`). **File ▸ Export to HTML…** writes one self-contained `.html` page (styles, maths, diagrams and local images included; maths uses the reader's system fonts).
 
 ## Settings
 
