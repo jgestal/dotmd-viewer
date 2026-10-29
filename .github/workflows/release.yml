@@ -83,7 +83,9 @@ jobs:
         run: |
           for name in APPLE_CERTIFICATE APPLE_CERTIFICATE_PASSWORD APPLE_SIGNING_IDENTITY APPLE_ID APPLE_PASSWORD APPLE_TEAM_ID; do
             if [ -n "${!name}" ]; then
-              echo "$name=${!name}" >> "$GITHUB_ENV"
+              # Delimiter syntax, so multi-line values (a base64 certificate) survive.
+              delimiter="EOF_$(openssl rand -hex 8)"
+              { echo "$name<<$delimiter"; echo "${!name}"; echo "$delimiter"; } >> "$GITHUB_ENV"
             fi
           done
       - name: Import optional Windows signing certificate
