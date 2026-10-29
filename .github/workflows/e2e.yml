@@ -68,8 +68,14 @@ jobs:
           choco install gsudo -y --no-progress
           $env:Path += ";C:\tools\gsudo\Current"
           icacls "$env:GITHUB_WORKSPACE" /grant "Everyone:(OI)(CI)F" /T /Q | Out-Null
-          gsudo status
+          $watch = Start-Job {
+            while ($true) {
+              Get-CimInstance Win32_Process -Filter "Name = 'simpledotmd.exe'" | ForEach-Object { "app: $($_.CommandLine)" }
+              Start-Sleep -Milliseconds 500
+            }
+          }
           gsudo --integrity Medium npm run test:e2e
+          Receive-Job $watch | Sort-Object -Unique
           if ($LASTEXITCODE -ne 0) {
             Get-CimInstance Win32_Process -Filter "Name = 'msedgewebview2.exe'" | Select-Object -First 2 | ForEach-Object { $_.CommandLine }
             exit 1
