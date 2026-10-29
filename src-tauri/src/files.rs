@@ -165,15 +165,21 @@ fn keep_permissions(path: &Path, temp: &NamedTempFile) -> AppResult<()> {
 }
 
 #[cfg(not(unix))]
+#[cfg_attr(test, mutants::skip)] // Not compiled on the Unix hosts that run cargo-mutants.
 fn keep_permissions(_path: &Path, _temp: &NamedTempFile) -> AppResult<()> {
     Ok(())
 }
 
-pub fn write_atomically(path: &Path, bytes: &[u8]) -> AppResult<()> {
-    let directory = match path.parent() {
+/// The folder `path` is in; `.` for a bare file name, whose parent is the empty path.
+pub fn parent_directory(path: &Path) -> &Path {
+    match path.parent() {
         Some(parent) if !parent.as_os_str().is_empty() => parent,
         _ => Path::new("."),
-    };
+    }
+}
+
+pub fn write_atomically(path: &Path, bytes: &[u8]) -> AppResult<()> {
+    let directory = parent_directory(path);
     let io_error = |error| AppError::io(error, path);
     let mut temp = NamedTempFile::new_in(directory).map_err(io_error)?;
     temp.write_all(bytes).map_err(io_error)?;
@@ -341,6 +347,17 @@ mod tests {
     }
 
     #[test]
+    fn a_file_of_exactly_20_mib_is_read() {
+        let dir = TempDir::new().unwrap();
+        let path = dir.path().join("big.md");
+        let file = fs::File::create(&path).unwrap();
+        file.set_len(20 * 1024 * 1024).unwrap();
+        // The sparse file is all NUL bytes: read, then refused as binary rather than as too large.
+        let error = read_text(&path).unwrap_err();
+        assert_eq!(error.message, binary_error(&path).message);
+    }
+
+    #[test]
     fn invalid_utf16_is_reported() {
         let dir = TempDir::new().unwrap();
         let path = file_with(&dir, &[0xFF, 0xFE, 0x00, 0xD8]);
@@ -372,6 +389,16 @@ mod tests {
         let path = dir.path().join("nope").join("a.md");
         let error = write_text(&path, "x", Encoding::Utf8, false).unwrap_err();
         assert_eq!(error.kind, ErrorKind::NotFound);
+    }
+
+    #[test]
+    fn the_parent_directory_of_a_bare_file_name_is_the_current_folder() {
+        assert_eq!(parent_directory(Path::new("a.md")), Path::new("."));
+        assert_eq!(
+            parent_directory(Path::new("/notes/a.md")),
+            Path::new("/notes")
+        );
+        assert_eq!(parent_directory(Path::new("/")), Path::new("."));
     }
 
     #[test]

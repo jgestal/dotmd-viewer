@@ -66,6 +66,13 @@ mod tests {
     }
 
     #[test]
+    fn a_file_that_cannot_be_read_is_an_error_not_an_empty_load() {
+        let dir = TempDir::new().unwrap();
+        let error = load(dir.path()).unwrap_err();
+        assert_eq!(error.path.as_deref(), dir.path().to_str());
+    }
+
+    #[test]
     fn saved_preferences_load_back_as_parsed_json() {
         let dir = TempDir::new().unwrap();
         let path = dir.path().join("config").join(FILE_NAME);
