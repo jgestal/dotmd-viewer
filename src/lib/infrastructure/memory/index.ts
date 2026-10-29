@@ -23,6 +23,7 @@ export * from './memoryDragOut';
 export * from './memoryFileSystem';
 export * from './memoryMenu';
 export * from './memoryNotifier';
+export * from './memoryAppInfo';
 export * from './memoryOpener';
 export * from './memoryOpenRequests';
 export * from './memoryPreferencesStore';

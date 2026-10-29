@@ -91,9 +91,21 @@ describe('buildMenu', () => {
     expect(flat).not.toContain('"item":"quit"');
   });
 
-  it('keeps About in Help except on macOS', () => {
-    expect(labels(submenu(buildMenu(context('linux')), 'menu.help')).at(-1)).toBe('<about>');
-    expect(labels(submenu(buildMenu(context('mac')), 'menu.help'))).not.toContain('<about>');
+  it.each(['linux', 'windows'] as const)(
+    'ends Help with the app About dialog command on %s',
+    (platform) => {
+      const about = submenu(buildMenu(context(platform)), 'menu.help').at(-1);
+      expect(about).toMatchObject({ kind: 'command', id: 'help.about' });
+      expect(strip((about as { label: string }).label)).toBe('[menu.about]');
+      expect(JSON.stringify(buildMenu(context(platform)))).not.toContain('"item":"about"');
+    },
+  );
+
+  it('keeps the native About panel in the macOS app menu only', () => {
+    const app = submenu(buildMenu(context('mac')), 'app.name');
+    expect(app[0]).toMatchObject({ kind: 'predefined', item: 'about' });
+    const flat = JSON.stringify(submenu(buildMenu(context('mac')), 'menu.help'));
+    expect(flat).not.toContain('help.about');
   });
 
   it('uses the system full-screen item on macOS and the app command elsewhere', () => {

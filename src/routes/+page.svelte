@@ -3,6 +3,7 @@
   import { app } from '$lib/presentation/app.svelte';
   import OutlinePanel from '$lib/presentation/components/OutlinePanel.svelte';
   import ExplorerPanel from '$lib/presentation/components/ExplorerPanel.svelte';
+  import DialogHost from '$lib/presentation/components/DialogHost.svelte';
   import FavouritesPanel from '$lib/presentation/components/FavouritesPanel.svelte';
   import Shell from '$lib/presentation/components/Shell.svelte';
   import StatusBar from '$lib/presentation/components/StatusBar.svelte';
@@ -70,3 +71,4 @@
     <StatusBar />
   {/snippet}
 </Shell>
+<DialogHost />
