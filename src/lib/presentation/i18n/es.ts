@@ -71,7 +71,7 @@ export const es = {
   'menu.selectAll': 'Seleccionar todo',
   'menu.find': 'Buscar…',
   'menu.findReplace': 'Buscar y reemplazar…',
-  'menu.view': 'Visualización',
+  'menu.view': 'Ver',
   'menu.showSidebar': 'Mostrar barra lateral',
   'menu.zoomIn': 'Aumentar zoom',
   'menu.zoomOut': 'Reducir zoom',
@@ -95,7 +95,7 @@ export const es = {
   'welcome.hint': 'Abre un archivo Markdown o una carpeta, o suéltalos aquí.',
   'document.unsaved': 'Cambios sin guardar',
   'sidebar.resize': 'Cambiar el ancho de la barra lateral',
-  'action.dismiss': 'Cerrar',
+  'action.dismiss': 'Descartar',
   'dialog.unsaved.title': 'Cambios sin guardar',
   'dialog.unsaved.message': '¿Quieres guardar los cambios hechos en «{name}»?',
   'dialog.unsaved.save': 'Guardar',
@@ -127,7 +127,7 @@ export const es = {
   'favourites.empty.hint':
     'Abre un documento y pulsa la estrella de la cabecera para guardarlo aquí.',
   'favourites.missing': 'Este elemento ya no existe',
-  'favourites.removeItem': 'Quitar "{name}" de favoritos',
+  'favourites.removeItem': 'Quitar «{name}» de favoritos',
   'favourites.reorderHint': 'Alt+Arriba y Alt+Abajo reordenan',
 
   // T29 · Preview
@@ -173,7 +173,7 @@ export const es = {
   'entryMenu.copyPath': 'Copiar ruta',
   'entryMenu.pathCopied': 'Ruta copiada',
   'entryMenu.copyFailed': 'No se pudo copiar la ruta.',
-  'entryMenu.renameField': 'Nuevo nombre de "{name}"',
+  'entryMenu.renameField': 'Nuevo nombre de «{name}»',
   // T34 · Pages layout
   'pages.pageSize': 'Tamaño de página',
   'pages.size.a4': 'A4',
@@ -181,7 +181,6 @@ export const es = {
   'pages.pageNumber': 'Página {page} de {total}',
   // T35 · Slides
   'slides.present': 'Presentar',
-  'slides.exit': 'Salir de la presentación',
   'slides.previous': 'Diapositiva anterior',
   'slides.next': 'Diapositiva siguiente',
   'slides.counter': '{current} / {total}',
@@ -203,7 +202,7 @@ export const es = {
   'visual.placeholder': 'Escribe aquí o teclea / para añadir un bloque',
   'visual.menu.textGroup': 'Texto',
   'visual.menu.text': 'Texto',
-  'visual.menu.heading': 'Título {level}',
+  'visual.menu.heading': 'Encabezado {level}',
   'visual.menu.quote': 'Cita',
   'visual.menu.divider': 'Separador',
   'visual.menu.listGroup': 'Listas',
@@ -250,6 +249,8 @@ export const es = {
   'about.source': 'Código fuente en GitHub',
   // T42 · images
   'drop.images': 'Suelta para insertar imágenes',
-  'images.saveFirst': 'Guarda el documento primero para guardar sus imágenes a su lado',
+  'images.saveFirst': 'Guarda primero el documento para poder guardar sus imágenes junto a él',
   'images.copyFailed': 'No se pudo copiar {name}: {reason}',
+  // T51 · Translations: Linux names the settings item Preferences
+  'menu.preferences': 'Preferencias…',
 } as const satisfies Record<keyof typeof en, string>;
