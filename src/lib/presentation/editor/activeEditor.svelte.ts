@@ -8,6 +8,11 @@ export interface EditorActions {
   replace(): void;
   /** Inserts text where the point is over the editor, or at the caret without a point. */
   insertAt(point: Point | null, text: string): void;
+  /** The selected text, empty when only a caret is placed. */
+  selectedText(): string;
+  /** Replaces the selection with `text`; an empty text deletes it. */
+  replaceSelection(text: string): void;
+  selectAll(): void;
 }
 
 let current = $state.raw<EditorActions | null>(null);

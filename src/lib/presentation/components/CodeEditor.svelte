@@ -9,6 +9,8 @@
   import { editorExtensions, editorTexts, textsSlot } from '../editor/extensions';
   import { insertTextAt } from '../editor/insertText';
   import { caretOf, scrollLineToTop, topLineOf } from '../editor/position';
+  import { replaceSelection, selectAll, selectedText } from '../editor/selection';
+  import { showCodeMenu } from '../contextMenu/documentActions';
   import { i18n } from '../i18n/i18n.svelte';
   import { throttle } from '../navigation';
   import { navigation } from '../navigation.svelte';
@@ -80,6 +82,9 @@
       find: () => openSearch(false),
       replace: () => openSearch(true),
       insertAt: (point, text) => view && insertTextAt(view, point, text),
+      selectedText: () => (view ? selectedText(view) : ''),
+      replaceSelection: (text) => view && replaceSelection(view, text),
+      selectAll: () => view && selectAll(view),
     });
     editor.focus();
     return () => {
@@ -120,7 +125,13 @@
   });
 </script>
 
-<div class="editor" bind:this={host} style:--editor-zoom={app.preferences.zoom}></div>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div
+  class="editor"
+  bind:this={host}
+  oncontextmenu={(event) => void showCodeMenu(event)}
+  style:--editor-zoom={app.preferences.zoom}
+></div>
 
 <style>
   .editor {

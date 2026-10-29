@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Context menus inside the document, native in the app and drawn by the page in a browser: Copy, Select All, Edit, Export to PDF, Print, Reveal in Finder/Explorer/file manager and Copy Path on the preview, pages and slides (plus Open Link, Copy Link Address and Copy Image Path on links and images); Cut, Copy, Paste, Select All, Find, Export and Print in the code editor; the same clipboard commands leading the editable preview; and Reveal, Copy Path and Show in Sidebar on the header title (#131).
 - Sepia and Night (pure black) themes, a View ▸ Theme menu, a theme button in the header and `Mod+Alt+T` to cycle themes (#129).
 - End-to-end smoke tests (`npm run test:e2e`, WebdriverIO + `tauri-driver`) in a separate `E2E` workflow: open a file and a folder from the command line, switch Preview/Code/Split, edit and save, with failure screenshots uploaded on Windows and Linux; macOS gets a start-up smoke test. PDF export is not driven (native save dialog) and stays covered by unit tests (#92).
 - Final README: screenshots of the reading, split, pages, slides and settings views in light and dark, the feature list, a keyboard-shortcut table for macOS and Windows/Linux, a guide to opening unsigned builds, build and test instructions, and a Spanish translation in docs/README.es.md (#56).

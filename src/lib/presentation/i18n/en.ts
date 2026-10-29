@@ -261,4 +261,10 @@ export const en = {
   'menu.theme': 'Theme',
   'menu.nextTheme': 'Next Theme',
   'theme.pick': 'Choose theme',
+  // T66 · document context menus
+  'documentMenu.openLink': 'Open Link',
+  'documentMenu.copyLink': 'Copy Link Address',
+  'documentMenu.copyImage': 'Copy Image Path',
+  'documentMenu.showInSidebar': 'Show in Sidebar',
+  'documentMenu.clipboardFailed': 'The clipboard is not available.',
 } as const satisfies Record<string, string>;

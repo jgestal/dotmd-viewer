@@ -264,4 +264,10 @@ export const es = {
   'menu.theme': 'Tema',
   'menu.nextTheme': 'Siguiente tema',
   'theme.pick': 'Elegir tema',
+  // T66 · menús contextuales del documento
+  'documentMenu.openLink': 'Abrir enlace',
+  'documentMenu.copyLink': 'Copiar dirección del enlace',
+  'documentMenu.copyImage': 'Copiar ruta de la imagen',
+  'documentMenu.showInSidebar': 'Mostrar en la barra lateral',
+  'documentMenu.clipboardFailed': 'El portapapeles no está disponible.',
 } as const satisfies Record<keyof typeof en, string>;
