@@ -11,6 +11,7 @@ export const tauriFileSystem: FileSystem = {
   kind: (path) => call<EntryKind | 'missing'>('path_kind', { path }),
   rename: (from, to) => call<void>('rename_path', { from, to }),
   trash: (path) => call<void>('trash_path', { path }),
+  ensureDir: (path) => call<void>('ensure_dir_path', { path }),
   copyInto: (source, directory) => call<string>('copy_into', { source, directory }),
   reveal: (path) => call<void>('reveal_path', { path }),
 };

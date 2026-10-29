@@ -55,6 +55,7 @@ pub fn run() {
             file_ops::rename_path,
             file_ops::trash_path,
             file_ops::copy_into,
+            file_ops::ensure_dir_path,
             file_ops::reveal_path,
             preferences_file::load_preferences,
             preferences_file::save_preferences,

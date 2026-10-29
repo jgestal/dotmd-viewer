@@ -9,6 +9,7 @@ import type { DropEvent } from '$lib/ports';
 import type { FavouriteWithStatus } from '$lib/domain/workspace';
 import { toAppError } from '$lib/domain/errors';
 import { displayName, isDirty } from '$lib/domain/document';
+import { dirName } from '$lib/domain/paths';
 import { pageSetupFor } from '$lib/domain/printing';
 import {
   defaultPreferences,
@@ -18,6 +19,8 @@ import {
   type Preferences,
 } from '$lib/domain/preferences';
 import { createAppCommands } from './appCommands';
+import { isImageDrop } from './drop/classifyDrop';
+import { activeEditor } from './editor/activeEditor.svelte';
 import type { CommandId } from './commands/ids';
 import { createRegistry, type CommandRegistry } from './commands/registry';
 import { i18n } from './i18n/i18n.svelte';
@@ -138,12 +141,20 @@ class App {
     if (file !== null) await this.open(file);
   }
 
-  #onDrag({ type, paths }: DropEvent): void {
+  #onDrag({ type, paths, position }: DropEvent): void {
     if (this.#draggedOut.length > 0 && paths.every((path) => this.#draggedOut.includes(path))) {
       return;
     }
     this.draggedPaths = type === 'leave' || type === 'drop' ? null : paths;
-    if (type === 'drop') void this.openPaths(paths);
+    if (type !== 'drop') return;
+    if (activeEditor.current && isImageDrop(paths)) void this.insertImages(paths, position ?? null);
+    else void this.openPaths(paths);
+  }
+
+  /** Copies dropped pictures next to the document and links them in the code editor. */
+  async insertImages(paths: readonly string[], at: DropEvent['position'] | null): Promise<void> {
+    const links = await this.container.images.importDropped(this.document?.path ?? null, paths);
+    if (links !== null) activeEditor.current?.insertAt(at ?? null, links);
   }
 
   async openWithDialog(): Promise<void> {
@@ -235,6 +246,10 @@ class App {
           pageSize,
           setup,
           diagramErrorLabel: i18n.t('preview.diagramError'),
+          images: {
+            documentDir: doc.path === null ? null : dirName(doc.path),
+            assetUrls: this.container.assetUrls,
+          },
         }),
       release: unmountPrintable,
     };

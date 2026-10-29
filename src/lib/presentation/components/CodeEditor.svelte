@@ -7,6 +7,7 @@
   import { activeEditor } from '../editor/activeEditor.svelte';
   import { changeBetween } from '../editor/changes';
   import { editorExtensions, editorTexts, textsSlot } from '../editor/extensions';
+  import { insertTextAt } from '../editor/insertText';
   import { caretOf, scrollLineToTop, topLineOf } from '../editor/position';
   import { i18n } from '../i18n/i18n.svelte';
   import { throttle } from '../navigation';
@@ -78,6 +79,7 @@
     const unregister = activeEditor.register({
       find: () => openSearch(false),
       replace: () => openSearch(true),
+      insertAt: (point, text) => view && insertTextAt(view, point, text),
     });
     editor.focus();
     return () => {

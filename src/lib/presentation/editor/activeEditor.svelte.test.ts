@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { activeEditor } from './activeEditor.svelte';
 
 describe('activeEditor', () => {
-  const actions = () => ({ find: vi.fn(), replace: vi.fn() });
+  const actions = () => ({ find: vi.fn(), replace: vi.fn(), insertAt: vi.fn() });
 
   it('is empty until an editor registers and again once it withdraws', () => {
     const editor = actions();

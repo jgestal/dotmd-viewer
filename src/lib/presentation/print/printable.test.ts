@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { MemoryRenderer } from '$lib/infrastructure/memory';
+import { MemoryAssetUrls, MemoryRenderer } from '$lib/infrastructure/memory';
 import { sheetGeometry } from '../pages/sheet';
 import { buildSheets, mountPrintable, unmountPrintable } from './printable';
 
@@ -8,6 +8,7 @@ const options = {
   pageSize: 'a4',
   setup: { size: 'a4', marginMm: 20 },
   diagramErrorLabel: 'diagram error',
+  images: { documentDir: '/d', assetUrls: new MemoryAssetUrls() },
 } as const;
 
 const printable = () => document.getElementById('print-root');

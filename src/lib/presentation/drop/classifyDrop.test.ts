@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { classifyDrop } from './classifyDrop';
+import { classifyDrop, isImageDrop } from './classifyDrop';
 
 describe('classifyDrop', () => {
   it('accepts a drag whose names are not known yet as a file', () => {
@@ -32,5 +32,33 @@ describe('classifyDrop', () => {
   it('accepts a mixed drop when a folder or a Markdown file is among rejected ones', () => {
     expect(classifyDrop(['/x/pic.png', '/x/notes'])).toBe('folder');
     expect(classifyDrop(['/x/pic.png', '/x/a.md'])).toBe('file');
+  });
+});
+
+describe('classifyDrop with the code editor on screen', () => {
+  it('offers to insert a drop made only of pictures', () => {
+    expect(classifyDrop(['/x/a.png', '/x/b.JPG'], true)).toBe('images');
+  });
+
+  it('keeps rejecting pictures when no editor is on screen', () => {
+    expect(classifyDrop(['/x/a.png'], false)).toBe('rejected');
+    expect(classifyDrop(['/x/a.png'])).toBe('rejected');
+  });
+
+  it('opens a drop that mixes pictures with a document or a folder', () => {
+    expect(classifyDrop(['/x/a.png', '/x/a.md'], true)).toBe('file');
+    expect(classifyDrop(['/x/a.png', '/x/notes'], true)).toBe('folder');
+  });
+
+  it('does not take a drag whose names are not known yet for pictures', () => {
+    expect(classifyDrop([], true)).toBe('file');
+  });
+});
+
+describe('isImageDrop', () => {
+  it('is true only when there are paths and all of them are pictures', () => {
+    expect(isImageDrop(['/x/a.png'])).toBe(true);
+    expect(isImageDrop([])).toBe(false);
+    expect(isImageDrop(['/x/a.png', '/x/a.md'])).toBe(false);
   });
 });

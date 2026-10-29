@@ -21,6 +21,10 @@ describe('sanitize', () => {
     expect(html).toBe('<a>x</a>');
   });
 
+  it('removes javascript: image sources', () => {
+    expect(sanitize('<img src="javascript:alert(1)" alt="x">')).toBe('<img alt="x">');
+  });
+
   it('keeps ordinary links', () => {
     expect(sanitize('<a href="https://example.com/a">x</a>')).toBe(
       '<a href="https://example.com/a">x</a>',

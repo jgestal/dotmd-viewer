@@ -212,6 +212,29 @@ export function describeFileSystemContract(name: string, factory: () => FileSyst
       });
     });
 
+    describe('ensureDir', () => {
+      it('creates a folder and its missing parents', async () => {
+        const { fileSystem, seedFolder } = factory();
+        seedFolder('/d');
+        await fileSystem.ensureDir('/d/a/assets');
+        expect(await fileSystem.kind('/d/a')).toBe('folder');
+        expect(await fileSystem.kind('/d/a/assets')).toBe('folder');
+      });
+
+      it('keeps an existing folder and what is in it', async () => {
+        const { fileSystem, seedFile } = factory();
+        seedFile('/d/assets/img.png', 'x');
+        await fileSystem.ensureDir('/d/assets');
+        expect((await fileSystem.readText('/d/assets/img.png')).content).toBe('x');
+      });
+
+      it('rejects when a file is in the way', async () => {
+        const { fileSystem, seedFile } = factory();
+        seedFile('/d/assets', 'x');
+        expect(await rejectionKind(fileSystem.ensureDir('/d/assets'))).toBe('invalidInput');
+      });
+    });
+
     describe('copyInto', () => {
       it('copies under the same name when it is free and returns the new path', async () => {
         const { fileSystem, seedFile, seedFolder } = factory();

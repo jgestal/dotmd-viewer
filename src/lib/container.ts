@@ -1,6 +1,7 @@
 // Composition root: the one place that picks concrete adapters and wires the use cases to them.
 // Presentation receives the returned container instead of importing infrastructure.
 import { createDrop, type DropUseCases } from './application/drop';
+import { createImages, type ImageUseCases } from './application/images';
 import { createDocuments, type Documents } from './application/documents';
 import { createPreferences, type PreferencesUseCases } from './application/preferences';
 import { createPrinting, type Printing } from './application/printing';
@@ -19,6 +20,7 @@ import {
   TauriDropTarget,
   TauriOpenRequests,
   TauriMenu,
+  tauriAssetUrls,
   tauriContextMenu,
   tauriDragOut,
   tauriFileSystem,
@@ -35,6 +37,7 @@ import { isTauri } from './isTauri';
 import type {
   AppInfo,
   AppWindow,
+  AssetUrls,
   ContextMenu,
   Dialogs,
   DragOut,
@@ -68,11 +71,13 @@ export interface Container {
   readonly documents: Documents;
   readonly workspace: WorkspaceUseCases;
   readonly drop: DropUseCases;
+  readonly images: ImageUseCases;
   readonly preferences: PreferencesUseCases;
   readonly printing: Printing;
   /** Ports the presentation subscribes to directly. */
   readonly watcher: FileWatcher;
   readonly renderer: MarkdownRenderer;
+  readonly assetUrls: AssetUrls;
   readonly openRequests: OpenRequests;
   readonly opener: ExternalOpener;
   readonly window: AppWindow;
@@ -87,6 +92,7 @@ interface Ports {
   readonly fs: FileSystem;
   readonly watcher: FileWatcher;
   readonly renderer: MarkdownRenderer;
+  readonly assetUrls: AssetUrls;
   readonly dialogs: Dialogs;
   readonly window: AppWindow;
   readonly store: PreferencesStore;
@@ -105,6 +111,7 @@ const tauriPorts = (t: Translate): Ports => ({
   fs: tauriFileSystem,
   watcher: tauriWatcher,
   renderer: tauriRenderer,
+  assetUrls: tauriAssetUrls,
   dialogs: new TauriDialogs(t),
   window: tauriWindow,
   store: tauriPreferencesStore,
@@ -130,7 +137,7 @@ const lazyDemoRenderer: MarkdownRenderer = {
 /** In a plain browser: an in-memory demo workspace, opened on first run. */
 const memoryPorts = (contextMenu: ContextMenu): Ports => {
   const services = createMemoryServices();
-  seedDemo(services.fs);
+  seedDemo(services.fs, services.assetUrls);
   services.preferences.raw ??= { lastFolder: DEMO_FOLDER, lastFile: `${DEMO_FOLDER}/Welcome.md` };
   return {
     ...services,
@@ -164,6 +171,7 @@ export const createContainer = ({
     documents: createDocuments({ fs, dialogs, window, watcher, notifier, t, caseInsensitive }),
     workspace: createWorkspace({ fs, dialogs, notifier, t, caseInsensitive }),
     drop: createDrop({ fs, notifier, t }),
+    images: createImages({ fs, notifier, t }),
     preferences: createPreferences({ store, notifier, t }),
     printing: createPrinting({
       dialogs,
@@ -174,6 +182,7 @@ export const createContainer = ({
     }),
     watcher,
     renderer,
+    assetUrls: ports.assetUrls,
     openRequests,
     opener,
     window,
