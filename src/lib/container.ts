@@ -12,6 +12,7 @@ import {
   TauriOpenRequests,
   TauriMenu,
   tauriContextMenu,
+  tauriDragOut,
   tauriFileSystem,
   tauriOpener,
   tauriPreferencesStore,
@@ -24,6 +25,7 @@ import type {
   AppWindow,
   ContextMenu,
   Dialogs,
+  DragOut,
   DropTarget,
   FileSystem,
   ExternalOpener,
@@ -61,6 +63,7 @@ export interface Container {
   readonly window: AppWindow;
   readonly menu: NativeMenu;
   readonly dropTarget: DropTarget;
+  readonly dragOut: DragOut;
   readonly contextMenu: ContextMenu;
 }
 
@@ -75,6 +78,7 @@ interface Ports {
   readonly opener: ExternalOpener;
   readonly menu: NativeMenu;
   readonly dropTarget: DropTarget;
+  readonly dragOut: DragOut;
   readonly contextMenu: ContextMenu;
 }
 
@@ -89,6 +93,7 @@ const tauriPorts = (t: Translate): Ports => ({
   opener: tauriOpener,
   menu: new TauriMenu(),
   dropTarget: new TauriDropTarget(),
+  dragOut: tauriDragOut,
   contextMenu: tauriContextMenu,
 });
 
@@ -142,6 +147,7 @@ export const createContainer = ({
     window,
     menu: ports.menu,
     dropTarget: ports.dropTarget,
+    dragOut: ports.dragOut,
     contextMenu: ports.contextMenu,
   };
 };

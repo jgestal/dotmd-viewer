@@ -1,6 +1,7 @@
 //! DotMD Viewer backend: file access, Markdown rendering and OS integration, exposed to the
 //! frontend as Tauri commands. Each feature lives in its own module; this file only wires them.
 
+mod drag_out;
 pub mod error;
 mod file_ops;
 mod files;
@@ -36,6 +37,7 @@ pub fn run() {
         )
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_drag::init())
         .manage(OpenRequests::with_pending(launch_paths))
         .manage(watcher::WatcherState::default())
         .manage(quit::QuitState::default())
@@ -57,6 +59,7 @@ pub fn run() {
             preferences_file::save_preferences,
             window_state::set_document_state,
             quit::quit_app,
+            drag_out::drag_icon,
         ])
         .setup(|app| {
             show_window_if_frontend_stalls(app.handle().clone());

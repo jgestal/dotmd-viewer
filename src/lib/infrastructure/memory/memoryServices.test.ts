@@ -4,6 +4,7 @@ import { fakeTranslate } from './fakeTranslate';
 import { MemoryContextMenu } from './memoryContextMenu';
 import { MemoryDialogs } from './memoryDialogs';
 import { MemoryNotifier } from './memoryNotifier';
+import { MemoryDragOut } from './memoryDragOut';
 import { MemoryOpener } from './memoryOpener';
 import { MemoryOpenRequests } from './memoryOpenRequests';
 import { MemoryPreferencesStore } from './memoryPreferencesStore';
@@ -223,6 +224,18 @@ describe('MemoryOpener', () => {
     await opener.openExternal('https://example.com');
     await opener.openExternal('mailto:a@b.c');
     expect(opener.opened).toEqual(['https://example.com', 'mailto:a@b.c']);
+  });
+});
+
+describe('MemoryDragOut', () => {
+  it('records the drags it was asked to start', async () => {
+    const dragOut = new MemoryDragOut();
+    await dragOut.start(['/w/a.md']);
+    await dragOut.start(['/w/b.md', '/w/c.md'], '/icon.png');
+    expect(dragOut.started).toEqual([
+      { paths: ['/w/a.md'], iconPath: undefined },
+      { paths: ['/w/b.md', '/w/c.md'], iconPath: '/icon.png' },
+    ]);
   });
 });
 

@@ -47,6 +47,8 @@ class App {
   /** Favourite paths found missing on disk by the last `refreshFavourites`. */
   #missingFavourites = $state<readonly string[]>([]);
   #favouritesRun = 0;
+  /** Files being carried out of the window by a system drag. */
+  #draggedOut: readonly string[] = [];
 
   readonly platform = currentPlatform();
   readonly commands: CommandRegistry;
@@ -134,6 +136,9 @@ class App {
   }
 
   #onDrag({ type, paths }: DropEvent): void {
+    if (this.#draggedOut.length > 0 && paths.every((path) => this.#draggedOut.includes(path))) {
+      return;
+    }
     this.draggedPaths = type === 'leave' || type === 'drop' ? null : paths;
     if (type === 'drop') void this.openPaths(paths);
   }
@@ -225,6 +230,26 @@ class App {
     return this.#followMove(
       await this.container.workspace.rename(this.preferences, path, newName, kind),
     );
+  }
+
+  /** Moves a file or folder into `folder`, keeping its name; answers where it went, or `null`. */
+  async moveEntry(path: string, folder: string): Promise<PathChange | null> {
+    return this.#followMove(await this.container.workspace.move(this.preferences, path, folder));
+  }
+
+  /**
+   * Hands files to the system as a drag out of the window (Finder, mail, other apps). While the
+   * system drag runs, dragging them back over the window is not an open request.
+   */
+  async dragOut(paths: readonly string[]): Promise<void> {
+    this.#draggedOut = paths;
+    try {
+      await this.container.dragOut.start(paths);
+    } catch (thrown) {
+      notifier.error(toAppError(thrown).message);
+    } finally {
+      this.#draggedOut = [];
+    }
   }
 
   /** Asks to trash a file or folder; answers whether it was trashed. */

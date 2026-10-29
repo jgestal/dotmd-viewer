@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { fakeTranslate } from '../memory';
 import { mockBackend, resetMocksAfterEach } from './mockBackend';
 import { TauriOpenRequests } from './tauriOpenRequests';
+import { tauriDragOut } from './tauriDragOut';
 import { tauriPreferencesStore } from './tauriPreferencesStore';
 import { tauriRenderer } from './tauriRenderer';
 import { tauriWatcher } from './tauriWatcher';
@@ -214,5 +215,28 @@ describe('TauriDialogs', () => {
   it('reports a plugin failure as an AppError', async () => {
     mockBackend({ 'plugin:dialog|open': () => Promise.reject('denied') });
     await expect(dialogs.openFolder()).rejects.toEqual({ kind: 'io', message: 'denied' });
+  });
+});
+
+describe('tauriDragOut', () => {
+  const dragCommand = 'plugin:drag|start_drag';
+
+  it('starts a system drag of the files with the default cursor image', async () => {
+    const calls = mockBackend({ drag_icon: () => '/tmp/icon.png', [dragCommand]: () => null });
+    await tauriDragOut.start(['/w/a.md', '/w/b.md']);
+    expect(calls.map(({ command }) => command)).toEqual(['drag_icon', dragCommand]);
+    expect(calls[1].args).toMatchObject({ item: ['/w/a.md', '/w/b.md'], image: '/tmp/icon.png' });
+  });
+
+  it('uses the image it is given without asking for the default', async () => {
+    const calls = mockBackend({ [dragCommand]: () => null });
+    await tauriDragOut.start(['/w/a.md'], '/x/me.png');
+    expect(calls).toHaveLength(1);
+    expect(calls[0].args).toMatchObject({ image: '/x/me.png' });
+  });
+
+  it('reports a refused drag as an app error', async () => {
+    mockBackend({ drag_icon: () => '/tmp/icon.png' });
+    await expect(tauriDragOut.start(['/w/a.md'])).rejects.toMatchObject({ kind: 'io' });
   });
 });
