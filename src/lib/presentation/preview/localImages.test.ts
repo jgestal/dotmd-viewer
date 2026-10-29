@@ -28,6 +28,14 @@ describe('resolveLocalImages', () => {
     expect(srcs(root)).toEqual(['asset://a', 'asset://b', 'asset://c']);
   });
 
+  it('keeps the original reference of a resolved image, and only of that one', () => {
+    const root = page('<img src="../assets/a.png"><img src="https://x.org/a.png">');
+    resolveLocalImages(root, sources());
+    expect(
+      [...root.querySelectorAll('img')].map((image) => image.getAttribute('data-source')),
+    ).toEqual(['../assets/a.png', null]);
+  });
+
   it('leaves remote and data images untouched', () => {
     const html =
       '<img src="https://x.org/a.png"><img src="http://x.org/b.png"><img src="data:image/png;base64,AA">';

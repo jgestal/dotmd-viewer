@@ -33,8 +33,12 @@ function resolveSrcset(srcset: string, sources: ImageSources): string {
  */
 export function resolveLocalImages(root: ParentNode, sources: ImageSources): void {
   for (const image of root.querySelectorAll('img[src]')) {
-    const url = resolveOne(image.getAttribute('src') ?? '', sources);
-    if (url !== null) image.setAttribute('src', url);
+    const source = image.getAttribute('src') ?? '';
+    const url = resolveOne(source, sources);
+    if (url === null) continue;
+    // The original reference stays available, e.g. to copy the file's path from the context menu.
+    image.setAttribute('data-source', source);
+    image.setAttribute('src', url);
   }
   for (const element of root.querySelectorAll('img[srcset], source[srcset]')) {
     element.setAttribute('srcset', resolveSrcset(element.getAttribute('srcset') ?? '', sources));

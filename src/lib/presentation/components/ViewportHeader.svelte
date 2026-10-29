@@ -1,5 +1,6 @@
 <script lang="ts">
   import { displayName } from '$lib/domain/document';
+  import { showTitleMenu } from '../contextMenu/documentActions';
   import { app, type EditMode, type Layout } from '../app.svelte';
   import { i18n } from '../i18n/i18n.svelte';
   import Icon from './Icon.svelte';
@@ -23,7 +24,11 @@
     <Icon name="sidebar" />
   </button>
 
-  <h1 class="title" title={app.document?.path ?? ''}>
+  <h1
+    class="title"
+    oncontextmenu={(event) => void showTitleMenu(event)}
+    title={app.document?.path ?? ''}
+  >
     {title}
     {#if app.dirty}<span class="dirty" aria-label={i18n.t('document.unsaved')}>●</span>{/if}
   </h1>

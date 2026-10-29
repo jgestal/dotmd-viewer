@@ -3,6 +3,7 @@
   import 'katex/dist/katex.min.css';
   import '../styles/document.css';
   import { app } from '../app.svelte';
+  import { showPreviewMenu } from '../contextMenu/documentActions';
   import { i18n } from '../i18n/i18n.svelte';
   import { throttle } from '../navigation';
   import { navigation } from '../navigation.svelte';
@@ -101,10 +102,12 @@
   });
 </script>
 
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
   class="scroller"
   bind:this={scroller}
   onscroll={reportTopLine}
+  oncontextmenu={(event) => void showPreviewMenu(event)}
   style:--doc-zoom={app.preferences.zoom}
 >
   <div class="document">

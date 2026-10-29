@@ -5,6 +5,7 @@
   import { dirName } from '$lib/domain/paths';
   import { slideAtLine, splitSlides } from '$lib/domain/slides';
   import { app } from '../app.svelte';
+  import { showPreviewMenu } from '../contextMenu/documentActions';
   import { i18n } from '../i18n/i18n.svelte';
   import { notifier } from '../toasts.svelte';
   import { navigation } from '../navigation.svelte';
@@ -206,6 +207,7 @@
     bind:this={host}
     onpointermove={wakeCursor}
     onclick={onStageClick}
+    oncontextmenu={(event) => void showPreviewMenu(event)}
   >
     {#if slides.length === 0}
       <p class="empty">{i18n.t('slides.empty')}</p>

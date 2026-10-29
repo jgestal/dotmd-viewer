@@ -4,6 +4,7 @@
   import '../styles/document.css';
   import { dirName } from '$lib/domain/paths';
   import { app } from '../app.svelte';
+  import { showPreviewMenu } from '../contextMenu/documentActions';
   import { i18n } from '../i18n/i18n.svelte';
   import { notifier } from '../toasts.svelte';
   import { throttle } from '../navigation';
@@ -163,7 +164,13 @@
     {/each}
   </div>
 
-  <div class="desk" bind:this={desk} onscroll={reportTopLine}>
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <div
+    class="desk"
+    bind:this={desk}
+    onscroll={reportTopLine}
+    oncontextmenu={(event) => void showPreviewMenu(event)}
+  >
     <div
       class="sheets"
       bind:this={sheets}

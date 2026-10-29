@@ -4,6 +4,7 @@
   import '../styles/document.css';
   import { dirName } from '$lib/domain/paths';
   import { app } from '../app.svelte';
+  import { showPreviewMenu } from '../contextMenu/documentActions';
   import { i18n } from '../i18n/i18n.svelte';
   import { notifier } from '../toasts.svelte';
   import { effectiveScheme, type ColorScheme, SYSTEM_DARK_QUERY } from '../preview/colorScheme';
@@ -121,9 +122,11 @@
   });
 </script>
 
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
   class="scroller"
   bind:this={scroller}
+  oncontextmenu={(event) => void showPreviewMenu(event)}
   onscroll={() => {
     reportTopLine();
     onScroll?.();
