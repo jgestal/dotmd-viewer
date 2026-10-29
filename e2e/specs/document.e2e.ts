@@ -5,15 +5,21 @@ import { browser, $, expect } from '@wdio/globals';
 // and unsaved marker) stands in for it. PDF export opens a native save dialog and is covered
 // by unit tests instead.
 const documentPath = process.env.E2E_DOCUMENT as string;
-const TYPED = 'Typed by the smoke test. ';
+const TYPED = 'TypedBySmokeTest';
 
 // Windows and Linux only, where Mod is Ctrl.
 const sendShortcut = (key: string) => browser.keys(['Control', key]);
 
 describe('opening a Markdown file from the command line', () => {
   it('shows the file name, its heading and rendered maths', async () => {
-    await expect($('h1.title')).toHaveText(expect.stringContaining('sample'));
-    await expect($('article.markdown-body h1')).toHaveText('Smoke Heading');
+    await expect($('h1.title')).toHaveElementProperty(
+      'textContent',
+      expect.stringContaining('sample'),
+    );
+    await expect($('article.markdown-body h1')).toHaveElementProperty(
+      'textContent',
+      'Smoke Heading',
+    );
     await expect($('article.markdown-body .katex')).toExist();
     await expect($('article.markdown-body table')).toExist();
   });
@@ -22,7 +28,10 @@ describe('opening a Markdown file from the command line', () => {
     await sendShortcut('e');
     await sendShortcut('2');
     const content = $('.cm-content');
-    await expect(content).toHaveText(expect.stringContaining('# Smoke Heading'));
+    await expect(content).toHaveElementProperty(
+      'textContent',
+      expect.stringContaining('# Smoke Heading'),
+    );
 
     await content.click();
     await browser.keys(['Control', 'Home']);

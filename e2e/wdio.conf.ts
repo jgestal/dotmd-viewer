@@ -44,6 +44,8 @@ export const config: WebdriverIO.Config = {
   reporters: ['spec'],
   mochaOpts: { ui: 'bdd', timeout: 60_000 },
   waitforTimeout: 15_000,
+  connectionRetryTimeout: 90_000,
+  connectionRetryCount: 0,
 
   onPrepare: () => {
     mkdirSync(workDir, { recursive: true });

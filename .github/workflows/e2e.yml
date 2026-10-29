@@ -53,6 +53,17 @@ jobs:
           "NATIVE_WEBDRIVER=$driverDir\msedgedriver.exe" >> $env:GITHUB_ENV
       - name: Build app without bundling
         run: npx tauri build --debug --no-bundle
+      - name: Diagnose app start-up with remote debugging (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          $env:WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS = '--remote-debugging-port=9222'
+          $app = Start-Process src-tauri/target/debug/dotmd-viewer.exe -ArgumentList 'e2e/fixtures/sample.md' -PassThru
+          Start-Sleep 20
+          "alive: $(-not $app.HasExited)"
+          try { (Invoke-WebRequest http://127.0.0.1:9222/json/version -UseBasicParsing).Content } catch { "devtools: $_" }
+          Stop-Process -Id $app.Id -Force -ErrorAction SilentlyContinue
       - name: Run E2E tests (Linux)
         if: runner.os == 'Linux'
         run: xvfb-run --auto-servernum npm run test:e2e
