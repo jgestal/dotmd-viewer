@@ -22,7 +22,7 @@ process.env.E2E_DOCUMENT = documentCopy;
 // different one is its own capability, pinned to its spec file.
 const launching = (specs: string[], argument: string) =>
   ({
-    specs,
+    'wdio:specs': specs,
     'tauri:options': { application: binary, args: [argument] },
   }) as WebdriverIO.Capabilities;
 
