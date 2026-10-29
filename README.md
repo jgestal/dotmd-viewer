@@ -202,7 +202,7 @@ Linux.
 Mutation testing must score at least 85 %. It is a manual workflow (**Mutation testing** in GitHub Actions), and the
 Rust target needs `cargo install cargo-mutants` once.
 
-End-to-end tests are not part of the project yet. Smoke tests on Windows and Linux are planned.
+`npm run test:e2e` runs WebDriver smoke tests (tauri-driver) against a debug build; CI runs them on Linux, plus a start-up smoke test on macOS. The Windows job is not blocking yet: msedgedriver cannot attach to WebView2 on the GitHub runner.
 
 ## Documentation
 

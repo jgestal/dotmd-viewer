@@ -207,7 +207,7 @@ y Linux.
 La prueba de mutaciones debe alcanzar al menos un 85 %. Es un flujo manual (**Mutation testing** en GitHub Actions), y
 el destino de Rust necesita `cargo install cargo-mutants` una vez.
 
-Las pruebas de extremo a extremo todavía no forman parte del proyecto. Hay previstas pruebas de humo en Windows y Linux.
+`npm run test:e2e` ejecuta pruebas de humo con WebDriver (tauri-driver) sobre una compilación de depuración; la CI las ejecuta en Linux, más una prueba de arranque en macOS. El trabajo de Windows todavía no bloquea: msedgedriver no consigue conectarse a WebView2 en el runner de GitHub.
 
 ## Documentación
 

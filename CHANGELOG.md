@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- End-to-end smoke tests (`npm run test:e2e`, WebdriverIO + `tauri-driver`) in a separate `E2E` workflow: open a file and a folder from the command line, switch Preview/Code/Split, edit and save, with failure screenshots uploaded on Windows and Linux; macOS gets a start-up smoke test. PDF export is not driven (native save dialog) and stays covered by unit tests (#92).
 - Final README: screenshots of the reading, split, pages, slides and settings views in light and dark, the feature list, a keyboard-shortcut table for macOS and Windows/Linux, a guide to opening unsigned builds, build and test instructions, and a Spanish translation in docs/README.es.md (#56).
 
 - Complete Spanish and English translations, with tests that fail on a key the code requests but a dictionary lacks, a key no code uses, an empty or untranslated value, or a placeholder or ellipsis that differs between languages; Spanish menus follow Spain's conventions («Ver», «Edición», «Ajustes» on macOS and Windows, «Preferencias» on Linux) (#51).
