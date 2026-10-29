@@ -258,4 +258,10 @@ export const es = {
   'images.copyFailed': 'No se pudo copiar {name}: {reason}',
   // T51 · Translations: Linux names the settings item Preferences
   'menu.preferences': 'Preferencias…',
+  // T64 · temas
+  'settings.theme.sepia': 'Sepia',
+  'settings.theme.night': 'Noche',
+  'menu.theme': 'Tema',
+  'menu.nextTheme': 'Siguiente tema',
+  'theme.pick': 'Elegir tema',
 } as const satisfies Record<keyof typeof en, string>;

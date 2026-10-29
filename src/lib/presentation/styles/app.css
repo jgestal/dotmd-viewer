@@ -28,7 +28,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
+  :root:not([data-theme]) {
     --bg: #15191a;
     --bg-sidebar: #1b2022;
     --bg-elev: #22282a;
@@ -62,6 +62,43 @@
   --danger: #f07167;
   --sel: rgba(79, 179, 169, 0.3);
   --shadow: 0 8px 28px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.3);
+  color-scheme: dark;
+}
+
+:root[data-theme='sepia'] {
+  --bg: #f4ecd8;
+  --bg-sidebar: #ebe1c6;
+  --bg-elev: #faf5e6;
+  --bg-hover: rgba(67, 52, 34, 0.07);
+  --bg-active: rgba(67, 52, 34, 0.12);
+  --fg: #433422;
+  --fg-muted: #7a6a55;
+  --border: #d8caa6;
+  --accent: #9a5b1e;
+  --accent-fg: #ffffff;
+  --accent-soft: rgba(154, 91, 30, 0.14);
+  --danger: #a8352b;
+  --sel: rgba(154, 91, 30, 0.25);
+  --shadow: 0 8px 28px rgba(67, 52, 34, 0.18), 0 1px 3px rgba(67, 52, 34, 0.1);
+  color-scheme: light;
+}
+
+/* Pure black page for OLED screens; the panels are only a shade above it. */
+:root[data-theme='night'] {
+  --bg: #000000;
+  --bg-sidebar: #0a0a0a;
+  --bg-elev: #151515;
+  --bg-hover: rgba(230, 228, 223, 0.08);
+  --bg-active: rgba(230, 228, 223, 0.14);
+  --fg: #e6e4df;
+  --fg-muted: #9a9a96;
+  --border: #242424;
+  --accent: #4fb3a9;
+  --accent-fg: #0b1716;
+  --accent-soft: rgba(79, 179, 169, 0.18);
+  --danger: #f07167;
+  --sel: rgba(79, 179, 169, 0.32);
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.04);
   color-scheme: dark;
 }
 

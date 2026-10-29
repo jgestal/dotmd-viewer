@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Sepia and Night (pure black) themes, a View ▸ Theme menu, a theme button in the header and `Mod+Alt+T` to cycle themes (#129).
 - End-to-end smoke tests (`npm run test:e2e`, WebdriverIO + `tauri-driver`) in a separate `E2E` workflow: open a file and a folder from the command line, switch Preview/Code/Split, edit and save, with failure screenshots uploaded on Windows and Linux; macOS gets a start-up smoke test. PDF export is not driven (native save dialog) and stays covered by unit tests (#92).
 - Final README: screenshots of the reading, split, pages, slides and settings views in light and dark, the feature list, a keyboard-shortcut table for macOS and Windows/Linux, a guide to opening unsigned builds, build and test instructions, and a Spanish translation in docs/README.es.md (#56).
 

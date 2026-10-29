@@ -28,6 +28,37 @@ describe('help commands', () => {
   });
 });
 
+describe('theme commands', () => {
+  const themeApp = (theme: string) => {
+    const setTheme = vi.fn();
+    const cycleTheme = vi.fn();
+    const app = { document: null, preferences: { theme }, setTheme, cycleTheme } as unknown as App;
+    return { commands: createAppCommands(app), setTheme, cycleTheme };
+  };
+
+  it.each(['system', 'light', 'dark', 'sepia', 'night'])('chooses the %s theme', (theme) => {
+    const { commands, setTheme } = themeApp('light');
+    find(commands, `view.theme.${theme}`)?.run();
+    expect(setTheme).toHaveBeenCalledExactlyOnceWith(theme);
+  });
+
+  it('checks only the current theme', () => {
+    const { commands } = themeApp('sepia');
+    const checked = commands
+      .filter((command) => command.id.startsWith('view.theme.') && command.checked?.())
+      .map((command) => command.id);
+    expect(checked).toEqual(['view.theme.sepia']);
+  });
+
+  it('cycles themes with Mod+Alt+T', () => {
+    const { commands, cycleTheme } = themeApp('light');
+    const next = find(commands, 'view.theme.next');
+    expect(next?.accelerator).toBe('Mod+Alt+T');
+    next?.run();
+    expect(cycleTheme).toHaveBeenCalledOnce();
+  });
+});
+
 describe('paper commands', () => {
   it.each(['file.exportPdf', 'file.print'])('binds %s to its default shortcut', (id) => {
     const command = find(commandsFor(null), id);

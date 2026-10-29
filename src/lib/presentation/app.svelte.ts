@@ -18,6 +18,7 @@ import {
   zoomOut,
   type Preferences,
 } from '$lib/domain/preferences';
+import { nextTheme, type Theme } from '$lib/domain/theme';
 import { createAppCommands } from './appCommands';
 import { isImageDrop } from './drop/classifyDrop';
 import { activeEditor } from './editor/activeEditor.svelte';
@@ -381,6 +382,14 @@ class App {
 
   setLayout(layout: Layout): void {
     this.setPreference('layout', layout);
+  }
+
+  setTheme(theme: Theme): void {
+    this.setPreference('theme', theme);
+  }
+
+  cycleTheme(): void {
+    this.setTheme(nextTheme(this.preferences.theme));
   }
 
   toggleSidebar(): void {

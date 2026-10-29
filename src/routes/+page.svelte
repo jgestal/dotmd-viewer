@@ -53,7 +53,7 @@
     const theme = app.preferences.theme;
     if (theme === 'system') delete document.documentElement.dataset.theme;
     else document.documentElement.dataset.theme = theme;
-    // The native title bar does not follow the page, so it is told too.
+    // The native title bar does not follow the page, so it is told the theme's base scheme.
     const shown = effectiveScheme(theme, systemIsDark);
     if (app.ready) void app.container.window.setTheme(shown);
   });

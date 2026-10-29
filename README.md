@@ -67,7 +67,7 @@ continuous page, as paginated A4 or Letter sheets, or as slides. It is built wit
   Linux.
 - **Settings** (`Cmd+,` / `Ctrl+,`) for language, theme, default page size and zoom.
 - Interface in English and Spanish, following the system language unless you choose one.
-- Light and dark themes, following the system unless you choose one.
+- Light, dark, sepia and night (pure black) themes, following the system unless you choose one. Switch from View ▸ Theme, the button in the header, or `Cmd+Alt+T` / `Ctrl+Alt+T` to cycle.
 
 ## Screenshots
 

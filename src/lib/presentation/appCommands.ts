@@ -3,9 +3,11 @@
 // is shown disabled, and its shortcut does nothing.
 import type { Command } from './commands/registry';
 import { defaultAccelerators, type CommandId } from './commands/ids';
+import { themeLabel } from './settingsOptions';
 import { AUTHOR_WEBSITE } from './credits';
 import { dialogs } from './dialogs.svelte';
 import { activeEditor } from './editor/activeEditor.svelte';
+import { THEMES } from '$lib/domain/theme';
 import type { App, EditMode, Layout, SidebarTab } from './app.svelte';
 
 type Binding = Pick<Command, 'run' | 'enabled' | 'checked'> & { readonly label: string };
@@ -53,6 +55,7 @@ export function createAppCommands(app: App): Command[] {
       run: () => app.clearRecents(),
       enabled: () => app.preferences.recents.length > 0,
     },
+    'view.theme.next': { label: 'menu.nextTheme', run: () => app.cycleTheme() },
     'view.fullScreen': { label: 'menu.fullScreen', run: () => app.toggleFullscreen() },
     'view.zoomIn': { label: 'menu.zoomIn', run: () => app.zoomIn() },
     'view.zoomOut': { label: 'menu.zoomOut', run: () => app.zoomOut() },
@@ -85,6 +88,14 @@ export function createAppCommands(app: App): Command[] {
       label: `sidebar.${tab}`,
       run: () => app.showSidebarTab(tab),
       checked: () => app.preferences.sidebarVisible && app.preferences.sidebarTab === tab,
+    };
+  }
+
+  for (const theme of THEMES) {
+    bindings[`view.theme.${theme}`] = {
+      label: themeLabel(theme),
+      run: () => app.setTheme(theme),
+      checked: () => app.preferences.theme === theme,
     };
   }
 

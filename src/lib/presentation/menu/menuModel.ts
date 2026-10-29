@@ -7,6 +7,8 @@ import type { MenuNode, PredefinedMenuItem as PredefinedItem, Translate } from '
 
 export type { MenuNode };
 import { baseName } from '$lib/domain/paths';
+import { THEMES } from '$lib/domain/theme';
+import { themeLabel } from '../settingsOptions';
 
 /** What the menu needs to know about each command: its accelerator and current state. */
 export interface CommandState {
@@ -122,6 +124,12 @@ export function buildMenu(context: MenuContext): MenuNode[] {
     command('view.zoomIn', 'menu.zoomIn'),
     command('view.zoomOut', 'menu.zoomOut'),
     command('view.zoomReset', 'menu.zoomReset'),
+    separator,
+    submenu('menu.theme', [
+      ...THEMES.map((theme) => command(`view.theme.${theme}`, themeLabel(theme))),
+      separator,
+      command('view.theme.next', 'menu.nextTheme'),
+    ]),
     separator,
     // macOS draws its own full-screen item (with the green button's shortcut).
     mac

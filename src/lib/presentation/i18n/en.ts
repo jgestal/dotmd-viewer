@@ -255,4 +255,10 @@ export const en = {
   'images.copyFailed': 'Could not copy {name}: {reason}',
   // T51 · Translations: Linux names the settings item Preferences
   'menu.preferences': 'Preferences…',
+  // T64 · themes
+  'settings.theme.sepia': 'Sepia',
+  'settings.theme.night': 'Night',
+  'menu.theme': 'Theme',
+  'menu.nextTheme': 'Next Theme',
+  'theme.pick': 'Choose theme',
 } as const satisfies Record<string, string>;
