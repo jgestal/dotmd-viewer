@@ -84,4 +84,7 @@ const highlighting = HighlightStyle.define([
   },
 ]);
 
-export const editorTheme: Extension = [theme, syntaxHighlighting(highlighting)];
+/** Syntax colours alone, for code blocks embedded in another editor (the visual one). */
+export const codeHighlighting: Extension = syntaxHighlighting(highlighting);
+
+export const editorTheme: Extension = [theme, codeHighlighting];
