@@ -4,6 +4,7 @@
 // Every method that can fail rejects with an AppError (domain/errors.ts).
 
 import type { Encoding } from '../domain/document';
+import type { PageSetup } from '../domain/printing';
 
 export interface TextFile {
   readonly content: string;
@@ -189,6 +190,19 @@ export interface ContextMenu {
     items: readonly MenuItem[],
     at?: { readonly x: number; readonly y: number },
   ): Promise<string | null>;
+}
+
+/** The system print dialog for what the webview currently shows (the printable document). */
+export interface Printer {
+  print(): Promise<void>;
+}
+
+/** `saved`: the file was written; `printDialog`: the platform could only open the print dialog. */
+export type ExportOutcome = 'saved' | 'printDialog';
+
+/** Writes what the webview currently shows (the printable document) to a PDF file. */
+export interface PdfExporter {
+  export(path: string, page: PageSetup): Promise<ExportOutcome>;
 }
 
 /** Short, non-blocking messages to the user. */

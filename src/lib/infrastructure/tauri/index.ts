@@ -8,6 +8,7 @@ export * from './tauriMenu';
 export * from './tauriOpener';
 export * from './tauriOpenRequests';
 export * from './tauriPreferencesStore';
+export * from './tauriPrinting';
 export * from './tauriRenderer';
 export * from './tauriWatcher';
 export * from './tauriWindow';

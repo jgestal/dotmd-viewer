@@ -2,12 +2,14 @@
 // cases work on (document, preferences) and turns their results into reactive runes; components
 // read `app.*` and call its methods instead of talking to the use cases directly.
 import type { DocumentState } from '$lib/application/documents';
+import type { PrintRequest } from '$lib/application/printing';
 import type { MoveResult, PathChange } from '$lib/application/workspace';
 import { createContainer, type Container } from '$lib/container';
 import type { DropEvent } from '$lib/ports';
-import { isDirty } from '$lib/domain/document';
 import type { FavouriteWithStatus } from '$lib/domain/workspace';
 import { toAppError } from '$lib/domain/errors';
+import { displayName, isDirty } from '$lib/domain/document';
+import { pageSetupFor } from '$lib/domain/printing';
 import {
   defaultPreferences,
   resetZoom,
@@ -21,6 +23,7 @@ import { createRegistry, type CommandRegistry } from './commands/registry';
 import { i18n } from './i18n/i18n.svelte';
 import { currentPlatform } from './platform';
 import { fallbackContextMenu } from './contextMenu/fallbackMenu.svelte';
+import { mountPrintable, unmountPrintable } from './print/printable';
 import { notifier } from './toasts.svelte';
 
 export type EditMode = Preferences['editMode'];
@@ -202,6 +205,39 @@ class App {
   async #externalChange(path: string): Promise<void> {
     const state = await this.container.documents.externalChange(this.documentState, path);
     if (state) this.documentState = state;
+  }
+
+  // Paper
+
+  print(): Promise<void> {
+    const request = this.#printRequest();
+    return request ? this.container.printing.print(request) : Promise.resolve();
+  }
+
+  exportPdf(): Promise<void> {
+    const request = this.#printRequest();
+    if (!request || !this.document) return Promise.resolve();
+    const name = displayName(this.document, i18n.t('document.untitled'));
+    return this.container.printing.exportPdf(name, request);
+  }
+
+  /** What printing the open document takes: its page setup and how to show it alone in the window. */
+  #printRequest(): PrintRequest | null {
+    const doc = this.document;
+    if (!doc) return null;
+    const { layout, pageSize } = this.preferences;
+    const setup = pageSetupFor(layout, pageSize);
+    return {
+      setup,
+      prepare: () =>
+        mountPrintable(this.container.renderer, doc.content, {
+          paged: layout === 'pages',
+          pageSize,
+          setup,
+          diagramErrorLabel: i18n.t('preview.diagramError'),
+        }),
+      release: unmountPrintable,
+    };
   }
 
   // Folders

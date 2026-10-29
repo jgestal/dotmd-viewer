@@ -8,6 +8,7 @@ mod files;
 mod folders;
 mod open_requests;
 mod preferences_file;
+mod printing;
 mod quit;
 mod render;
 mod watcher;
@@ -60,6 +61,8 @@ pub fn run() {
             window_state::set_document_state,
             quit::quit_app,
             drag_out::drag_icon,
+            printing::print_page,
+            printing::export_pdf,
         ])
         .setup(|app| {
             show_window_if_frontend_stalls(app.handle().clone());

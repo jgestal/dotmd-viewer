@@ -24,6 +24,8 @@ export function createAppCommands(app: App): Command[] {
     'file.save': { label: 'menu.save', run: () => app.save(), enabled: hasDocument },
     'file.saveAs': { label: 'menu.saveAs', run: () => app.saveAs(), enabled: hasDocument },
     'file.close': { label: 'menu.close', run: () => app.close(), enabled: hasDocument },
+    'file.exportPdf': { label: 'menu.exportPdf', run: () => app.exportPdf(), enabled: hasDocument },
+    'file.print': { label: 'menu.print', run: () => app.print(), enabled: hasDocument },
     'edit.find': {
       label: 'menu.find',
       run: () => activeEditor.current?.find(),

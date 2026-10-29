@@ -3,8 +3,15 @@
 import { createDrop, type DropUseCases } from './application/drop';
 import { createDocuments, type Documents } from './application/documents';
 import { createPreferences, type PreferencesUseCases } from './application/preferences';
+import { createPrinting, type Printing } from './application/printing';
 import { createWorkspace, type WorkspaceUseCases } from './application/workspace';
-import { BrowserDropTarget, createMemoryServices, MemoryMenu } from './infrastructure/memory';
+import {
+  BrowserDropTarget,
+  BrowserPdfExporter,
+  BrowserPrinter,
+  createMemoryServices,
+  MemoryMenu,
+} from './infrastructure/memory';
 import { BrowserDialogs, BrowserOpener, DEMO_FOLDER, seedDemo } from './infrastructure/memory/demo';
 import {
   TauriDialogs,
@@ -15,7 +22,9 @@ import {
   tauriDragOut,
   tauriFileSystem,
   tauriOpener,
+  tauriPdfExporter,
   tauriPreferencesStore,
+  tauriPrinter,
   tauriRenderer,
   tauriWatcher,
   tauriWindow,
@@ -34,7 +43,9 @@ import type {
   MarkdownRenderer,
   Notifier,
   OpenRequests,
+  PdfExporter,
   PreferencesStore,
+  Printer,
   Translate,
 } from './ports';
 
@@ -55,6 +66,7 @@ export interface Container {
   readonly workspace: WorkspaceUseCases;
   readonly drop: DropUseCases;
   readonly preferences: PreferencesUseCases;
+  readonly printing: Printing;
   /** Ports the presentation subscribes to directly. */
   readonly watcher: FileWatcher;
   readonly renderer: MarkdownRenderer;
@@ -80,6 +92,8 @@ interface Ports {
   readonly dropTarget: DropTarget;
   readonly dragOut: DragOut;
   readonly contextMenu: ContextMenu;
+  readonly printer: Printer;
+  readonly pdfExporter: PdfExporter;
 }
 
 const tauriPorts = (t: Translate): Ports => ({
@@ -95,6 +109,8 @@ const tauriPorts = (t: Translate): Ports => ({
   dropTarget: new TauriDropTarget(),
   dragOut: tauriDragOut,
   contextMenu: tauriContextMenu,
+  printer: tauriPrinter,
+  pdfExporter: tauriPdfExporter,
 });
 
 /** markdown-it only ships in the browser build (Tauri renders with comrak), so it loads on first use. */
@@ -119,6 +135,8 @@ const memoryPorts = (contextMenu: ContextMenu): Ports => {
     contextMenu,
     store: services.preferences,
     dropTarget: new BrowserDropTarget(services.fs),
+    printer: new BrowserPrinter(),
+    pdfExporter: new BrowserPdfExporter(),
   };
 };
 
@@ -140,6 +158,13 @@ export const createContainer = ({
     workspace: createWorkspace({ fs, dialogs, notifier, t, caseInsensitive }),
     drop: createDrop({ fs, notifier, t }),
     preferences: createPreferences({ store, notifier, t }),
+    printing: createPrinting({
+      dialogs,
+      printer: ports.printer,
+      exporter: ports.pdfExporter,
+      notifier,
+      t,
+    }),
     watcher,
     renderer,
     openRequests,

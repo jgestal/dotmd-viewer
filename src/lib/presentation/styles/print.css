@@ -1,0 +1,101 @@
+/* The printable document (see print/printable.ts). On screen it does not exist visually; on paper
+   it is the only thing on the page, always in the light palette whatever theme the app is in. */
+
+#print-root {
+  display: none;
+}
+
+@media print {
+  /* Light palette: the triple :root outweighs the dark-theme selectors of app.css and document.css. */
+  :root:root:root {
+    --bg: #ffffff;
+    --bg-sidebar: #f2f0ea;
+    --bg-elev: #ffffff;
+    --fg: #1f2328;
+    --fg-muted: #676c73;
+    --border: #e2ded4;
+    --accent: #1f6f6a;
+    --danger: #b4372f;
+    --doc-code-bg: #f0eee7;
+    --doc-inline-code-bg: rgba(31, 35, 40, 0.07);
+    --doc-mark: rgba(255, 213, 79, 0.45);
+    --hl-keyword: #a626a4;
+    --hl-string: #3a7d2c;
+    --hl-number: #b45f06;
+    --hl-comment: #8a8f98;
+    --hl-title: #2461b8;
+    --hl-type: #b4372f;
+    --hl-meta: #1f6f6a;
+    --alert-note: #2461b8;
+    --alert-tip: #2a7d46;
+    --alert-important: #7c4dbd;
+    --alert-warning: #a86b00;
+    --alert-caution: #b4372f;
+    color-scheme: light;
+  }
+
+  html,
+  body {
+    height: auto;
+    overflow: visible;
+    background: #ffffff;
+  }
+
+  /* Everything that is not the printable document: sidebar, toolbars, toasts, dialogs. */
+  body > :not(#print-root) {
+    display: none !important;
+  }
+
+  #print-root {
+    display: block;
+    color: var(--fg);
+    font: 16px/1.4 var(--font-ui);
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  #print-root .print-flow {
+    font-size: 16px;
+  }
+
+  #print-root :is(pre, table, img, svg, blockquote, .mermaid-diagram, .markdown-alert) {
+    break-inside: avoid;
+  }
+
+  #print-root :is(h1, h2, h3, h4, h5, h6) {
+    break-after: avoid;
+  }
+
+  /* One sheet per page. A pixel short of the paper so rounding never spills a blank page. */
+  #print-root .print-sheet {
+    position: relative;
+    box-sizing: border-box;
+    width: var(--sheet-w);
+    height: calc(var(--sheet-h) - 1px);
+    padding: var(--sheet-margin);
+    overflow: hidden;
+    break-after: page;
+    break-inside: avoid;
+    font-size: 15px;
+  }
+
+  #print-root .print-sheet:last-child {
+    break-after: auto;
+  }
+
+  #print-root .print-sheet-body {
+    display: flow-root;
+    height: 100%;
+  }
+
+  #print-root .print-page-number {
+    position: absolute;
+    right: 0;
+    bottom: calc(var(--sheet-margin) / 2 - 0.6em);
+    left: 0;
+    color: var(--fg-muted);
+    font: 11px/1 var(--font-ui);
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+}
