@@ -178,7 +178,6 @@ export const en = {
   'pages.pageNumber': 'Page {page} of {total}',
   // T35 · Slides
   'slides.present': 'Present',
-  'slides.exit': 'Exit presentation',
   'slides.previous': 'Previous slide',
   'slides.next': 'Next slide',
   'slides.counter': '{current} / {total}',
@@ -249,4 +248,6 @@ export const en = {
   'drop.images': 'Drop to insert images',
   'images.saveFirst': 'Save the document first so its images can be stored next to it',
   'images.copyFailed': 'Could not copy {name}: {reason}',
+  // T51 · Translations: Linux names the settings item Preferences
+  'menu.preferences': 'Preferences…',
 } as const satisfies Record<string, string>;

@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Complete Spanish and English translations, with tests that fail on a key the code requests but a dictionary lacks, a key no code uses, an empty or untranslated value, or a placeholder or ellipsis that differs between languages; Spanish menus follow Spain's conventions («Ver», «Edición», «Ajustes» on macOS and Windows, «Preferencias» on Linux) (#51).
+
 - Release workflow: pushing a `v*` tag builds unsigned installers on macOS (universal `.dmg`), Windows (`.msi`, `.exe`) and Linux (`.deb`, `.rpm`, `.AppImage`) into a draft GitHub release, with optional signing secrets and `scripts/bump-version.mjs` for version bumps; see docs/releasing.md (#55).
 
 - Recent documents in the OS: opened and saved files appear in the macOS Dock menu and File > Open Recent, the Windows Jump List (once the installer registers the file types) and the Linux recently-used list; Clear Recents empties them too (#47).

@@ -60,7 +60,11 @@ export function buildMenu(context: MenuContext): MenuNode[] {
     ...(context.recents.length > 0 ? [separator] : []),
     command('file.clearRecents', 'menu.clearRecents'),
   ]);
-  const settings = command('app.settings', 'menu.settings');
+  // GNOME and KDE call it Preferences; macOS and Windows call it Settings.
+  const settings = command(
+    'app.settings',
+    platform === 'linux' ? 'menu.preferences' : 'menu.settings',
+  );
   // macOS keeps its native About panel; elsewhere that panel is poor, so the app's own dialog opens.
   const about = mac ? predefined('about', 'menu.about') : command('help.about', 'menu.about');
 
