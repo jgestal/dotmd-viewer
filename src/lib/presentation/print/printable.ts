@@ -84,8 +84,18 @@ function pagesOf(root: HTMLElement, pageSize: PageSize): HTMLElement[] {
   return buildSheets(blocks, paginateBlocks(blocks, geometry), geometry);
 }
 
-const nextFrame = (): Promise<void> =>
-  new Promise((resolve) => requestAnimationFrame(() => resolve()));
+/** Longest wait for a frame: none comes while the window is hidden or the screen is off. */
+const FRAME_TIMEOUT_MS = 100;
+
+/**
+ * The next frame, or a short timeout when no frame is drawn (a hidden window exporting from the
+ * command line or a file manager), so preparing the document can never hang.
+ */
+export const nextFrame = (): Promise<void> =>
+  new Promise((resolve) => {
+    requestAnimationFrame(() => resolve());
+    setTimeout(resolve, FRAME_TIMEOUT_MS);
+  });
 
 /** Fonts (KaTeX's included) and layout have settled, so the print engine sees the final page. */
 async function whenSettled(): Promise<void> {

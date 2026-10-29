@@ -1,7 +1,7 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryAssetUrls, MemoryRenderer } from '$lib/infrastructure/memory';
 import { sheetGeometry } from '../pages/sheet';
-import { buildSheets, mountPrintable, unmountPrintable } from './printable';
+import { buildSheets, mountPrintable, nextFrame, unmountPrintable } from './printable';
 
 const options = {
   paged: false,
@@ -93,5 +93,28 @@ describe('buildSheets', () => {
     expect(sheets[0].style.getPropertyValue('--sheet-w')).toBe('794px');
     expect(sheets[0].style.getPropertyValue('--sheet-h')).toBe('1123px');
     expect(sheets[0].style.getPropertyValue('--sheet-margin')).toBe('76px');
+  });
+});
+
+describe('nextFrame', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+  });
+
+  it('resolves on the next frame', async () => {
+    vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => callback(0));
+    await expect(nextFrame()).resolves.toBeUndefined();
+  });
+
+  it('still resolves after 100 ms when no frame is ever drawn', async () => {
+    vi.useFakeTimers();
+    vi.stubGlobal('requestAnimationFrame', () => 0);
+    let settled = false;
+    void nextFrame().then(() => (settled = true));
+    await vi.advanceTimersByTimeAsync(99);
+    expect(settled).toBe(false);
+    await vi.advanceTimersByTimeAsync(1);
+    expect(settled).toBe(true);
   });
 });
