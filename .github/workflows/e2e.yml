@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, windows-latest]
+        os: [windows-latest]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     steps:
@@ -63,7 +63,17 @@ jobs:
         run: xvfb-run --auto-servernum npm run test:e2e
       - name: Run E2E tests (Windows)
         if: runner.os == 'Windows'
-        run: npm run test:e2e
+        shell: pwsh
+        run: |
+          choco install gsudo -y --no-progress
+          $env:Path += ";C:\tools\gsudo\Current"
+          icacls "$env:GITHUB_WORKSPACE" /grant "Everyone:(OI)(CI)F" /T /Q | Out-Null
+          gsudo status
+          gsudo --integrity Medium npm run test:e2e
+          if ($LASTEXITCODE -ne 0) {
+            Get-CimInstance Win32_Process -Filter "Name = 'msedgewebview2.exe'" | Select-Object -First 2 | ForEach-Object { $_.CommandLine }
+            exit 1
+          }
       - name: Upload failure screenshots
         if: failure()
         uses: actions/upload-artifact@v4
