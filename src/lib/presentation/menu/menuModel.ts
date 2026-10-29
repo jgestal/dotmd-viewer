@@ -61,7 +61,8 @@ export function buildMenu(context: MenuContext): MenuNode[] {
     command('file.clearRecents', 'menu.clearRecents'),
   ]);
   const settings = command('app.settings', 'menu.settings');
-  const about = predefined('about', 'menu.about');
+  // macOS keeps its native About panel; elsewhere that panel is poor, so the app's own dialog opens.
+  const about = mac ? predefined('about', 'menu.about') : command('help.about', 'menu.about');
 
   const file = submenu('menu.file', [
     command('file.new', 'menu.new'),

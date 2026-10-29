@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Settings (Cmd/Ctrl+,) with language, theme, default page size and zoom applied live; a searchable Keyboard Shortcuts table generated from the command registry in each platform's notation; and an in-app About dialog (icon, version, author links, MIT licence) that Windows and Linux use for "About" while macOS keeps the native panel too (#117, #54).
+
 - Closing the window, Alt+F4 and Quit (menu, Cmd/Ctrl+Q or the Dock) ask to save, discard or cancel when there are unsaved changes (#46).
 - Split view: code and preview side by side (stacked below 900 px) with a draggable, keyboard-resizable divider remembered for the session and scroll synchronised both ways through `data-sourcepos`, the pane being used leading (#32).
 - Drag in the Explorer and out of the app: drag files and folders onto a folder, a file's folder or the root header to move them (a name clash is reported, nothing is overwritten), onto the Favourites tab or list to add a favourite, and within Favourites to reorder; pointer-based with a ghost label, drop highlighting, expand-on-hover after 700 ms and Esc to cancel. Leaving the window during a drag hands the file to the system (Finder, mail, other apps) through `tauri-plugin-drag` and a `DragOut` port; the macOS title-bar proxy icon is draggable natively (#43, #44).

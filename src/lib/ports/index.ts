@@ -174,6 +174,11 @@ export interface ExternalOpener {
   openExternal(url: string): Promise<void>;
 }
 
+/** Facts about the running app. */
+export interface AppInfo {
+  version(): Promise<string>;
+}
+
 export interface MenuItem {
   readonly id: string;
   /** Already translated. */

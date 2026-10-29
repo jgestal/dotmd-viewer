@@ -10,6 +10,7 @@ import {
   BrowserPdfExporter,
   BrowserPrinter,
   createMemoryServices,
+  MemoryAppInfo,
   MemoryMenu,
 } from './infrastructure/memory';
 import { BrowserDialogs, BrowserOpener, DEMO_FOLDER, seedDemo } from './infrastructure/memory/demo';
@@ -21,6 +22,7 @@ import {
   tauriContextMenu,
   tauriDragOut,
   tauriFileSystem,
+  tauriAppInfo,
   tauriOpener,
   tauriPdfExporter,
   tauriPreferencesStore,
@@ -31,6 +33,7 @@ import {
 } from './infrastructure/tauri';
 import { isTauri } from './isTauri';
 import type {
+  AppInfo,
   AppWindow,
   ContextMenu,
   Dialogs,
@@ -73,6 +76,7 @@ export interface Container {
   readonly openRequests: OpenRequests;
   readonly opener: ExternalOpener;
   readonly window: AppWindow;
+  readonly appInfo: AppInfo;
   readonly menu: NativeMenu;
   readonly dropTarget: DropTarget;
   readonly dragOut: DragOut;
@@ -88,6 +92,7 @@ interface Ports {
   readonly store: PreferencesStore;
   readonly openRequests: OpenRequests;
   readonly opener: ExternalOpener;
+  readonly appInfo: AppInfo;
   readonly menu: NativeMenu;
   readonly dropTarget: DropTarget;
   readonly dragOut: DragOut;
@@ -105,6 +110,7 @@ const tauriPorts = (t: Translate): Ports => ({
   store: tauriPreferencesStore,
   openRequests: new TauriOpenRequests(),
   opener: tauriOpener,
+  appInfo: tauriAppInfo,
   menu: new TauriMenu(),
   dropTarget: new TauriDropTarget(),
   dragOut: tauriDragOut,
@@ -130,6 +136,7 @@ const memoryPorts = (contextMenu: ContextMenu): Ports => {
     ...services,
     renderer: lazyDemoRenderer,
     opener: new BrowserOpener(),
+    appInfo: new MemoryAppInfo(),
     menu: new MemoryMenu(),
     dialogs: new BrowserDialogs(),
     contextMenu,
@@ -170,6 +177,7 @@ export const createContainer = ({
     openRequests,
     opener,
     window,
+    appInfo: ports.appInfo,
     menu: ports.menu,
     dropTarget: ports.dropTarget,
     dragOut: ports.dragOut,

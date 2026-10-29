@@ -5,6 +5,7 @@ import { MemoryContextMenu } from './memoryContextMenu';
 import { MemoryDialogs } from './memoryDialogs';
 import { MemoryNotifier } from './memoryNotifier';
 import { MemoryDragOut } from './memoryDragOut';
+import { MemoryAppInfo } from './memoryAppInfo';
 import { MemoryOpener } from './memoryOpener';
 import { MemoryOpenRequests } from './memoryOpenRequests';
 import { MemoryPreferencesStore } from './memoryPreferencesStore';
@@ -267,5 +268,11 @@ describe('MemoryContextMenu', () => {
     expect(await menu.show(items)).toBe('open');
     expect(await menu.show(items)).toBeNull();
     expect(menu.shown).toEqual([items, items]);
+  });
+});
+
+describe('MemoryAppInfo', () => {
+  it('answers the version in package.json', async () => {
+    expect(await new MemoryAppInfo().version()).toMatch(/^\d+\.\d+\.\d+/);
   });
 });
