@@ -60,6 +60,9 @@ continuous page, as paginated A4 or Letter sheets, or as slides. It is built wit
 
 - Print (`Cmd+P` / `Ctrl+P`) and **Export to PDF** (`Cmd+Shift+E` / `Ctrl+Shift+E`), written by the system's own web
   engine. Only the document is printed, in the light palette, with maths and diagrams rendered.
+- **Export to PDF** and **Print** straight from the file manager: right-click a Markdown file in Finder (Services),
+  File Explorer or Dolphin. The PDF is written next to the file and shown in the file manager. The same actions work
+  from the command line: `simpledotmd --export-pdf notes.md [--out notes.pdf]`, `--print notes.md`, `--new`.
 
 **Desktop integration**
 

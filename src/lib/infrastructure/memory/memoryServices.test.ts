@@ -173,9 +173,16 @@ describe('MemoryPreferencesStore', () => {
 describe('MemoryOpenRequests', () => {
   it('queues requests while nobody listens and hands them over once', async () => {
     const requests = new MemoryOpenRequests();
-    requests.emit(['/a.md']);
-    requests.emit(['/b.md', '/c.md']);
-    expect(await requests.takePending()).toEqual(['/a.md', '/b.md', '/c.md']);
+    requests.emit([{ action: 'open', path: '/a.md' }]);
+    requests.emit([
+      { action: 'open', path: '/b.md' },
+      { action: 'print', path: '/c.md' },
+    ]);
+    expect(await requests.takePending()).toEqual([
+      { action: 'open', path: '/a.md' },
+      { action: 'open', path: '/b.md' },
+      { action: 'print', path: '/c.md' },
+    ]);
     expect(await requests.takePending()).toEqual([]);
   });
 
@@ -183,14 +190,14 @@ describe('MemoryOpenRequests', () => {
     const requests = new MemoryOpenRequests();
     const listener = vi.fn();
     const unsubscribe = requests.onOpen(listener);
-    requests.emit(['/a.md']);
-    expect(listener).toHaveBeenCalledExactlyOnceWith(['/a.md']);
+    requests.emit([{ action: 'open', path: '/a.md' }]);
+    expect(listener).toHaveBeenCalledExactlyOnceWith([{ action: 'open', path: '/a.md' }]);
     expect(requests.pending).toEqual([]);
 
     unsubscribe();
-    requests.emit(['/b.md']);
+    requests.emit([{ action: 'open', path: '/b.md' }]);
     expect(listener).toHaveBeenCalledOnce();
-    expect(await requests.takePending()).toEqual(['/b.md']);
+    expect(await requests.takePending()).toEqual([{ action: 'open', path: '/b.md' }]);
   });
 });
 

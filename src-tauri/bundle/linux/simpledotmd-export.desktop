@@ -1,0 +1,20 @@
+# KDE Dolphin service menu, installed by the .deb and .rpm into share/kio/servicemenus:
+# right-click a Markdown file > SimpleDotMD > Export to PDF / Print, backed by the app's
+# command line.
+[Desktop Entry]
+Type=Service
+MimeType=text/markdown;text/x-markdown;
+Actions=exportPdf;print;
+X-KDE-Submenu=SimpleDotMD
+
+[Desktop Action exportPdf]
+Name=Export to PDF with SimpleDotMD
+Name[es]=Exportar a PDF con SimpleDotMD
+Icon=simpledotmd
+Exec=simpledotmd --export-pdf %f
+
+[Desktop Action print]
+Name=Print with SimpleDotMD
+Name[es]=Imprimir con SimpleDotMD
+Icon=document-print
+Exec=simpledotmd --print %f

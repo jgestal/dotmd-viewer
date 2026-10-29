@@ -62,6 +62,10 @@ página continua, como hojas A4 o Carta paginadas, o como diapositivas. Está he
 
 - Imprimir (`Cmd+P` / `Ctrl+P`) y **Exportar a PDF** (`Cmd+Shift+E` / `Ctrl+Shift+E`), generados por el motor web del
   propio sistema. Solo se imprime el documento, con la paleta clara, con fórmulas y diagramas renderizados.
+- **Exportar a PDF** e **Imprimir** desde el gestor de archivos: clic derecho en un archivo Markdown en Finder
+  (Servicios), el Explorador de archivos o Dolphin. El PDF se guarda junto al archivo y se muestra en el gestor de
+  archivos. Las mismas acciones funcionan desde la línea de órdenes: `simpledotmd --export-pdf notas.md [--out
+notas.pdf]`, `--print notas.md`, `--new`.
 
 **Integración con el escritorio**
 

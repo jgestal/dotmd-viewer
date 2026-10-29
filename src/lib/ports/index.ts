@@ -4,6 +4,7 @@
 // Every method that can fail rejects with an AppError (domain/errors.ts).
 
 import type { Encoding } from '../domain/document';
+import type { OpenRequest } from '../domain/openRequests';
 import type { PageSetup } from '../domain/printing';
 
 export interface TextFile {
@@ -157,10 +158,13 @@ export interface PreferencesStore {
   save(serialised: string): Promise<void>;
 }
 
-/** Files the OS asked us to open: launch arguments, Finder "Open with", a second instance. */
+/**
+ * Requests from outside the window: launch arguments (`--export-pdf`, `--print`, `--new`),
+ * Finder "Open with" and services, the file managers' context menus, a second instance.
+ */
 export interface OpenRequests {
-  takePending(): Promise<readonly string[]>;
-  onOpen(listener: (paths: readonly string[]) => void): () => void;
+  takePending(): Promise<readonly OpenRequest[]>;
+  onOpen(listener: (requests: readonly OpenRequest[]) => void): () => void;
 }
 
 /** What the user is doing with files dragged over the window. `paths` is empty on `leave`. */

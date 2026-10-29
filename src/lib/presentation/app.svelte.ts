@@ -2,6 +2,12 @@
 // cases work on (document, preferences) and turns their results into reactive runes; components
 // read `app.*` and call its methods instead of talking to the use cases directly.
 import type { DocumentState } from '$lib/application/documents';
+import {
+  handleOpenRequests,
+  openRequested,
+  runRequestedActions,
+  type RequestTarget,
+} from '$lib/application/openRequests';
 import type { PrintRequest } from '$lib/application/printing';
 import type { MoveResult, PathChange } from '$lib/application/workspace';
 import { createContainer, type Container } from '$lib/container';
@@ -9,7 +15,7 @@ import type { DropEvent } from '$lib/ports';
 import type { FavouriteWithStatus } from '$lib/domain/workspace';
 import { toAppError } from '$lib/domain/errors';
 import { displayName, isDirty } from '$lib/domain/document';
-import { dirName } from '$lib/domain/paths';
+import { dirName, isSamePath } from '$lib/domain/paths';
 import { pageSetupFor } from '$lib/domain/printing';
 import {
   defaultPreferences,
@@ -63,6 +69,14 @@ class App {
   #container: Container | null = null;
   #saveTimer: ReturnType<typeof setTimeout> | undefined;
   #lastCommand: { id: CommandId; at: number } | null = null;
+  /** What requests from outside the window (command line, file manager menus) act on. */
+  readonly #requestTarget: RequestTarget = {
+    openPaths: (paths) => this.openPaths(paths),
+    openFile: (path) => this.#openFile(path),
+    exportPdfTo: (path) => this.#exportPdfTo(path),
+    print: () => this.print(),
+    newDocument: () => this.newDocument(),
+  };
 
   constructor() {
     this.commands = createRegistry(createAppCommands(this));
@@ -100,18 +114,20 @@ class App {
     i18n.setPreference(this.preferences.language);
 
     watcher.onChange((path) => void this.#externalChange(path));
-    openRequests.onOpen((paths) => void this.openPaths(paths));
+    openRequests.onOpen((requests) => void handleOpenRequests(requests, this.#requestTarget));
     dropTarget.onDrag((event) => this.#onDrag(event));
     const { window } = this.#container;
     window.onCloseRequested(() => this.confirmQuit());
     window.onQuitRequested(() => void this.quit());
     const pending = await openRequests.takePending();
-    if (pending.length > 0) await this.openPaths(pending);
+    if (pending.length > 0) await openRequested(pending, this.#requestTarget);
     else if (!this.preferences.guideShown) await this.openGuide();
     else if (this.preferences.lastFile) await this.open(this.preferences.lastFile, { quiet: true });
     this.ready = true;
     // The window starts hidden; showing it here means the first painted frame is the real one.
     await this.container.window.reveal();
+    // Actions asked for at launch (`--export-pdf`, `--print`) run once the window is on screen.
+    await runRequestedActions(pending, this.#requestTarget);
   }
 
   // Documents
@@ -126,6 +142,13 @@ class App {
     this.editing = false;
     this.preferences = this.container.workspace.rememberOpened(this.preferences, result.openedPath);
     this.#scheduleSave();
+  }
+
+  /** Opens the file unless it is already the open document; true when it ends up open. */
+  async #openFile(path: string): Promise<boolean> {
+    await this.open(path);
+    const openPath = this.document?.path;
+    return openPath != null && isSamePath(openPath, path);
   }
 
   /** Hands a web or mail link to the system; failures become a toast. */
@@ -249,6 +272,12 @@ class App {
     if (!request || !this.document) return Promise.resolve();
     const name = displayName(this.document, i18n.t('document.untitled'));
     return this.container.printing.exportPdf(name, request);
+  }
+
+  /** Writes the open document as a PDF at `path` without asking (file manager, command line). */
+  #exportPdfTo(path: string): Promise<void> {
+    const request = this.#printRequest();
+    return request ? this.container.printing.exportPdfTo(path, request) : Promise.resolve();
   }
 
   /** What printing the open document takes: its page setup and how to show it alone in the window. */
