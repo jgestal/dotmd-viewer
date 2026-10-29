@@ -63,6 +63,8 @@ jobs:
           Start-Sleep 20
           "alive: $(-not $app.HasExited)"
           try { (Invoke-WebRequest http://127.0.0.1:9222/json/version -UseBasicParsing).Content } catch { "devtools: $_" }
+          Get-CimInstance Win32_Process -Filter "Name = 'msedgewebview2.exe'" | Select-Object -First 3 | ForEach-Object { $_.CommandLine }
+          (Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}' -ErrorAction SilentlyContinue).pv
           Stop-Process -Id $app.Id -Force -ErrorAction SilentlyContinue
       - name: Run E2E tests (Linux)
         if: runner.os == 'Linux'
