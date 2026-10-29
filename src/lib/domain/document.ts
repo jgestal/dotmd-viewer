@@ -18,6 +18,8 @@ export interface Document {
   readonly lineEnding: LineEnding;
   readonly encoding: Encoding;
   readonly hasBom: boolean;
+  /** What an unsaved document is called instead of "untitled" (the built-in guide). */
+  readonly name?: string;
 }
 
 export interface OpenDocumentInput {
@@ -59,8 +61,11 @@ export const openDocument = ({ path, raw, encoding, hasBom }: OpenDocumentInput)
   };
 };
 
-export const newDocument = (): Document =>
-  openDocument({ path: null, raw: '', encoding: 'utf-8', hasBom: false });
+/** An unsaved document; `content` starts as saved, so a read-only text like the guide is clean. */
+export const newDocument = (content = '', name?: string): Document => ({
+  ...openDocument({ path: null, raw: content, encoding: 'utf-8', hasBom: false }),
+  ...(name === undefined ? {} : { name }),
+});
 
 export const editDocument = (doc: Document, content: string): Document => ({
   ...doc,
@@ -101,7 +106,7 @@ export const reloadFromDisk = (doc: Document, raw: string): ReloadResult => {
 
 /** The file name of the document, or `untitled` when it has no path. */
 export const displayName = (doc: Document, untitled: string): string =>
-  doc.path === null ? untitled : (doc.path.split(PATH_SEPARATOR).pop() ?? doc.path);
+  doc.path === null ? (doc.name ?? untitled) : (doc.path.split(PATH_SEPARATOR).pop() ?? doc.path);
 
 /** Follows a rename or move of `from` to `to`: a document at or inside it now lives at the new path. */
 export const retargetDocument = (

@@ -65,8 +65,8 @@ export function buildMenu(context: MenuContext): MenuNode[] {
     'app.settings',
     platform === 'linux' ? 'menu.preferences' : 'menu.settings',
   );
-  // macOS keeps its native About panel; elsewhere that panel is poor, so the app's own dialog opens.
-  const about = mac ? predefined('about', 'menu.about') : command('help.about', 'menu.about');
+  // The app's own About dialog, with the credits, on every platform.
+  const about = command('help.about', 'menu.about');
 
   const file = submenu('menu.file', [
     command('file.new', 'menu.new'),
@@ -130,6 +130,7 @@ export function buildMenu(context: MenuContext): MenuNode[] {
   ]);
 
   const help = submenu('menu.help', [
+    command('help.guide', 'menu.guide'),
     command('help.shortcuts', 'menu.keyboardShortcuts'),
     command('help.website', 'menu.website'),
     ...(mac ? [] : [separator, about]),

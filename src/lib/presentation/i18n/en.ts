@@ -2,6 +2,7 @@
 export const en = {
   'app.name': 'DotMD Viewer',
 
+  'titlebar.edited': 'Edited',
   'document.untitled': 'Untitled',
   'document.deletedOnDisk': '"{name}" was deleted from disk. Your open copy is kept.',
   'error.open': 'Could not open "{name}".',
@@ -80,6 +81,8 @@ export const en = {
   'menu.zoom': 'Zoom',
   'menu.bringAllToFront': 'Bring All to Front',
   'menu.help': 'Help',
+  'menu.guide': 'User Guide',
+  'guide.title': 'User Guide',
   'menu.keyboardShortcuts': 'Keyboard Shortcuts',
   'menu.website': 'Website',
   'menu.about': 'About DotMD Viewer',
@@ -242,6 +245,8 @@ export const en = {
   'shortcuts.noResults': 'No shortcuts match your search.',
   'shortcuts.group.app': 'Application',
   'about.version': 'Version {version}',
+  'about.credits': 'Credits',
+  'about.madeBy': 'Designed and developed by',
   'about.licence': 'Released under the MIT licence.',
   'about.source': 'Source code on GitHub',
   // T42 · images

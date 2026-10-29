@@ -18,6 +18,8 @@ export interface Preferences {
   readonly favourites: readonly Favourite[];
   readonly lastFolder: string | null;
   readonly lastFile: string | null;
+  /** The user guide opens by itself once, on the first launch. */
+  readonly guideShown: boolean;
 }
 
 export const ZOOM_MIN = 0.5;
@@ -40,6 +42,7 @@ export const defaultPreferences: Preferences = {
   favourites: [],
   lastFolder: null,
   lastFile: null,
+  guideShown: false,
 };
 
 const clamp = (value: number, min: number, max: number): number =>
@@ -100,6 +103,7 @@ const fieldParsers: FieldParsers = {
       : defaultPreferences.favourites,
   lastFolder: (raw) => (isPath(raw) ? raw : null),
   lastFile: (raw) => (isPath(raw) ? raw : null),
+  guideShown: (raw) => (typeof raw === 'boolean' ? raw : defaultPreferences.guideShown),
 };
 
 const preferenceKeys = Object.keys(fieldParsers) as (keyof Preferences)[];

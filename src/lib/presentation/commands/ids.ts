@@ -27,6 +27,7 @@ export const COMMAND_IDS = [
   'view.zoomOut',
   'view.zoomReset',
   'view.fullScreen',
+  'help.guide',
   'help.shortcuts',
   'help.website',
   'help.about',

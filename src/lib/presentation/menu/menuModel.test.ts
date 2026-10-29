@@ -45,7 +45,7 @@ describe('buildMenu', () => {
     ]);
     const app = submenu(buildMenu(context('mac')), 'app.name');
     expect(labels(app)).toEqual([
-      '<about>',
+      '[menu.about]',
       '—',
       '[menu.settings]',
       '—',
@@ -101,12 +101,21 @@ describe('buildMenu', () => {
     },
   );
 
-  it('keeps the native About panel in the macOS app menu only', () => {
+  it('opens the app About dialog from the macOS app menu, not from Help', () => {
     const app = submenu(buildMenu(context('mac')), 'app.name');
-    expect(app[0]).toMatchObject({ kind: 'predefined', item: 'about' });
+    expect(app[0]).toMatchObject({ kind: 'command', id: 'help.about' });
+    expect(JSON.stringify(buildMenu(context('mac')))).not.toContain('"item":"about"');
     const flat = JSON.stringify(submenu(buildMenu(context('mac')), 'menu.help'));
     expect(flat).not.toContain('help.about');
   });
+
+  it.each(['mac', 'linux', 'windows'] as const)(
+    'starts Help with the user guide on %s',
+    (platform) => {
+      const first = submenu(buildMenu(context(platform)), 'menu.help')[0];
+      expect(first).toMatchObject({ kind: 'command', id: 'help.guide' });
+    },
+  );
 
   it('uses the system full-screen item on macOS and the app command elsewhere', () => {
     expect(labels(submenu(buildMenu(context('mac')), 'menu.view')).at(-1)).toBe('<fullscreen>');

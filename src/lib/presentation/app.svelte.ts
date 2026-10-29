@@ -23,6 +23,7 @@ import { isImageDrop } from './drop/classifyDrop';
 import { activeEditor } from './editor/activeEditor.svelte';
 import type { CommandId } from './commands/ids';
 import { createRegistry, type CommandRegistry } from './commands/registry';
+import { userGuide } from './guide/guide';
 import { i18n } from './i18n/i18n.svelte';
 import { currentPlatform } from './platform';
 import { fallbackContextMenu } from './contextMenu/fallbackMenu.svelte';
@@ -105,6 +106,7 @@ class App {
     window.onQuitRequested(() => void this.quit());
     const pending = await openRequests.takePending();
     if (pending.length > 0) await this.openPaths(pending);
+    else if (!this.preferences.guideShown) await this.openGuide();
     else if (this.preferences.lastFile) await this.open(this.preferences.lastFile, { quiet: true });
     this.ready = true;
     // The window starts hidden; showing it here means the first painted frame is the real one.
@@ -172,6 +174,22 @@ class App {
     this.documentState = state;
     this.editing = true;
     if (this.preferences.editMode === 'preview') this.setPreference('editMode', 'code');
+  }
+
+  /**
+   * Help ▸ User Guide, in the interface language, opened in Split view so each example sits next
+   * to its result; shown once on first launch.
+   */
+  async openGuide(): Promise<void> {
+    const state = await this.container.documents.newDocument(this.documentState, {
+      content: userGuide(i18n.locale),
+      name: i18n.t('guide.title'),
+    });
+    if (!state) return;
+    this.documentState = state;
+    this.editing = true;
+    this.setPreference('editMode', 'split');
+    this.setPreference('guideShown', true);
   }
 
   async save(): Promise<void> {

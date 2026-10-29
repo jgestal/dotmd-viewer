@@ -7,6 +7,7 @@
   import DropOverlay from './DropOverlay.svelte';
   import ContextMenuFallback from './ContextMenuFallback.svelte';
   import Sidebar from './Sidebar.svelte';
+  import TitleBar from './TitleBar.svelte';
   import Toasts from './Toasts.svelte';
   import ViewportHeader from './ViewportHeader.svelte';
 
@@ -54,8 +55,12 @@
   }
 </script>
 
+{#if app.platform === 'mac'}
+  <TitleBar />
+{/if}
 <div
   class="shell"
+  class:below-titlebar={app.platform === 'mac'}
   style:--sidebar-width="{app.preferences.sidebarVisible ? app.preferences.sidebarWidth : 0}px"
 >
   {#if app.preferences.sidebarVisible}
@@ -95,6 +100,10 @@
     /* Without this the single row grows with the content and the page scrolls, not the viewport. */
     grid-template-rows: minmax(0, 1fr);
     height: 100vh;
+  }
+
+  .shell.below-titlebar {
+    height: calc(100vh - var(--titlebar-height));
   }
 
   .resizer {

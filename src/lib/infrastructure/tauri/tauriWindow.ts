@@ -4,6 +4,9 @@ import { attempt, call } from './invoke';
 import { subscribe } from './subscription';
 import { formatWindowTitle, runsOnMac } from './windowTitle';
 
+/** The page's `--bg` for each scheme (app.css), so no light edge shows around a dark page. */
+const BACKGROUNDS = { light: '#fbfaf7', dark: '#15191a' } as const;
+
 /**
  * Window title through the JS API; proxy icon and edited dot through `set_document_state`.
  * The window starts hidden (tauri.conf.json), so `reveal` is the first thing the user sees.
@@ -37,4 +40,19 @@ export const tauriWindow: AppWindow = {
   onQuitRequested: (handler) => subscribe<void>('quit-requested', handler).unsubscribe,
 
   quit: () => call<void>('quit_app'),
+
+  async setTheme(shown) {
+    await attempt(() => getCurrentWindow().setBackgroundColor(BACKGROUNDS[shown]));
+    await call<void>('set_title_bar_scheme', { dark: shown === 'dark' });
+  },
+
+  // Tauri reads the app's appearance, which keeps following the system whatever the window shows.
+  systemScheme: async () => (await attempt(() => getCurrentWindow().theme())) ?? 'light',
+
+  onSystemSchemeChange(handler) {
+    const unlisten = attempt(() =>
+      getCurrentWindow().onThemeChanged(({ payload }) => handler(payload)),
+    );
+    return () => void unlisten.then((stop) => stop()).catch(() => undefined);
+  },
 };

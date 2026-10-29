@@ -215,7 +215,7 @@ Rust target needs `cargo install cargo-mutants` once.
 
 ## Credits
 
-Made by **Juan Gestal** — juan@gestal.es — https://www.gestal.es
+Made by **Juan Gestal** — juan@gestal.es — https://gestal.es
 
 Built with Tauri, SvelteKit, Milkdown, CodeMirror, markdown-it, KaTeX, Mermaid and highlight.js.
 

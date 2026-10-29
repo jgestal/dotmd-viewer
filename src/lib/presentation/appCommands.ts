@@ -3,13 +3,12 @@
 // is shown disabled, and its shortcut does nothing.
 import type { Command } from './commands/registry';
 import { defaultAccelerators, type CommandId } from './commands/ids';
+import { AUTHOR_WEBSITE } from './credits';
 import { dialogs } from './dialogs.svelte';
 import { activeEditor } from './editor/activeEditor.svelte';
 import type { App, EditMode, Layout, SidebarTab } from './app.svelte';
 
 type Binding = Pick<Command, 'run' | 'enabled' | 'checked'> & { readonly label: string };
-
-const WEBSITE = 'https://www.gestal.es';
 
 // Exported so the i18n tests can enumerate the keys built from these lists (`mode.${mode}`, ...).
 export const editModes: readonly EditMode[] = ['preview', 'code', 'split'];
@@ -59,10 +58,11 @@ export function createAppCommands(app: App): Command[] {
     'view.zoomOut': { label: 'menu.zoomOut', run: () => app.zoomOut() },
     'view.zoomReset': { label: 'menu.zoomReset', run: () => app.resetZoom() },
     'app.settings': { label: 'menu.settings', run: () => dialogs.open('settings') },
+    'help.guide': { label: 'menu.guide', run: () => void app.openGuide() },
     'help.shortcuts': { label: 'menu.keyboardShortcuts', run: () => dialogs.open('shortcuts') },
     'help.about': { label: 'menu.about', run: () => dialogs.open('about') },
     'app.quit': { label: 'menu.quit', run: () => app.quit() },
-    'help.website': { label: 'menu.website', run: () => void window.open(WEBSITE, '_blank') },
+    'help.website': { label: 'menu.website', run: () => void app.openExternal(AUTHOR_WEBSITE) },
   };
 
   for (const mode of editModes) {

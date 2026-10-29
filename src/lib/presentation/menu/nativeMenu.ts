@@ -10,7 +10,7 @@ import { buildMenu, type MenuNode } from './menuModel';
 export const ABOUT: AboutInfo = {
   name: 'DotMD Viewer',
   credits: 'Juan Gestal · juan@gestal.es',
-  website: 'https://www.gestal.es',
+  website: 'https://gestal.es',
   copyright: '© 2026 Juan Gestal · MIT License',
 };
 

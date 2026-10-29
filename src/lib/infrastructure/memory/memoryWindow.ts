@@ -56,6 +56,33 @@ export class MemoryWindow implements AppWindow {
     this.quitCalled = true;
   }
 
+  /** The scheme the window chrome was last matched to. */
+  theme: 'light' | 'dark' | null = null;
+
+  async setTheme(shown: 'light' | 'dark'): Promise<void> {
+    this.theme = shown;
+  }
+
+  /** The simulated system's scheme; `changeSystemScheme` switches it. */
+  system: 'light' | 'dark' = 'light';
+  private schemeHandlers: ((scheme: 'light' | 'dark') => void)[] = [];
+
+  async systemScheme(): Promise<'light' | 'dark'> {
+    return this.system;
+  }
+
+  onSystemSchemeChange(handler: (scheme: 'light' | 'dark') => void): () => void {
+    this.schemeHandlers.push(handler);
+    return () => {
+      this.schemeHandlers = this.schemeHandlers.filter((registered) => registered !== handler);
+    };
+  }
+
+  changeSystemScheme(scheme: 'light' | 'dark'): void {
+    this.system = scheme;
+    for (const handler of this.schemeHandlers) handler(scheme);
+  }
+
   /** Simulates the user closing the window; true when it closed (and the app quit). */
   async requestClose(): Promise<boolean> {
     const answers = await Promise.all(this.closeHandlers.map((handler) => handler()));
