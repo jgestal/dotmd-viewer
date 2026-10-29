@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Release workflow: pushing a `v*` tag builds unsigned installers on macOS (universal `.dmg`), Windows (`.msi`, `.exe`) and Linux (`.deb`, `.rpm`, `.AppImage`) into a draft GitHub release, with optional signing secrets and `scripts/bump-version.mjs` for version bumps; see docs/releasing.md (#55).
+
 - Settings (Cmd/Ctrl+,) with language, theme, default page size and zoom applied live; a searchable Keyboard Shortcuts table generated from the command registry in each platform's notation; and an in-app About dialog (icon, version, author links, MIT licence) that Windows and Linux use for "About" while macOS keeps the native panel too (#117, #54).
 
 - Local images in every view (preview, pages, slides, print): relative and absolute `src` values resolve against the document's folder and load through Tauri's asset protocol (scope: the home folder and removable volumes) behind an `AssetUrls` port; remote images keep working and other schemes stay blocked. Dropping images on the code editor copies them into `assets/` next to the document under free names and inserts `![name](assets/name.png)` at the drop position; an unsaved document asks to be saved first. New `ensure_dir_path` command (#42).
