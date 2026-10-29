@@ -90,11 +90,14 @@ pub fn run() {
         // Finder double-click and "Open With" arrive as an event, even on a cold start.
         #[cfg(target_os = "macos")]
         if let tauri::RunEvent::Opened { urls } = event {
-            let paths = urls
+            let requests = urls
                 .iter()
                 .filter_map(|url| url.to_file_path().ok())
-                .map(|path| path.to_string_lossy().into_owned());
-            open_requests::deliver(app, open_requests::open_all(paths));
+                .map(|path| open_requests::OpenRequest::Open {
+                    path: path.to_string_lossy().into_owned(),
+                })
+                .collect();
+            open_requests::deliver(app, requests);
         }
     });
 }

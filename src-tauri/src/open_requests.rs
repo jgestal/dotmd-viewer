@@ -120,14 +120,6 @@ where
     requests
 }
 
-/// Plain "open these files" requests, as Finder delivers them.
-pub fn open_all(paths: impl IntoIterator<Item = String>) -> Vec<OpenRequest> {
-    paths
-        .into_iter()
-        .map(|path| OpenRequest::Open { path })
-        .collect()
-}
-
 fn absolute(arg: &str, cwd: &Path) -> String {
     let path = PathBuf::from(arg);
     let absolute = if path.is_absolute() {
@@ -296,14 +288,6 @@ mod tests {
                 r#"{"action":"print","path":"/c.md"},"#,
                 r#"{"action":"new"}]"#
             )
-        );
-    }
-
-    #[test]
-    fn wraps_paths_as_open_requests() {
-        assert_eq!(
-            open_all(["/a.md".to_owned(), "/b".to_owned()]),
-            vec![open("/a.md"), open("/b")]
         );
     }
 
