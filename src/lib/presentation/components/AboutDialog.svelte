@@ -30,10 +30,13 @@
     <img src="/favicon.png" alt="" width="96" height="96" />
     <h3>{i18n.t('app.name')}</h3>
     <p class="muted">{i18n.t('about.version', { version })}</p>
-    <p>
-      {AUTHOR_NAME} — {@render link(`mailto:${AUTHOR_EMAIL}`, AUTHOR_EMAIL)} —
-      {@render link(AUTHOR_WEBSITE, AUTHOR_WEBSITE)}
-    </p>
+    <section class="credits" aria-label={i18n.t('about.credits')}>
+      <h4>{i18n.t('about.credits')}</h4>
+      <p class="muted">{i18n.t('about.madeBy')}</p>
+      <p class="author">{AUTHOR_NAME}</p>
+      <p>{@render link(`mailto:${AUTHOR_EMAIL}`, AUTHOR_EMAIL)}</p>
+      <p>{@render link(AUTHOR_WEBSITE, AUTHOR_WEBSITE.replace(/^https?:\/\//, ''))}</p>
+    </section>
     <p class="muted">{i18n.t('about.licence')}</p>
     <p>{@render link(REPOSITORY, i18n.t('about.source'))}</p>
   </div>
@@ -55,6 +58,31 @@
 
   p {
     margin: 8px 0 0;
+  }
+
+  .credits {
+    margin-top: 16px;
+    padding: 12px 24px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .credits p {
+    margin-top: 4px;
+  }
+
+  h4 {
+    margin: 0 0 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+
+  .author {
+    font-size: 15px;
+    font-weight: 600;
   }
 
   .muted {

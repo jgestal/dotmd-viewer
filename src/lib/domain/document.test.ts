@@ -92,6 +92,12 @@ describe('newDocument', () => {
       hasBom: false,
     });
   });
+
+  it('can start with clean text and a name of its own', () => {
+    const guide = newDocument('# Guide\r\n', 'User Guide');
+    expect(guide).toMatchObject({ path: null, content: '# Guide\n', name: 'User Guide' });
+    expect(isDirty(guide)).toBe(false);
+  });
 });
 
 describe('editDocument', () => {
@@ -216,6 +222,10 @@ describe('reloadFromDisk', () => {
 describe('displayName', () => {
   it('returns the untitled label when there is no path', () => {
     expect(displayName(newDocument(), 'Untitled')).toBe('Untitled');
+  });
+
+  it('prefers the name of an unsaved document over the untitled label', () => {
+    expect(displayName(newDocument('', 'User Guide'), 'Untitled')).toBe('User Guide');
   });
 
   it('returns the file name of a POSIX path', () => {

@@ -4,6 +4,7 @@ import type { en } from './en';
 export const es = {
   'app.name': 'DotMD Viewer',
 
+  'titlebar.edited': 'Editado',
   'document.untitled': 'Sin título',
   'document.deletedOnDisk': '«{name}» se eliminó del disco. Se conserva tu copia abierta.',
   'error.open': 'No se pudo abrir «{name}».',
@@ -82,6 +83,8 @@ export const es = {
   'menu.zoom': 'Zoom',
   'menu.bringAllToFront': 'Traer todo al frente',
   'menu.help': 'Ayuda',
+  'menu.guide': 'Guía de uso',
+  'guide.title': 'Guía de uso',
   'menu.keyboardShortcuts': 'Atajos de teclado',
   'menu.website': 'Sitio web',
   'menu.about': 'Acerca de DotMD Viewer',
@@ -245,6 +248,8 @@ export const es = {
   'shortcuts.noResults': 'Ningún atajo coincide con la búsqueda.',
   'shortcuts.group.app': 'Aplicación',
   'about.version': 'Versión {version}',
+  'about.credits': 'Créditos',
+  'about.madeBy': 'Diseñado y desarrollado por',
   'about.licence': 'Publicado bajo la licencia MIT.',
   'about.source': 'Código fuente en GitHub',
   // T42 · images

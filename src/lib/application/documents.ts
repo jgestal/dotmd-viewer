@@ -49,10 +49,16 @@ export interface DocumentsDeps {
   readonly caseInsensitive?: boolean;
 }
 
+export interface NewDocumentInput {
+  readonly content: string;
+  readonly name: string;
+}
+
 export interface Documents {
   open(state: DocumentState, path: string): Promise<OpenResult | null>;
   openWithDialog(state: DocumentState): Promise<OpenResult | null>;
-  newDocument(state: DocumentState): Promise<DocumentState | null>;
+  /** An unsaved document; `initial` gives it text and a name (the built-in guide). */
+  newDocument(state: DocumentState, initial?: NewDocumentInput): Promise<DocumentState | null>;
   save(state: DocumentState): Promise<DocumentState | null>;
   saveAs(state: DocumentState): Promise<DocumentState | null>;
   close(state: DocumentState): Promise<DocumentState | null>;
@@ -154,9 +160,12 @@ export const createDocuments = ({
     return chosen === null ? null : open(state, chosen);
   };
 
-  const startNew = async (state: DocumentState): Promise<DocumentState | null> => {
+  const startNew = async (
+    state: DocumentState,
+    initial?: NewDocumentInput,
+  ): Promise<DocumentState | null> => {
     if (!(await resolveUnsaved(state))) return null;
-    const doc = newDocument();
+    const doc = newDocument(initial?.content, initial?.name);
     await watcher.watch(null);
     await show(doc);
     return { doc };

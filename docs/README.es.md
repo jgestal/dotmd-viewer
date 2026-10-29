@@ -220,7 +220,7 @@ el destino de Rust necesita `cargo install cargo-mutants` una vez.
 
 ## Créditos
 
-Hecho por **Juan Gestal** — juan@gestal.es — https://www.gestal.es
+Hecho por **Juan Gestal** — juan@gestal.es — https://gestal.es
 
 Construido con Tauri, SvelteKit, Milkdown, CodeMirror, markdown-it, KaTeX, Mermaid y highlight.js.
 

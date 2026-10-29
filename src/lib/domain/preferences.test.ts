@@ -27,6 +27,7 @@ const custom: Preferences = {
   ],
   lastFolder: '/docs',
   lastFile: '/a.md',
+  guideShown: true,
 };
 
 describe('defaultPreferences', () => {
@@ -45,6 +46,7 @@ describe('defaultPreferences', () => {
       favourites: [],
       lastFolder: null,
       lastFile: null,
+      guideShown: false,
     });
   });
 });

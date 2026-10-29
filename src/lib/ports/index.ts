@@ -90,6 +90,15 @@ export interface AppWindow {
   onQuitRequested(handler: () => void): () => void;
   /** Exits the app now, without asking: the caller already confirmed any unsaved changes. */
   quit(): Promise<void>;
+  /**
+   * Draws the whole window (title bar, background, page) in `shown`. On macOS that also fixes
+   * what the page's `prefers-color-scheme` reports, so the system's own choice comes from
+   * `systemScheme` and `onSystemSchemeChange` instead.
+   */
+  setTheme(shown: 'light' | 'dark'): Promise<void>;
+  systemScheme(): Promise<'light' | 'dark'>;
+  /** Returns the function that removes the handler. */
+  onSystemSchemeChange(handler: (scheme: 'light' | 'dark') => void): () => void;
 }
 
 /** Menu items the operating system implements itself (clipboard, window management…). */

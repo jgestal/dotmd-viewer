@@ -61,6 +61,7 @@ pub fn run() {
             preferences_file::load_preferences,
             preferences_file::save_preferences,
             window_state::set_document_state,
+            window_state::set_title_bar_scheme,
             quit::quit_app,
             drag_out::drag_icon,
             printing::print_page,

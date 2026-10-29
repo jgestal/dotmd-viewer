@@ -159,6 +159,13 @@ describe('newDocument', () => {
     dialogs.answerAskUnsaved('cancel');
     expect(await documents.newDocument(state)).toBeNull();
   });
+
+  it('opens given text clean, under its own name', async () => {
+    const { documents, window } = setup();
+    const result = await documents.newDocument(EMPTY, { content: '# Guide', name: 'User Guide' });
+    expect(result?.doc).toMatchObject({ path: null, content: '# Guide', savedContent: '# Guide' });
+    expect(window.current).toEqual({ title: 'User Guide', path: null, edited: false });
+  });
 });
 
 describe('save', () => {
