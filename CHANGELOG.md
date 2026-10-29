@@ -7,15 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-29
+
 ### Changed
 
 - Mutation testing pass on the TypeScript business rules: the StrykerJS score of `src/lib/domain` and `src/lib/application` rises from 94.22 % to 99.02 % with new boundary tests, and the remaining equivalent mutants are justified in docs/mutation.md (#57).
-
 - The app is now called **SimpleDotMD — Markdown Viewer & Editor**; the repository moved to `jgestal/simpledotmd`. The bundle identifier is unchanged, so settings and file associations carry over.
 - The Windows WebDriver E2E job now runs every scenario and blocks pull requests again: CI runs it at medium integrity, because WebView2 150+ drops msedgedriver's debugging switch in elevated processes, and hands each scenario's file to the running app, because msedgedriver rewrites `args` as browser switches (#139).
 
 ### Added
 
+- Manual test checklist per operating system in docs/manual-testing.md, run before each release (#58).
 - Rust mutation testing pass with cargo-mutants: new unit tests kill the surviving mutants, and the code that cannot run under `cargo test` (GUI event loop, other platforms) is excluded with each reason in `docs/mutation.md` (#57).
 - **File ▸ Export to HTML…** (no shortcut; also in the document's context menus) writes one self-contained `.html` page in the theme you are using: styles and KaTeX CSS inline, maths and code already rendered, Mermaid diagrams as inline SVG and local images (up to 10 MB each) embedded as `data:` URIs. Maths in the exported page uses the reader's system fonts, since a single file cannot carry KaTeX's font files (#132).
 - Context menus inside the document, native in the app and drawn by the page in a browser: Copy, Select All, Edit, Export to PDF, Print, Reveal in Finder/Explorer/file manager and Copy Path on the preview, pages and slides (plus Open Link, Copy Link Address and Copy Image Path on links and images); Cut, Copy, Paste, Select All, Find, Export and Print in the code editor; the same clipboard commands leading the editable preview; and Reveal, Copy Path and Show in Sidebar on the header title (#131).

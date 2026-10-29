@@ -1,6 +1,6 @@
 [package]
 name = "simpledotmd"
-version = "0.0.1"
+version = "0.1.0"
 description = "Cross-platform Markdown viewer with optional editing"
 authors = ["Juan Gestal <juan@gestal.es>"]
 repository = "https://github.com/jgestal/simpledotmd"
